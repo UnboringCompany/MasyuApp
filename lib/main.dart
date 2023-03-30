@@ -4,8 +4,6 @@ import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'widgets/core.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -20,31 +18,19 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MASYU',
-      home: MenuPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MenuPage(),
+      },
     );
-
   }
 }
 
-class MenuPage extends StatefulWidget {
+class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
-
-  @override
-  State<MenuPage> createState() => _MenuPageState();
-}
-
-class _MenuPageState extends State<MenuPage> {
-
-  Grille grille = Grille(6);
-
-  void _incrementCounter() {
-    setState(() {
-      grille.printGrid();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,4 +44,7 @@ class _MenuPageState extends State<MenuPage> {
       ),
     ));
   }
+
+ 
 }
+
