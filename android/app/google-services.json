@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "95038094021",
+    "project_id": "masyu-app-by-unboringcompany",
+    "storage_bucket": "masyu-app-by-unboringcompany.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95038094021:android:84cf9895696fd5217e0eac",
+        "android_client_info": {
+          "package_name": "com.example.masyu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95038094021-nnijf4e5gkq7kthi91o52d0qc992enaq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWcOHJSuWYFLjJC9l1grhMtymlolGdgjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95038094021-nnijf4e5gkq7kthi91o52d0qc992enaq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
