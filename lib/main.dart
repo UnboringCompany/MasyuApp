@@ -6,7 +6,6 @@ import 'widgets/core.dart';
 
 
 void main() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }
 
@@ -16,6 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -45,6 +47,13 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CoreWidget( child: Text("MASYU"),);
+    return CoreWidget(
+      child: Center(child : Column(
+        children: [
+          const SizedBox(height: 130),
+          const Text("MASYU", style: TextStyle(color: Colors.white, letterSpacing: 10, fontSize: 40, fontWeight: FontWeight.w600)),
+        ],
+      ),
+    ));
   }
 }
