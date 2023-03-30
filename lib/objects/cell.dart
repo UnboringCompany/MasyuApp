@@ -6,7 +6,7 @@ class Cell {
   // Constructeur
   Cell(this.posX, this.posY);
 
-  bool isValid() {
+  bool isCellValid() {
     // TODO
     return true;
   }

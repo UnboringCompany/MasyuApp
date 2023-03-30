@@ -1,12 +1,12 @@
 import 'cell.dart';
 
-class cercle extends Cell {
+class Cercle extends Cell {
   // Attributs
   int color;
   bool isValid;
 
   // Constructeur
-  cercle(int posX, int posY, this.color, this.isValid)
+  Cercle(int posX, int posY, this.color, this.isValid)
       : super(posX, posY);
 
   // Méthodes
@@ -15,7 +15,7 @@ class cercle extends Cell {
   }
 
   @override
-  bool isValid() {
+  bool isCellValid() {
     // TODO
     return true;
   }

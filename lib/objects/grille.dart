@@ -8,7 +8,9 @@ class Grille {
   List<Trait> listeTraits;
 
   // Constructeur
-  Grille(this.size, {this.listeCells = const [], this.listeTraits = const []});
+    Grille(this.size)
+      : listeCells = List<Cell>.empty(growable: true),
+        listeTraits = List<Trait>.empty(growable: true);
 
   // Méthodes
   void addCase(Cell c) {
@@ -47,7 +49,7 @@ class Grille {
   bool isValid() {
     // TODO
     for (Cell cell in listeCells) {
-      if (!cell.isValid()) {
+      if (!cell.isCellValid()) {
         return false;
       }
     }
@@ -55,6 +57,7 @@ class Grille {
   }
 
   void printGrid() {
-    print('Bonjour');
+    generate();
+    print(listeCells.toString());
   }
 }
