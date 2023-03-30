@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/objects/grille.dart';
+import 'package:masyu_app/widgets/citation.dart';
 import 'widgets/core.dart';
 
 
@@ -50,8 +51,9 @@ class _MenuPageState extends State<MenuPage> {
     return CoreWidget(
       child: Center(child : Column(
         children: [
-          const SizedBox(height: 130),
+          const SizedBox(height: 100),
           const Text("MASYU", style: TextStyle(color: Colors.white, letterSpacing: 10, fontSize: 40, fontWeight: FontWeight.w600)),
+          CitationWidget(),
         ],
       ),
     ));

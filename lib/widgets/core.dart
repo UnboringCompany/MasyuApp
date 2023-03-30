@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
-class CoreWidget extends StatelessWidget {
+class CoreWidget extends StatefulWidget {
 
   final Widget child;
 
   const CoreWidget({Key? key, required this.child}) : super(key: key);
   
+  @override
+  State<StatefulWidget> createState() => _CoreWidgetState();
+
+}
+
+class _CoreWidgetState extends State<CoreWidget> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +39,7 @@ class CoreWidget extends StatelessWidget {
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              body: child,
+              body: widget.child,
             ),
         )
         )
