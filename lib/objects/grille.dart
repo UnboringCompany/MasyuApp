@@ -1,29 +1,26 @@
-import 'case.dart';
+import 'cell.dart';
 import 'trait.dart';
 
 class Grille {
   // Attributs
   int size;
-  List<Case> liste_cases;
-  List<Trait> liste_traits;
+  List<Cell> listeCells;
+  List<Trait> listeTraits;
 
   // Constructeur
-  Grille(this.size){
-    liste_cases = [];
-    liste_traits = [];
-  }
+  Grille(this.size, {this.listeCells = const [], this.listeTraits = const []});
 
   // Méthodes
-  void addCase(Case c) {
-    liste_cases.add(c);
+  void addCase(Cell c) {
+    listeCells.add(c);
   }
 
   void addTrait(Trait t) {
-    liste_traits.add(t);
+    listeTraits.add(t);
   }
 
   void removeTrait(Trait t) {
-    liste_traits.remove(t);
+    listeTraits.remove(t);
   }
 
   void reset() {
@@ -34,7 +31,7 @@ class Grille {
     // TODO
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
-        addCase(Case(i, j));
+        addCase(Cell(i, j));
       }
     }
     int nb_cercles_blancs = size * size ~/ 2;
@@ -49,11 +46,15 @@ class Grille {
 
   bool isValid() {
     // TODO
-    for (case in liste_cases) {
-      if (!case.isValid()) {
+    for (Cell cell in listeCells) {
+      if (!cell.isValid()) {
         return false;
       }
     }
     return true;
+  }
+
+  void printGrid() {
+    print('Bonjour');
   }
 }

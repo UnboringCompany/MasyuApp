@@ -1,12 +1,12 @@
-import 'case.dart';
+import 'cell.dart';
 
 class Trait{
   // Attributs
-  Case case_dep;
-  Case case_arr;
+  Cell cellDep;
+  Cell cellArr;
 
   // Constructeur
-  Trait(this.case_dep, this.case_arr);
+  Trait(this.cellDep, this.cellArr);
 
   // Méthodes
   void getCase_dep() {

@@ -1,13 +1,13 @@
-import 'case.dart';
+import 'cell.dart';
 
-class cercle extends Case {
+class cercle extends Cell {
   // Attributs
   int color;
-  bool is_valid;
+  bool isValid;
 
   // Constructeur
-  cercle(int pos_x, int pos_y, this.color, this.is_valid)
-      : super(pos_x, pos_y);
+  cercle(int posX, int posY, this.color, this.isValid)
+      : super(posX, posY);
 
   // Méthodes
   void getColor() {

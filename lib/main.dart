@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masyu_app/objects/grille.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,8 +58,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  Grille grille = Grille(6);
+  
+
   void _incrementCounter() {
     setState(() {
+
+      grille.printGrid();
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
