@@ -39,22 +39,44 @@ class MenuPage extends StatefulWidget {
 
 class _MenuState extends State<MenuPage> {
 
+  //TODO: Changer les tailles de sizedbox en dynamique
+
   @override
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
     return CoreWidget(
       child: Center(child : Column(
         children: [
           const SizedBox(height: 100),
           const Text("MASYU", style: TextStyle(color: Colors.white, letterSpacing: 10, fontSize: 40, fontWeight: FontWeight.w600)),
           CitationWidget(),
-          const SizedBox(height: 50),
+          const SizedBox(height: 80),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
               Tile(icon: Icon(BootstrapIcons.play, color: Color(0xff3D4AEB), size: 100,), title: "Reprendre\n6x6 - 1min37"),
               Tile(icon: Icon(BootstrapIcons.watch, color: Color(0xff3D4AEB), size: 80), title: "Défi\nContre la montre")
           ]),
-          
+          const SizedBox(height: 80),
+          Container(
+            width: 0.85 * size.width,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Color(0xff3D4AEB),
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: ElevatedButton(
+              onPressed: () {
+                
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                elevation: 0,
+              ),
+              child: Text("Nouvelle partie")),
+          )
         ],
       ),
     ));
