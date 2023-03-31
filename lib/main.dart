@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/widgets/citation.dart';
+import 'package:masyu_app/widgets/sizedropdown.dart';
 import 'package:masyu_app/widgets/tile.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
@@ -45,6 +46,8 @@ class _MenuState extends State<MenuPage> {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
+    String _selectedOption = 'Option 1';
+    List<String> _options = ['Option 1', 'Option 2', 'Option 3'];
 
     return CoreWidget(
       child: Center(child : Column(
@@ -76,7 +79,9 @@ class _MenuState extends State<MenuPage> {
                 elevation: 0,
               ),
               child: Text("Nouvelle partie")),
-          )
+          ),
+          const SizedBox(height: 15),
+          const GridSizeMenu()
         ],
       ),
     ));
