@@ -62,7 +62,7 @@ class Grille {
   }
 
   void generateGrille() {
-    choice = Random().nextInt(5);
+    choice = Random().nextInt(4);
     generateCells();
     switch (choice) {
       case 0:
