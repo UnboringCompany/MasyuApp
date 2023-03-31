@@ -10,14 +10,6 @@ class CitationWidget extends StatefulWidget {
 
 class _CitationWidgetState extends State<CitationWidget> {
 
-
-  Future<String> lireFichier() async {
-    String contenuFichier = await rootBundle.loadString('asset/Citation.txt');
-    List<String> lignes = contenuFichier.split('\n');
-    return lignes[Random().nextInt(lignes.length)];
-  }
-
-
   String citation = 'Citation par défaut';
 
   @override
