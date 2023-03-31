@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:masyu_app/widgets/circle.dart';
 
 class GrilleWidget extends StatefulWidget {
   @override
@@ -122,7 +123,6 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               );
             },
           ),
-         
           CustomPaint(
               painter: LinePainter(liens, context),
               child:  GestureDetector(
@@ -145,6 +145,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               }
             },),
             ),
+
+            CircleWidget(x: 30.0, y:30.0, couleur: "blanc"),
         ]),
       ),
     ));
@@ -160,7 +162,7 @@ class LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blue
+      ..color = Color(0xff3D4AEB)
       ..strokeWidth = 5;
 
     for (int i = 0; i < liens.length; i++) {
