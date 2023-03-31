@@ -6,6 +6,8 @@ import 'package:masyu_app/widgets/tile.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 
+import 'game.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MenuPage(),
+        '/game' : (context) => GamePage(),
       },
     );
   }
@@ -44,8 +47,8 @@ class _MenuState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    String _selectedOption = 'Option 1';
-    List<String> _options = ['Option 1', 'Option 2', 'Option 3'];
+    String _selectedOption = '6x6';
+    List<String> _options = ['6x6', '8x8', '10x10'];
 
     return CoreWidget(
         child: Center(
@@ -83,7 +86,9 @@ class _MenuState extends State<MenuPage> {
                 color: Color(0xff3D4AEB),
                 borderRadius: BorderRadius.circular(10)),
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, "/game");
+                },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
                   elevation: 0,
@@ -111,12 +116,7 @@ class _MenuState extends State<MenuPage> {
                     child: Text("Règles")),
               ),
               SizedBox(width: 0.01 * size.width),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    BootstrapIcons.gear,
-                    color: Colors.white,
-                  ))
+              IconButton(onPressed: () {}, icon: const Icon(BootstrapIcons.gear, color: Colors.white,))
             ],
           )
         ],
