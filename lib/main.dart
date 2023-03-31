@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:masyu_app/setings.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
 import 'package:masyu_app/widgets/tile.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MenuPage(),
-        '/game' : (context) => GamePage(),
+        '/game': (context) => GamePage(),
       },
     );
   }
@@ -43,6 +44,15 @@ class MenuPage extends StatefulWidget {
 
 class _MenuState extends State<MenuPage> {
   //TODO: Changer les tailles de sizedbox en dynamique
+
+  void seeSettings() {
+    Navigator.pushReplacement<void, void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const Settings(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +126,12 @@ class _MenuState extends State<MenuPage> {
                     child: Text("Règles")),
               ),
               SizedBox(width: 0.01 * size.width),
-              IconButton(onPressed: () {}, icon: const Icon(BootstrapIcons.gear, color: Colors.white,))
+              IconButton(
+                  onPressed: seeSettings,
+                  icon: const Icon(
+                    BootstrapIcons.gear,
+                    color: Colors.white,
+                  ))
             ],
           )
         ],
