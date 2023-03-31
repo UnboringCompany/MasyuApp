@@ -111,7 +111,12 @@ class _MenuState extends State<MenuPage> {
                     child: Text("Règles")),
               ),
               SizedBox(width: 0.01 * size.width),
-              IconButton(onPressed: () {}, icon: const Icon(BootstrapIcons.gear, color: Colors.white,))
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    BootstrapIcons.gear,
+                    color: Colors.white,
+                  ))
             ],
           )
         ],
