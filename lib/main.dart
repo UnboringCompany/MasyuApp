@@ -51,6 +51,9 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuState extends State<MenuPage> {
+
+  String _dropdownValue = '';
+
   void seeSettings() {
     Navigator.pushReplacement<void, void>(
       context,
@@ -110,7 +113,7 @@ class _MenuState extends State<MenuPage> {
                 borderRadius: BorderRadius.circular(10)),
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, "/game");
+                  Navigator.pushNamed(context, "/game", arguments: {'type': 'new', 'size': _dropdownValue});
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
@@ -119,7 +122,12 @@ class _MenuState extends State<MenuPage> {
                 child: Text('new_game'.tr)),
           ),
           const SizedBox(height: 15),
-          const GridSizeMenu(),
+          GridSizeMenu(
+            onChanged: (newValue) {
+              setState(() {
+                _dropdownValue = newValue;
+              });
+            },),
           const SizedBox(height: 70),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

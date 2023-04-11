@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GridSizeMenu extends StatefulWidget {
-  const GridSizeMenu({super.key});
+  final Function(String) onChanged;
+
+  const GridSizeMenu({super.key, required this.onChanged});
 
   @override
   _GridSizeMenuState createState() => _GridSizeMenuState();
@@ -35,6 +37,7 @@ class _GridSizeMenuState extends State<GridSizeMenu> {
             onChanged: (String? value) {
               setState(() {
                 _selectedOption = value!;
+                widget.onChanged(_selectedOption); 
               });
             },
             items: _options.map((String option) {

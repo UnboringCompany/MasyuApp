@@ -24,6 +24,23 @@ class _Settings extends State<Settings> {
   void initState() {
     super.initState();
     getMuteState();
+    getLocal();
+  }
+
+  void getLocal() {
+    String lang = 'Français';
+    Locale? actual = Get.locale;
+    for (var lang in locale) {
+      if (lang['locale'] == actual) {
+        setState(() {
+          _selectedOption = lang['name'];
+        });
+        return;
+      }
+    }
+    setState(() {
+      _selectedOption = lang;
+    });
   }
 
   void seeHomePage() {
@@ -167,8 +184,9 @@ class _Settings extends State<Settings> {
                   onChanged: (String? value) {
                     setState(() {
                       _selectedOption = value!;
-                      updatelanguage(locale[locale.indexWhere((element) =>
-                          element['name'] == _selectedOption)]['locale']);
+                      updatelanguage(locale[locale.indexWhere(
+                              (element) => element['name'] == _selectedOption)]
+                          ['locale']);
                     });
                   },
                   items: _options.map((String option) {
