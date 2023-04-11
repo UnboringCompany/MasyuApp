@@ -4,6 +4,8 @@ import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/tile.dart';
 import 'main.dart';
+import 'LocalString.dart';
+import 'package:get/get.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -15,6 +17,8 @@ class Settings extends StatefulWidget {
 class _Settings extends State<Settings> {
   bool? sound = true;
   bool vibrate = true;
+  String _selectedOption = 'Français';
+  List<String> _options = ['English', 'Deutch', 'Français', 'Español', '日本'];
 
   @override
   void initState() {
@@ -45,11 +49,22 @@ class _Settings extends State<Settings> {
     });
   }
 
+  final List locale = [
+    {'name': 'Français', 'locale': Locale('fr', 'FR')},
+    {'name': 'English', 'locale': Locale('en', 'US')},
+    {'name': 'Deutch', 'locale': Locale('de', 'DE')},
+    {'name': 'Español', 'locale': Locale('es', 'ES')},
+    {'name': '日本', 'locale': Locale('ja', 'JP')},
+  ];
+
+  updatelanguage(Locale locale) {
+    Get.back();
+    Get.updateLocale(locale);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    String _selectedOption = 'Français';
-    List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
 
     return CoreWidget(
         child: Center(
@@ -65,7 +80,7 @@ class _Settings extends State<Settings> {
                   size: 25,
                 )),
             const SizedBox(width: 15),
-            const Text("MASYU",
+            Text('title'.tr,
                 style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 10,
@@ -152,6 +167,8 @@ class _Settings extends State<Settings> {
                   onChanged: (String? value) {
                     setState(() {
                       _selectedOption = value!;
+                      updatelanguage(locale[locale.indexWhere((element) =>
+                          element['name'] == _selectedOption)]['locale']);
                     });
                   },
                   items: _options.map((String option) {
@@ -177,7 +194,7 @@ class _Settings extends State<Settings> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Crédits :\n\nProjet Réalisé par :\nUnboring Company\n\nUne équipe composée de :\nLéo WADIN\nAurélien HOUDART\nDamien COLLOT\nElena BEYLAT",
+                'credits'.tr + '\n' + 'team'.tr,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
