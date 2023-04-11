@@ -21,12 +21,12 @@ class _GamePageState extends State<GamePage> {
         'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde
     final size = args['size'];
 
-    if (size == "6x6") {
-      _gridSize = 6;
+    if (size == "10x10") {
+      _gridSize = 10;
     } else if (size == "8x8") {
       _gridSize = 8;
     } else {
-      _gridSize = 10;
+      _gridSize = 6;
     }
 
     return (CoreWidget(
