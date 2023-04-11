@@ -1,7 +1,9 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
+import 'package:masyu_app/widgets/stopwatch.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -11,37 +13,83 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  
+
   @override
 
   Widget build(BuildContext context) {
+
     int _gridSize;
+    Grille grille;
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final type = args[
-        'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde
+        'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde, defi si defi contre la montre
     final size = args['size'];
 
-    if (size == "6x6") {
-      _gridSize = 6;
+    if (size == "10x10") {
+      _gridSize = 10;
     } else if (size == "8x8") {
       _gridSize = 8;
     } else {
-      _gridSize = 10;
+      _gridSize = 6;
     }
+
+    grille = Grille(_gridSize);
+    grille.generate();
 
     return (CoreWidget(
         child: Center(
             child: Column(children: [
       const SizedBox(height: 100),
-      const Text("MASYU",
-          style: TextStyle(
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Enregistrer ou abandonner'),
+                    content: Text('Si vous abandonnez la partie vous perdrez x points'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Abandonner'),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/');
+                          // TODO: Gérer la perte de points
+                        },
+                      ),
+                      TextButton(
+                        child: Text('Sauvegarder'),
+                        onPressed: () {
+                          // faire quelque chose ici
+                           Navigator.of(context).pushNamed('/');
+                           //TODO: Gérer la sauvegarde
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(
+              BootstrapIcons.arrow_left,
               color: Colors.white,
-              letterSpacing: 10,
-              fontSize: 40,
-              fontWeight: FontWeight.w600)),
-      const SizedBox(height: 80),
-      GrilleWidget(gridSize: _gridSize),
+              size: 25,
+            )),
+        const SizedBox(width: 15),
+        const Text("MASYU",
+            style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 10,
+                fontSize: 40,
+                fontWeight: FontWeight.w600))
+      ]),
+      const SizedBox(height: 30),
+      StopWatchWidget(),
+      const SizedBox(height: 30),
+      GrilleWidget(gridSize: _gridSize, grille: grille, solution: false,),
       const SizedBox(height: 40),
       Container(
           decoration: const BoxDecoration(
@@ -92,7 +140,9 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {},
+                onPressed: () => {
+                    Navigator.pushNamed(context, '/solution', arguments: {'grille': grille})
+                },
                 icon: const Icon(BootstrapIcons.x),
                 color: Colors.red,
               )),

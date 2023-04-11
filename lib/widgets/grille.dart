@@ -12,7 +12,9 @@ import 'package:masyu_app/widgets/circle.dart';
 class GrilleWidget extends StatefulWidget {
 
   final int gridSize;
-  const GrilleWidget({super.key, required this.gridSize});
+  final Grille grille;
+  final bool solution;
+  const GrilleWidget({super.key, required this.gridSize, required this.grille, required this.solution});
 
   @override
   State<StatefulWidget> createState() => _GrilleWidgetState();
@@ -20,9 +22,7 @@ class GrilleWidget extends StatefulWidget {
 
 class _GrilleWidgetState extends State<GrilleWidget> {
 
-  late Grille grille;
   List<CircleWidget> cercles = List.empty(growable: true);
-
   late List<List<int>> liens;
 
   int _calculateIndex(Offset offset) {
@@ -55,18 +55,25 @@ class _GrilleWidgetState extends State<GrilleWidget> {
   void initState() {
     super.initState();
     liens =  List.generate(widget.gridSize * widget.gridSize, (_) => List<int>.filled(widget.gridSize * widget.gridSize, 0));
-    grille = Grille(widget.gridSize);
-    grille.generate();
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
 
-      for(Cell cell in grille.getListeCells()) {
+      for(Cell cell in widget.grille.getListeCells()) {
         if(cell is Cercle) {
           cercles.add(
             CircleWidget(position: _getCenterPosition(cell.getPosX() + cell.getPosY()*widget.gridSize), couleur: cell.getColor() == 1 ? "blanc" : "noir", size: widget.gridSize),
           );
         }
       }
+
+      if(widget.solution) {
+        //TODO: Ajouter le traçage des traits de solution
+        for(Trait t in widget.grille.getListeTraitsSolution()) {
+                liens[t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize][t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize] = 1;
+                liens[t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize][t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize] = 1;
+        }
+      }
+
     setState((){}); // Force la mise à jour de l'affichage
   });
   }
@@ -86,10 +93,11 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         final endIndex = ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
             (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
 
-        if (startIndex >= 0 &&
-            startIndex <= widget.gridSize*widget.gridSize - 1 &&
+        if(!widget.solution) {
+          if (startIndex >= 0 &&
+            startIndex <= (widget.gridSize*widget.gridSize) - 1 &&
             endIndex >= 0 &&
-            endIndex <= widget.gridSize * widget.gridSize - 1) {
+            endIndex <= (widget.gridSize * widget.gridSize) - 1) {
           if (liens[startIndex][endIndex] == 0 &&
               liens[endIndex][startIndex] == 0 &&
               startIndex != endIndex) {
@@ -103,13 +111,15 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                 liens[startIndex][endIndex] = 1;
                 liens[endIndex][startIndex] = 1;
                 // TODO: Ajouter le calcul des coordonnées de cases
-                grille.addTrait(Trait(grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0), grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0)));
+                widget.grille.addTrait(Trait(widget.grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0), widget.grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0)));
                 print('De case ${startIndex} à case ${endIndex}');
                 setState(() {});
               }
             }
           }
         }
+        }
+        
       },
 
       child: Container(

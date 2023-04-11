@@ -18,6 +18,21 @@ class Grille {
         _listeTraits = List<Trait>.empty(growable: true),
         _listeTraitsSolution = List<Trait>.empty(growable: true);
 
+  // Constructeur à partir d'un json
+  Grille.fromJson(Map<String, dynamic> json)
+      : _size = json['size'],
+        _listeCells = json['listeCells'],
+        _listeTraits = json['listeTraits'],
+        _listeTraitsSolution = json['listeTraitsSolution'];
+
+  // Convertit la grille en json
+  Map<String, dynamic> toJson() => {
+        'size': _size,
+        'listeCells': _listeCells,
+        'listeTraits': _listeTraits,
+        'listeTraitsSolution': _listeTraitsSolution,
+      };
+
   // Méthodes
 
   /// Ajoute une cellule à la grille
@@ -94,7 +109,7 @@ class Grille {
     // Les cellules dans les coins et sur les bords ont moins de voisins, on s'assure donc de ne pas ajouter de voisins hors de la grille qui de ce fait n'éxisteraient pas
     if (x > 0) {
       voisins.add(Cell(x - 1, y));
-      }
+    }
     if (x < _size - 1) {
       voisins.add(Cell(x + 1, y));
     }
@@ -104,21 +119,23 @@ class Grille {
     if (y < _size - 1) {
       voisins.add(Cell(x, y + 1));
     }
-    
+
     // Si la cellule actuelle a des voisins non visités
     var tailleChemin = ordreChemin.length;
     var tailleMin = (_size * _size * 4) ~/ 5;
-    if(isThePathLongEnough(tailleChemin, tailleMin)){
-      voisins = voisins.where((voisin) =>!ordreChemin.contains(voisin) || voisin == ordreChemin[0]).toList();
+    if (isThePathLongEnough(tailleChemin, tailleMin)) {
+      voisins = voisins
+          .where((voisin) =>
+              !ordreChemin.contains(voisin) || voisin == ordreChemin[0])
+          .toList();
+    } else {
+      voisins =
+          voisins.where((voisin) => !ordreChemin.contains(voisin)).toList();
     }
-    else{
-      voisins = voisins.where((voisin) =>!ordreChemin.contains(voisin)).toList();
-    }
-    
+
     // On retourne la liste des voisins
     return voisins;
   }
-
 
   /// Fonction qui permet de générer la grille de jeu et la solution qui est gardée en mémoire pour si l'utilisateur à besoin d'un indice ou de la réponse.
   void generate() {
@@ -223,7 +240,9 @@ class Grille {
     Cell cellPrecedente = c.getCellPrecedente(this);
     Cell cellSuivante = c.getCellSuivante(this);
     if (cellPrecedente != Cell(-1, -1) && cellSuivante != Cell(-1, -1)) {
-      if ((cellPrecedente.isCellTurning(this) || cellSuivante.isCellTurning(this)) && !c.isCellTurning(this)) {
+      if ((cellPrecedente.isCellTurning(this) ||
+              cellSuivante.isCellTurning(this)) &&
+          !c.isCellTurning(this)) {
         // Les conditions sont de tourner avant ou après mais pas dans la cellule
         return true;
       }
@@ -248,11 +267,6 @@ class Grille {
     return false;
   }
 
-  void solve() {
-    // TODO
-    // Ou pas si on fait pas de solveur parce que c'est pas forcément utile
-  }
-
   /// Fonction qui permet de vérifier si la grille est valide
   bool isValid() {
     // On vérifie que chaque cellule est valide
@@ -266,11 +280,12 @@ class Grille {
 
   /// Fonction qui permet d'aller chercher un indice
   /// @return true si la grille est complète, false sinon
-  getClue(){
+  getClue() {
     // Cherche dans la liste des traits de la solution un trait qui n'est pas dans la liste des traits de la grille
     List<Trait> listeTraitNotPlaced = List<Trait>.empty(growable: true);
     listeTraitNotPlaced = _listeTraitsSolution;
-    listeTraitNotPlaced.removeWhere((element) => _listeTraits.contains(element));
+    listeTraitNotPlaced
+        .removeWhere((element) => _listeTraits.contains(element));
     int size = listeTraitNotPlaced.length;
 
     return listeTraitNotPlaced[Random().nextInt(size)];
@@ -296,8 +311,8 @@ class Grille {
     return _listeTraits;
   }
 
-  /// Fonction qui permet de récupérer la liste des traits de la solution de la grille  
-  /// @return la liste des traits de la solution de la grille 
+  /// Fonction qui permet de récupérer la liste des traits de la solution de la grille
+  /// @return la liste des traits de la solution de la grille
   List<Trait> getListeTraitsSolution() {
     return _listeTraitsSolution;
   }
@@ -325,8 +340,7 @@ class Grille {
                 debugPrint("N : ${cercle.getPosX()}, ${cercle.getPosY()}");
                 cptNoir++;
               }
-            } else {
-            }
+            } else {}
           }
         }
       }
