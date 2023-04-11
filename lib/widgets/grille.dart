@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/cercle.dart';
 import 'package:masyu_app/objects/grille.dart';
+import 'package:masyu_app/objects/trait.dart';
 import 'package:masyu_app/widgets/circle.dart';
 
 class GrilleWidget extends StatefulWidget {
@@ -101,6 +102,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               } else {
                 liens[startIndex][endIndex] = 1;
                 liens[endIndex][startIndex] = 1;
+                // TODO: Ajouter le calcul des coordonnées de cases
+                grille.addTrait(Trait(grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0), grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0)));
                 print('De case ${startIndex} à case ${endIndex}');
                 setState(() {});
               }
