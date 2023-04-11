@@ -38,6 +38,7 @@ dependencies:
   firebase_core: ^2.8.0
   cloud_firestore: ^4.4.5
   bootstrap_icons: ^1.10.2
+  get:
 
 dev_dependencies:
   flutter_test:
