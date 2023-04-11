@@ -229,7 +229,8 @@ class _GamePageState extends State<GamePage> {
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                Navigator.of(context).pushNamed('/');
+                                Navigator.pushNamed(context, '/solution',
+                                    arguments: {'grille': grille});
                                 // TODO: Gérer la perte de points
                               },
                             ),
