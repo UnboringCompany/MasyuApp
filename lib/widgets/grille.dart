@@ -1,0 +1,210 @@
+import 'dart:math';
+
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:masyu_app/widgets/circle.dart';
+
+class GrilleWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _GrilleWidgetState();
+}
+
+class _GrilleWidgetState extends State<GrilleWidget> {
+
+  List<List<int>> liens =
+      List.generate(6 * 6, (_) => List<int>.filled(6 * 6, 0));
+
+  int _calculateIndex(Offset offset) {
+    final double width = context.size!.width / 6;
+    final int column = (offset.dx / width).floor();
+    final int row = (offset.dy / width).floor();
+    return row * 6 + column;
+  }
+
+  bool _isTapOnLine(Offset lineStart, Offset lineEnd, Offset tapPosition) {
+    const threshold = 10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
+    final distanceFromStart = (tapPosition - lineStart).distance;
+    final distanceFromEnd = (tapPosition - lineEnd).distance;
+    final lineLength = (lineEnd - lineStart).distance;
+    return distanceFromStart + distanceFromEnd >= lineLength - threshold &&
+        distanceFromStart + distanceFromEnd <= lineLength + threshold;
+  }
+
+  Offset _getCenterPosition(int index) {
+    final RenderBox gridBox = context.findRenderObject() as RenderBox;
+    final cellSize = gridBox.size.width / 6; // La taille d'une case de la grille
+    final row = (index / 6).floor(); // Le numéro de ligne de la case
+    final col = index % 6; // Le numéro de colonne de la case
+    final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
+    final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
+    return Offset(x, y); // Retourne l'offset du centre de la case
+}
+
+  @override
+  Widget build(BuildContext context) {
+    return (GestureDetector(
+      // Nouveau GestureDetector
+      onPanUpdate: (details) {
+        final RenderBox gridBox = context.findRenderObject() as RenderBox;
+        final startPos = gridBox.globalToLocal(details.globalPosition);
+        final endPos =
+            gridBox.globalToLocal(details.globalPosition + details.delta);
+
+        final startIndex = ((startPos.dx / gridBox.size.width) * 6).floor() +
+            (((startPos.dy / gridBox.size.height) * 6).floor() * 6);
+        final endIndex = ((endPos.dx / gridBox.size.width) * 6).floor() +
+            (((endPos.dy / gridBox.size.height) * 6).floor() * 6);
+
+        if (startIndex >= 0 &&
+            startIndex <= 35 &&
+            endIndex >= 0 &&
+            endIndex <= 35) {
+          if (liens[startIndex][endIndex] == 0 &&
+              liens[endIndex][startIndex] == 0 &&
+              startIndex != endIndex) {
+            if ((startIndex - endIndex).abs() == 1 ||
+                (startIndex - endIndex).abs() == 6) {
+              if (((startIndex + 1) % 6 == 0 &&
+                  (startIndex - endIndex) == -1)) {
+              } else if (((startIndex + 1) % 6 == 1 &&
+                  (startIndex - endIndex) == 1)) {
+              } else {
+                liens[startIndex][endIndex] = 1;
+                liens[endIndex][startIndex] = 1;
+                print('De case ${startIndex} à case ${endIndex}');
+                setState(() {});
+              }
+            }
+          }
+        }
+      },
+
+      child: Container(
+        height: 350,
+        width: 350,
+        child: Stack(children: [
+          // Déplacez le Stack dans le GestureDetector
+          Container(
+            padding: EdgeInsets.all(1.0),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 6 * 6,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 1.0,
+                mainAxisSpacing: 1.0,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+
+                if(index == 0) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6-1) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6*(6-1)) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6*6 - 1) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0))
+                    ),
+                  );
+                }
+
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xff373855),
+                  ),
+                );
+              },
+            ) ,
+          ),
+          CustomPaint(
+              painter: LinePainter(liens, context),
+              child:  GestureDetector(
+            onTapDown: (details) {
+              for (int i = 0; i < liens.length; i++) {
+                for (int j = 0; j < liens[0].length; j++) {
+                  if (liens[i][j] == 1) {
+                    final lineStart = _getCenterPosition(i);
+                    final lineEnd = _getCenterPosition(j);
+                    final tapPosition = details.localPosition;
+                    if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
+                      liens[i][j] = 0;
+                      liens[j][i] = 0;
+                      setState(() {
+                        
+                      });
+                    }
+                  }
+                }
+              }
+            },),
+            ),
+
+            //Ajout des cercles
+            CircleWidget(position: _getCenterPosition(0), couleur: "noir"),
+            CircleWidget(position: _getCenterPosition(12), couleur: "blanc"),
+            CircleWidget(position: _getCenterPosition(3), couleur: "noir"),
+
+
+        ]),
+      ),
+    ));
+  }
+}
+
+class LinePainter extends CustomPainter {
+  final List<List<int>> liens;
+  BuildContext context;
+
+  LinePainter(this.liens, this.context);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xff3D4AEB)
+      ..strokeWidth = 4;
+
+    for (int i = 0; i < liens.length; i++) {
+      for (int j = 0; j < liens[0].length; j++) {
+        if (liens[i][j] == 1) {
+          canvas.drawLine(_getCenterPosition(i), _getCenterPosition(j), paint);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+
+  Offset _getCenterPosition(int index) {
+    final RenderBox gridBox = context.findRenderObject() as RenderBox;
+    final cellSize =
+        gridBox.size.width / 6; // La taille d'une case de la grille
+    final row = (index / 6).floor(); // Le numéro de ligne de la case
+    final col = index % 6; // Le numéro de colonne de la case
+    final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
+    final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
+    return Offset(x, y); // Retourne l'offset du centre de la case
+  }
+}
