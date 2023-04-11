@@ -2,6 +2,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
+import 'package:masyu_app/widgets/stopwatch.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -11,6 +12,28 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  void showPopupMenu(BuildContext context) async {
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(1000.0, 1000.0, 0.0, 0.0),
+      items: [
+        PopupMenuItem(
+          value: 1,
+          child: Text("Option 1"),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Text("Option 2"),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Text("Option 3"),
+        ),
+      ],
+      elevation: 8.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int _gridSize;
@@ -18,28 +41,67 @@ class _GamePageState extends State<GamePage> {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final type = args[
-        'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde
+        'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde, defi si defi contre la montre
     final size = args['size'];
 
-    if (size == "6x6") {
-      _gridSize = 6;
+    if (size == "10x10") {
+      _gridSize = 10;
     } else if (size == "8x8") {
       _gridSize = 8;
     } else {
-      _gridSize = 10;
+      _gridSize = 6;
     }
 
     return (CoreWidget(
         child: Center(
             child: Column(children: [
       const SizedBox(height: 100),
-      const Text("MASYU",
-          style: TextStyle(
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Enregistrer ou abandonner'),
+                    content: Text('Si vous abandonnez la partie vous perdrez x points'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Abandonner'),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/');
+                          // TODO: Gérer la perte de points
+                        },
+                      ),
+                      TextButton(
+                        child: Text('Sauvegarder'),
+                        onPressed: () {
+                          // faire quelque chose ici
+                           Navigator.of(context).pushNamed('/');
+                           //TODO: Gérer la sauvegarde
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(
+              BootstrapIcons.arrow_left,
               color: Colors.white,
-              letterSpacing: 10,
-              fontSize: 40,
-              fontWeight: FontWeight.w600)),
-      const SizedBox(height: 80),
+              size: 25,
+            )),
+        const SizedBox(width: 15),
+        const Text("MASYU",
+            style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 10,
+                fontSize: 40,
+                fontWeight: FontWeight.w600))
+      ]),
+      const SizedBox(height: 30),
+      StopWatchWidget(),
+      const SizedBox(height: 30),
       GrilleWidget(gridSize: _gridSize),
       const SizedBox(height: 40),
       Container(
