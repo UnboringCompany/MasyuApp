@@ -18,12 +18,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
     _gridWidgets = List.generate(
         6 * 6,
         (index) => Container(
-              color: Colors.grey[200],
-              child: Center(
-                child: Text(
-                  '${index}',
-                  textAlign: TextAlign.center,
-                ),
+              decoration: const BoxDecoration(
+                color: Color(0xff373855),
               ),
             ));
   }
@@ -106,22 +102,57 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         width: 350,
         child: Stack(children: [
           // Déplacez le Stack dans le GestureDetector
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 6 * 6,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 6,
-              childAspectRatio: 1.0,
-              crossAxisSpacing: 1.0,
-              mainAxisSpacing: 1.0,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () => _updateGridWidget(
-                    index, Icon(Icons.favorite, color: Colors.red)),
-                child: _gridWidgets[index],
-              );
-            },
+          Container(
+            padding: EdgeInsets.all(1.0),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 6 * 6,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 1.0,
+                mainAxisSpacing: 1.0,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+
+                if(index == 0) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6-1) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6*(6-1)) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0))
+                    ),
+                  );
+                } else if(index == 6*6 - 1) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0))
+                    ),
+                  );
+                }
+
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xff373855),
+                  ),
+                );
+              },
+            ) ,
           ),
           CustomPaint(
               painter: LinePainter(liens, context),
@@ -146,7 +177,9 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             },),
             ),
 
-            CircleWidget(x: 30.0, y:30.0, couleur: "blanc"),
+            CircleWidget(x: 30.0, y:30.0, couleur: "noir"),
+            CircleWidget(x: 87.0, y:87.0, couleur: "blanc"),
+
         ]),
       ),
     ));
