@@ -40,6 +40,7 @@ dependencies:
   bootstrap_icons: ^1.10.2
   flutter_volume_controller: ^1.2.5
   vibration: ^1.7.6
+  get :
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,10 @@ dev_dependencies:
 flutter:
   assets:
     - asset/Citation.txt
+    - asset/rule1.png
+    - asset/rule2.png
+    - asset/rule3.png
+    - asset/rule4.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
