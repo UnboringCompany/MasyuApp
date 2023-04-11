@@ -10,25 +10,9 @@ class GrilleWidget extends StatefulWidget {
 }
 
 class _GrilleWidgetState extends State<GrilleWidget> {
-  late List<Widget> _gridWidgets;
+
   List<List<int>> liens =
       List.generate(6 * 6, (_) => List<int>.filled(6 * 6, 0));
-
-  _GrilleWidgetState() {
-    _gridWidgets = List.generate(
-        6 * 6,
-        (index) => Container(
-              decoration: const BoxDecoration(
-                color: Color(0xff373855),
-              ),
-            ));
-  }
-
-  void _updateGridWidget(int index, Widget newWidget) {
-    setState(() {
-      _gridWidgets[index] = newWidget;
-    });
-  }
 
   int _calculateIndex(Offset offset) {
     final double width = context.size!.width / 6;
@@ -38,7 +22,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
   }
 
   bool _isTapOnLine(Offset lineStart, Offset lineEnd, Offset tapPosition) {
-    final threshold =10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
+    const threshold = 10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
     final distanceFromStart = (tapPosition - lineStart).distance;
     final distanceFromEnd = (tapPosition - lineEnd).distance;
     final lineLength = (lineEnd - lineStart).distance;
@@ -82,10 +66,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                 (startIndex - endIndex).abs() == 6) {
               if (((startIndex + 1) % 6 == 0 &&
                   (startIndex - endIndex) == -1)) {
-                print('hit !');
               } else if (((startIndex + 1) % 6 == 1 &&
                   (startIndex - endIndex) == 1)) {
-                print('hit2 !');
               } else {
                 liens[startIndex][endIndex] = 1;
                 liens[endIndex][startIndex] = 1;
@@ -177,8 +159,11 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             },),
             ),
 
-            CircleWidget(x: 30.0, y:30.0, couleur: "noir"),
-            CircleWidget(x: 87.0, y:87.0, couleur: "blanc"),
+            //Ajout des cercles
+            CircleWidget(position: _getCenterPosition(0), couleur: "noir"),
+            CircleWidget(position: _getCenterPosition(12), couleur: "blanc"),
+            CircleWidget(position: _getCenterPosition(3), couleur: "noir"),
+
 
         ]),
       ),
@@ -195,8 +180,8 @@ class LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Color(0xff3D4AEB)
-      ..strokeWidth = 5;
+      ..color = const Color(0xff3D4AEB)
+      ..strokeWidth = 4;
 
     for (int i = 0; i < liens.length; i++) {
       for (int j = 0; j < liens[0].length; j++) {

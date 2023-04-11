@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class CircleWidget extends StatefulWidget {
 
-  final double x;
-  final double y;
+  final Offset position;
   final String couleur;
-  const CircleWidget({super.key, required this.x, required this.y, required this.couleur});
+  const CircleWidget({super.key, required this.position, required this.couleur});
 
   @override
   State<StatefulWidget> createState() => _CircleWidgetState();
@@ -17,8 +16,8 @@ class _CircleWidgetState extends State<CircleWidget> {
   Widget build(BuildContext context) {
     return(
       Positioned(
-      left: widget.x - 20,
-      top: widget.y - 20,
+      left: widget.position.dx - 20,
+      top: widget.position.dy - 20,
       child: Container(
         width: 20 * 2,
         height: 20 * 2,
