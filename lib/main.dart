@@ -4,6 +4,7 @@ import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
+import 'package:masyu_app/rule.dart';
 import 'package:masyu_app/setings.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
@@ -55,6 +56,15 @@ class _MenuState extends State<MenuPage> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const Settings(),
+      ),
+    );
+  }
+
+  void seeRules() {
+    Navigator.pushReplacement<void, void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const Rule(),
       ),
     );
   }
@@ -121,7 +131,7 @@ class _MenuState extends State<MenuPage> {
                     color: Color(0xffB15653),
                     borderRadius: BorderRadius.circular(10)),
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: seeRules,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.transparent,
                       elevation: 0,

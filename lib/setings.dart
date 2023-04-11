@@ -17,6 +17,8 @@ class Settings extends StatefulWidget {
 class _Settings extends State<Settings> {
   bool? sound = true;
   bool vibrate = true;
+  String _selectedOption = 'Français';
+  List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
 
   @override
   void initState() {
