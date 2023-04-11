@@ -51,12 +51,12 @@ class _Rule extends State<Rule> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'asset/rule1.png',
+            'assets/images/rule1.png',
             width: 181,
             height: 182.31,
           ),
           Image.asset(
-            'asset/rule2.png',
+            'assets/images/rule2.png',
             width: 181,
             height: 182.31,
           )
@@ -65,12 +65,12 @@ class _Rule extends State<Rule> {
       const SizedBox(height: 20),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Image.asset(
-          'asset/rule3.png',
+          'assets/images/rule3.png',
           width: 181,
           height: 182.31,
         ),
         Image.asset(
-          'asset/rule4.png',
+          'assets/images/rule4.png',
           width: 181,
           height: 182.31,
         )

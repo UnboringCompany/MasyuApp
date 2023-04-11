@@ -12,6 +12,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   @override
+
   Widget build(BuildContext context) {
     int _gridSize;
 
@@ -48,7 +49,10 @@ class _GamePageState extends State<GamePage> {
             color: Color(0x7F373855),
           ),
           child: IconButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.pushNamed(context, "/video"),
+              // TODO : ajoute l'indice dans la grille
+            },
             icon: const Icon(BootstrapIcons.lightbulb),
             color: Colors.white,
           )),
