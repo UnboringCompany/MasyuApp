@@ -18,7 +18,7 @@ class _Settings extends State<Settings> {
   bool? sound = true;
   bool vibrate = true;
   String _selectedOption = 'Français';
-  List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
+  List<String> _options = ['English', 'Deutch', 'Français', 'Español', '日本'];
 
   @override
   void initState() {
@@ -50,8 +50,8 @@ class _Settings extends State<Settings> {
   }
 
   final List locale = [
-    {'name': 'English', 'locale': Locale('fr', 'FR')},
-    {'name': 'Français', 'locale': Locale('en', 'US')},
+    {'name': 'Français', 'locale': Locale('fr', 'FR')},
+    {'name': 'English', 'locale': Locale('en', 'US')},
     {'name': 'Deutch', 'locale': Locale('de', 'DE')},
     {'name': 'Español', 'locale': Locale('es', 'ES')},
     {'name': '日本', 'locale': Locale('ja', 'JP')},
@@ -65,8 +65,6 @@ class _Settings extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    String _selectedOption = 'language'.tr;
-    List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
 
     return CoreWidget(
         child: Center(
@@ -169,6 +167,8 @@ class _Settings extends State<Settings> {
                   onChanged: (String? value) {
                     setState(() {
                       _selectedOption = value!;
+                      updatelanguage(locale[locale.indexWhere((element) =>
+                          element['name'] == _selectedOption)]['locale']);
                     });
                   },
                   items: _options.map((String option) {
@@ -194,7 +194,7 @@ class _Settings extends State<Settings> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'credits'.tr + 'team'.tr,
+                'credits'.tr + '\n' + 'team'.tr,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
