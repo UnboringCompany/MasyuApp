@@ -265,6 +265,18 @@ class Grille {
     return true;
   }
 
+  /// Fonction qui permet d'aller chercher un indice
+  /// @return true si la grille est complète, false sinon
+  getClue(){
+    // Cherche dans la liste des traits de la solution un trait qui n'est pas dans la liste des traits de la grille
+    List<Trait> listeTraitNotPlaced = List<Trait>.empty(growable: true);
+    listeTraitNotPlaced = _listeTraitsSolution;
+    listeTraitNotPlaced.removeWhere((element) => _listeTraits.contains(element));
+    int size = listeTraitNotPlaced.length;
+
+    return listeTraitNotPlaced[Random().nextInt(size)];
+  }
+
   // Accesseurs
 
   /// Fonction qui permet de récupérer la taille de la grille
