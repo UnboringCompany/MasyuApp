@@ -29,7 +29,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
     final double width = context.size!.width / widget.gridSize;
     final int column = (offset.dx / width).floor();
     final int row = (offset.dy / width).floor();
-    return row * 6 + column;
+    return row * widget.gridSize + column;
   }
 
   bool _isTapOnLine(Offset lineStart, Offset lineEnd, Offset tapPosition) {
@@ -44,8 +44,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
   Offset _getCenterPosition(int index) {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final cellSize = gridBox.size.width / widget.gridSize; // La taille d'une case de la grille
-    final row = (index / 6).floor(); // Le numéro de ligne de la case
-    final col = index % 6; // Le numéro de colonne de la case
+    final row = (index / widget.gridSize).floor(); // Le numéro de ligne de la case
+    final col = index % widget.gridSize; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
     final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
     return Offset(x, y); // Retourne l'offset du centre de la case
