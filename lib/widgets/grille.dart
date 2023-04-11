@@ -2,6 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:masyu_app/objects/cell.dart';
+import 'package:masyu_app/objects/cercle.dart';
+import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/widgets/circle.dart';
 
 class GrilleWidget extends StatefulWidget {
@@ -10,6 +14,9 @@ class GrilleWidget extends StatefulWidget {
 }
 
 class _GrilleWidgetState extends State<GrilleWidget> {
+
+  Grille grille = Grille(6);
+  List<CircleWidget> cercles = List.empty(growable: true);
 
   List<List<int>> liens =
       List.generate(6 * 6, (_) => List<int>.filled(6 * 6, 0));
@@ -39,6 +46,22 @@ class _GrilleWidgetState extends State<GrilleWidget> {
     final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
     return Offset(x, y); // Retourne l'offset du centre de la case
 }
+
+ @override
+  void initState() {
+    super.initState();
+    grille.generate();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      for(Cell cell in grille.getListeCells()) {
+        if(cell is Cercle) {
+          cercles.add(
+            CircleWidget(position: _getCenterPosition(cell.getPosX() + cell.getPosY()*6), couleur: cell.getColor() == 1 ? "blanc" : "noir"),
+          );
+        }
+      }
+    setState((){}); // Force la mise à jour de l'affichage
+  });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +183,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             ),
 
             //Ajout des cercles
-            CircleWidget(position: _getCenterPosition(0), couleur: "noir"),
-            CircleWidget(position: _getCenterPosition(12), couleur: "blanc"),
-            CircleWidget(position: _getCenterPosition(3), couleur: "noir"),
+            ...cercles,          
 
 
         ]),
