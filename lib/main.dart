@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:masyu_app/objects/grille.dart';
+import 'package:masyu_app/objects/cell.dart';
+import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/setings.dart';
 import 'package:masyu_app/widgets/citation.dart';
@@ -43,7 +46,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuState extends State<MenuPage> {
-  //TODO: Changer les tailles de sizedbox en dynamique
+  
 
   void seeSettings() {
     Navigator.pushReplacement<void, void>(
