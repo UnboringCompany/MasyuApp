@@ -1,9 +1,12 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/objects/grille.dart';
+import 'package:get/get.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
 import 'package:masyu_app/widgets/stopwatch.dart';
+
+import 'main.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -13,12 +16,17 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  
+  void seeHomePage() {
+    Navigator.pushReplacement<void, void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const MenuPage(),
+      ),
+    );
+  }
 
   @override
-
   Widget build(BuildContext context) {
-
     int _gridSize;
     Grille grille;
 
@@ -39,6 +47,160 @@ class _GamePageState extends State<GamePage> {
     grille = Grille(_gridSize);
     grille.generate();
 
+    void showPopupMenu(BuildContext context) async {
+      final result = await showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(1000.0, 1000.0, 0.0, 0.0),
+        items: [
+          PopupMenuItem(
+            value: 1,
+            child: Text("Option 1"),
+          ),
+          PopupMenuItem(
+            value: 2,
+            child: Text("Option 2"),
+          ),
+          PopupMenuItem(
+            value: 3,
+            child: Text("Option 3"),
+          ),
+        ],
+        elevation: 8.0,
+      );
+    }
+
+    void losePopup(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('game_over'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            backgroundColor: Colors.transparent,
+            content: Text('game_over_text'.trParams({'points': '32'}),
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.x),
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, '/solution',
+                          arguments: {'grille': grille});
+                    },
+                  )),
+            ],
+          );
+        },
+      );
+    }
+
+    void abandonPopup(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'abandon'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.transparent,
+            content: Text('abandon_text'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x7F373855),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(BootstrapIcons.check),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        losePopup(context);
+                      },
+                      color: Colors.white,
+                    )),
+                const SizedBox(width: 50),
+                Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x7F373855),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(BootstrapIcons.x),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      color: Colors.red,
+                    ))
+              ]),
+            ],
+          );
+        },
+      );
+    }
+
+    void cluePopup(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('clue'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            backgroundColor: Colors.transparent,
+            content: Text('clue_text'.trParams({'points': '10'}),
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x7F373855),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(BootstrapIcons.check),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, "/video");
+                      },
+                      color: Colors.white,
+                    )),
+                const SizedBox(width: 50),
+                Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x7F373855),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(BootstrapIcons.x),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      color: Colors.red,
+                    ))
+              ]),
+            ],
+          );
+        },
+      );
+    }
+
     return (CoreWidget(
         child: Center(
             child: Column(children: [
@@ -50,24 +212,39 @@ class _GamePageState extends State<GamePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Enregistrer ou abandonner'),
-                    content: Text('Si vous abandonnez la partie vous perdrez x points'),
+                    backgroundColor: Colors.transparent,
+                    title: Text('game_back'.tr,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.white)),
+                    content: Text('game_back_text'.trParams({'points': '40'}),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[
-                      TextButton(
-                        child: Text('Abandonner'),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/');
-                          // TODO: Gérer la perte de points
-                        },
-                      ),
-                      TextButton(
-                        child: Text('Sauvegarder'),
-                        onPressed: () {
-                          // faire quelque chose ici
-                           Navigator.of(context).pushNamed('/');
-                           //TODO: Gérer la sauvegarde
-                        },
-                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              child: Text('give_up'.tr,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pushNamed('/');
+                                // TODO: Gérer la perte de points
+                              },
+                            ),
+                            TextButton(
+                              child: Text('save'.tr,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                // faire quelque chose ici
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pushNamed('/');
+                                //TODO: Gérer la sauvegarde
+                              },
+                            ),
+                          ])
                     ],
                   );
                 },
@@ -89,7 +266,11 @@ class _GamePageState extends State<GamePage> {
       const SizedBox(height: 30),
       StopWatchWidget(),
       const SizedBox(height: 30),
-      GrilleWidget(gridSize: _gridSize, grille: grille, solution: false,),
+      GrilleWidget(
+        gridSize: _gridSize,
+        grille: grille,
+        solution: false,
+      ),
       const SizedBox(height: 40),
       Container(
           decoration: const BoxDecoration(
@@ -97,10 +278,7 @@ class _GamePageState extends State<GamePage> {
             color: Color(0x7F373855),
           ),
           child: IconButton(
-            onPressed: () => {
-              Navigator.pushNamed(context, "/video"),
-              // TODO : ajoute l'indice dans la grille
-            },
+            onPressed: () => {cluePopup(context)},
             icon: const Icon(BootstrapIcons.lightbulb),
             color: Colors.white,
           )),
@@ -140,9 +318,7 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {
-                    Navigator.pushNamed(context, '/solution', arguments: {'grille': grille})
-                },
+                onPressed: () => {abandonPopup(context)},
                 icon: const Icon(BootstrapIcons.x),
                 color: Colors.red,
               )),

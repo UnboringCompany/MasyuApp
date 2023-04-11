@@ -29,13 +29,18 @@ class LocalString extends Translations {
           'abandon_text': 'Abandonner vous fera perdre des points d\'élo',
           'bravo': 'Bravo !',
           'bravo_text':
-              'Vous avez gagné en {time} \nVous avez ainsi gagné {points} points',
+              'Vous avez gagné en @time \nVous avez ainsi gagné @points points',
           'game_over': 'Dommage !',
           'game_over_text':
-              'Vous n\'avez pas trouvé la solution\nVous perdez {points} points',
+              'Vous n\'avez pas trouvé la solution\nVous perdez @points points',
           'clue': 'Êtes vous sûr de vouloir un indice ?',
           'clue_text':
-              'L\'indice vous fera perdre {points} points sur cette partie',
+              'L\'indice vous fera perdre @points points sur cette partie',
+          'game_back': 'Enregistrer ou abandonner',
+          'game_back_text':
+              'Si vous abandonnez la partie vous perdrez @points points',
+          'give_up': 'Abandonner',
+          'save': 'Sauvegarder'
         },
         'en_UK': {
           'title': 'MASYU',
@@ -62,13 +67,18 @@ class LocalString extends Translations {
           'abandon': 'Are you sure you want to give up ?',
           'abandon_text': 'Giving up will make you lose elo points',
           'bravo': 'Good Job !',
-          'bravo_text': 'You won in {time} \nYou thus won {points} points',
+          'bravo_text': 'You won in @time \nYou thus won @points points',
           'game_over': 'Too bad !',
           'game_over_text':
-              'You did not find the solution\nYou lose {points} points',
+              'You did not find the solution\nYou lose @points points',
           'clue': 'Are you sure you want a clue ?',
           'clue_text':
-              'The clue will make you lose {points} points on this game',
+              'The clue will make you lose @points points on this game',
+          'game_back': 'Save or Give up',
+          'game_back_text':
+              'If you abandon the game you will lose @points points',
+          'give_up': 'Give up',
+          'save': 'Save'
         },
         'de_DE': {
           'title': 'MASYU',
@@ -96,13 +106,18 @@ class LocalString extends Translations {
           'abandon_text': 'Aufgeben wird Sie Elo-Punkte kosten',
           'bravo': 'Gute Arbeit !',
           'bravo_text':
-              'Du hast in {time} gewonnen \nDu hast also {points} Punkte gewonnen',
+              'Du hast in @time gewonnen \nDu hast also @points Punkte gewonnen',
           'game_over': 'Schade !',
           'game_over_text':
-              'Sie haben die Lösung nicht gefunden\nDu verlierst {points} Punkte',
+              'Sie haben die Lösung nicht gefunden\nDu verlierst @points Punkte',
           'clue': 'Bist du sicher, dass du einen Hinweis willst ?',
           'clue_text':
-              'Der Hinweis wird Sie {points} Punkte auf diesem Spiel kosten',
+              'Der Hinweis wird Sie @points Punkte auf diesem Spiel kosten',
+          'game_back': 'Speichern oder aufgeben',
+          'game_back_text':
+              'Wenn Sie das Spiel abbrechen, verlieren Sie @points Punkte',
+          'give_up': 'Aufgeben',
+          'save': 'Zu schützen'
         },
         'es_ES': {
           'title': 'MASYU',
@@ -129,12 +144,16 @@ class LocalString extends Translations {
           'abandon': '¿Estás seguro de que quieres abandonar?',
           'abandon_text': 'Abandonar te hará perder puntos de elo.',
           'bravo': '¡Bien hecho!',
-          'bravo_text': 'Has ganado en {time} \nHas ganado {points} puntos.',
+          'bravo_text': 'Has ganado en @time \nHas ganado @points puntos.',
           'game_over': 'Lástima',
           'game_over_text':
-              'No has encontrado la solución\nPierdes {points} puntos',
+              'No has encontrado la solución\nPierdes @points puntos',
           'clue': '¿Seguro que quieres una pista?',
-          'clue_text': 'La pista te costará {points} puntos para este juego',
+          'clue_text': 'La pista te costará @points puntos para este juego',
+          'game_back': 'Guardar o abandonar',
+          'game_back_text': 'Si abandonas el juego perderás @points puntos',
+          'give_up': 'Abandonar',
+          'save': 'Guardar'
         },
         'ja_JP': {
           'title': 'MASYU',
@@ -159,11 +178,15 @@ class LocalString extends Translations {
           'abandon': 'あなたはあきらめたいと思いますか？',
           'abandon_text': 'あきらめると、あなたはeloポイントを失います。',
           'bravo': 'よくできました！',
-          'bravo_text': 'あなたは{time}で勝ちました \nあなたは{points}ポイントを獲得しました',
+          'bravo_text': 'あなたは@timeで勝ちました \nあなたは@pointsポイントを獲得しました',
           'game_over': '残念！',
-          'game_over_text': 'あなたは解決策を見つけていません\nあなたは{points}ポイントを失います',
+          'game_over_text': 'あなたは解決策を見つけていません\nあなたは@pointsポイントを失います',
           'clue': 'あなたはヒントを必要としていますか？',
-          'clue_text': 'このゲームのために{points}ポイントを支払うヒント',
+          'clue_text': 'このゲームのために@pointsポイントを支払うヒント',
+          'game_back': '保存または放棄',
+          'game_back_text': 'ゲームを放棄すると、@points ポイントを失います',
+          'give_up': 'あきらめる',
+          'save': '守るために'
         },
       };
 }
