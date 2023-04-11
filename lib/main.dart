@@ -6,12 +6,14 @@ import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/rule.dart';
 import 'package:masyu_app/setings.dart';
+import 'package:masyu_app/solution.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
 import 'package:masyu_app/widgets/tile.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:get/get.dart';
+import 'package:masyu_app/video.dart';
 
 import 'game.dart';
 
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MenuPage(),
         '/game': (context) => GamePage(),
+        '/solution': (context) => SolutionPage(),
+        '/video': (context) => Video(),
       },
     );
   }
@@ -51,7 +55,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuState extends State<MenuPage> {
-
   String _dropdownValue = '';
 
   void seeSettings() {
@@ -79,7 +82,7 @@ class _MenuState extends State<MenuPage> {
     List<String> _options = ['6x6', '8x8', '10x10'];
 
     return CoreWidget(
-        child: Center(
+      child: Center(
       child: Column(
         children: [
           const SizedBox(height: 100),
@@ -113,7 +116,8 @@ class _MenuState extends State<MenuPage> {
                 borderRadius: BorderRadius.circular(10)),
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, "/game", arguments: {'type': 'new', 'size': _dropdownValue});
+                  Navigator.pushNamed(context, "/game",
+                      arguments: {'type': 'new', 'size': _dropdownValue});
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
@@ -127,7 +131,8 @@ class _MenuState extends State<MenuPage> {
               setState(() {
                 _dropdownValue = newValue;
               });
-            },),
+            },
+          ),
           const SizedBox(height: 70),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -1,5 +1,6 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
 import 'package:masyu_app/widgets/stopwatch.dart';
@@ -12,31 +13,14 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  void showPopupMenu(BuildContext context) async {
-    final result = await showMenu(
-      context: context,
-      position: RelativeRect.fromLTRB(1000.0, 1000.0, 0.0, 0.0),
-      items: [
-        PopupMenuItem(
-          value: 1,
-          child: Text("Option 1"),
-        ),
-        PopupMenuItem(
-          value: 2,
-          child: Text("Option 2"),
-        ),
-        PopupMenuItem(
-          value: 3,
-          child: Text("Option 3"),
-        ),
-      ],
-      elevation: 8.0,
-    );
-  }
+  
 
   @override
+
   Widget build(BuildContext context) {
+
     int _gridSize;
+    Grille grille;
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -51,6 +35,9 @@ class _GamePageState extends State<GamePage> {
     } else {
       _gridSize = 6;
     }
+
+    grille = Grille(_gridSize);
+    grille.generate();
 
     return (CoreWidget(
         child: Center(
@@ -102,7 +89,7 @@ class _GamePageState extends State<GamePage> {
       const SizedBox(height: 30),
       StopWatchWidget(),
       const SizedBox(height: 30),
-      GrilleWidget(gridSize: _gridSize),
+      GrilleWidget(gridSize: _gridSize, grille: grille, solution: false,),
       const SizedBox(height: 40),
       Container(
           decoration: const BoxDecoration(
@@ -110,7 +97,10 @@ class _GamePageState extends State<GamePage> {
             color: Color(0x7F373855),
           ),
           child: IconButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.pushNamed(context, "/video"),
+              // TODO : ajoute l'indice dans la grille
+            },
             icon: const Icon(BootstrapIcons.lightbulb),
             color: Colors.white,
           )),
@@ -150,7 +140,9 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {},
+                onPressed: () => {
+                    Navigator.pushNamed(context, '/solution', arguments: {'grille': grille})
+                },
                 icon: const Icon(BootstrapIcons.x),
                 color: Colors.red,
               )),

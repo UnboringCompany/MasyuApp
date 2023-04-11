@@ -16,7 +16,7 @@ class _CitationWidgetState extends State<CitationWidget> {
   initState() {
     super.initState();
     Future.microtask(() async {
-      String contenuFichier = await rootBundle.loadString('asset/Citation.txt');
+      String contenuFichier = await rootBundle.loadString('assets/Citation.txt');
       List<String> lignes = contenuFichier.split('\n');
 
       setState(() {
