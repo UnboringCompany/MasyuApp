@@ -13,7 +13,8 @@ class GrilleWidget extends StatefulWidget {
 
   final int gridSize;
   final Grille grille;
-  const GrilleWidget({super.key, required this.gridSize, required this.grille});
+  final bool solution;
+  const GrilleWidget({super.key, required this.gridSize, required this.grille, required this.solution});
 
   @override
   State<StatefulWidget> createState() => _GrilleWidgetState();
@@ -64,6 +65,15 @@ class _GrilleWidgetState extends State<GrilleWidget> {
           );
         }
       }
+
+      if(widget.solution) {
+        //TODO: Ajouter le traçage des traits de solution
+        for(Trait t in widget.grille.getListeTraitsSolution()) {
+                liens[t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize][t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize] = 1;
+                liens[t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize][t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize] = 1;
+        }
+      }
+
     setState((){}); // Force la mise à jour de l'affichage
   });
   }
@@ -83,7 +93,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         final endIndex = ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
             (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
 
-        if (startIndex >= 0 &&
+        if(!widget.solution) {
+          if (startIndex >= 0 &&
             startIndex <= (widget.gridSize*widget.gridSize) - 1 &&
             endIndex >= 0 &&
             endIndex <= (widget.gridSize * widget.gridSize) - 1) {
@@ -107,6 +118,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             }
           }
         }
+        }
+        
       },
 
       child: Container(

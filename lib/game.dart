@@ -88,7 +88,7 @@ class _GamePageState extends State<GamePage> {
       const SizedBox(height: 30),
       StopWatchWidget(),
       const SizedBox(height: 30),
-      GrilleWidget(gridSize: _gridSize, grille: grille),
+      GrilleWidget(gridSize: _gridSize, grille: grille, solution: false,),
       const SizedBox(height: 40),
       Container(
           decoration: const BoxDecoration(
@@ -137,7 +137,7 @@ class _GamePageState extends State<GamePage> {
               ),
               child: IconButton(
                 onPressed: () => {
-                  
+                    Navigator.pushNamed(context, '/solution', arguments: {'grille': grille})
                 },
                 icon: const Icon(BootstrapIcons.x),
                 color: Colors.red,

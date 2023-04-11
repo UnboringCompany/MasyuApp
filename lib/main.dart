@@ -6,6 +6,7 @@ import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/rule.dart';
 import 'package:masyu_app/setings.dart';
+import 'package:masyu_app/solution.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
 import 'package:masyu_app/widgets/tile.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MenuPage(),
         '/game': (context) => GamePage(),
+        '/solution': (context) => SolutionPage(),
       },
     );
   }
