@@ -28,7 +28,7 @@ class _GamePageState extends State<GamePage> {
               )
             ),
             const SizedBox(height: 80),
-            GrilleWidget(),
+            GrilleWidget(gridSize: 10),
           ]
           )
         )

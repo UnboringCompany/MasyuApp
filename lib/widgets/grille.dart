@@ -9,20 +9,23 @@ import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/widgets/circle.dart';
 
 class GrilleWidget extends StatefulWidget {
+
+  final int gridSize;
+  const GrilleWidget({super.key, required this.gridSize});
+
   @override
   State<StatefulWidget> createState() => _GrilleWidgetState();
 }
 
 class _GrilleWidgetState extends State<GrilleWidget> {
 
-  Grille grille = Grille(6);
+  late Grille grille;
   List<CircleWidget> cercles = List.empty(growable: true);
 
-  List<List<int>> liens =
-      List.generate(6 * 6, (_) => List<int>.filled(6 * 6, 0));
+  late List<List<int>> liens;
 
   int _calculateIndex(Offset offset) {
-    final double width = context.size!.width / 6;
+    final double width = context.size!.width / widget.gridSize;
     final int column = (offset.dx / width).floor();
     final int row = (offset.dy / width).floor();
     return row * 6 + column;
@@ -39,7 +42,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   Offset _getCenterPosition(int index) {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
-    final cellSize = gridBox.size.width / 6; // La taille d'une case de la grille
+    final cellSize = gridBox.size.width / widget.gridSize; // La taille d'une case de la grille
     final row = (index / 6).floor(); // Le numéro de ligne de la case
     final col = index % 6; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
@@ -50,12 +53,16 @@ class _GrilleWidgetState extends State<GrilleWidget> {
  @override
   void initState() {
     super.initState();
+    liens =  List.generate(widget.gridSize * widget.gridSize, (_) => List<int>.filled(widget.gridSize * widget.gridSize, 0));
+    grille = Grille(widget.gridSize);
     grille.generate();
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
+
       for(Cell cell in grille.getListeCells()) {
         if(cell is Cercle) {
           cercles.add(
-            CircleWidget(position: _getCenterPosition(cell.getPosX() + cell.getPosY()*6), couleur: cell.getColor() == 1 ? "blanc" : "noir"),
+            CircleWidget(position: _getCenterPosition(cell.getPosX() + cell.getPosY()*widget.gridSize), couleur: cell.getColor() == 1 ? "blanc" : "noir", size: widget.gridSize),
           );
         }
       }
@@ -73,23 +80,23 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         final endPos =
             gridBox.globalToLocal(details.globalPosition + details.delta);
 
-        final startIndex = ((startPos.dx / gridBox.size.width) * 6).floor() +
-            (((startPos.dy / gridBox.size.height) * 6).floor() * 6);
-        final endIndex = ((endPos.dx / gridBox.size.width) * 6).floor() +
-            (((endPos.dy / gridBox.size.height) * 6).floor() * 6);
+        final startIndex = ((startPos.dx / gridBox.size.width) * widget.gridSize).floor() +
+            (((startPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
+        final endIndex = ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
+            (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
 
         if (startIndex >= 0 &&
-            startIndex <= 35 &&
+            startIndex <= widget.gridSize*widget.gridSize - 1 &&
             endIndex >= 0 &&
-            endIndex <= 35) {
+            endIndex <= widget.gridSize * widget.gridSize - 1) {
           if (liens[startIndex][endIndex] == 0 &&
               liens[endIndex][startIndex] == 0 &&
               startIndex != endIndex) {
             if ((startIndex - endIndex).abs() == 1 ||
-                (startIndex - endIndex).abs() == 6) {
-              if (((startIndex + 1) % 6 == 0 &&
+                (startIndex - endIndex).abs() == widget.gridSize) {
+              if (((startIndex + 1) % widget.gridSize == 0 &&
                   (startIndex - endIndex) == -1)) {
-              } else if (((startIndex + 1) % 6 == 1 &&
+              } else if (((startIndex + 1) % widget.gridSize == 1 &&
                   (startIndex - endIndex) == 1)) {
               } else {
                 liens[startIndex][endIndex] = 1;
@@ -112,9 +119,9 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 6 * 6,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 6,
+              itemCount: widget.gridSize * widget.gridSize,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: widget.gridSize,
                 childAspectRatio: 1.0,
                 crossAxisSpacing: 1.0,
                 mainAxisSpacing: 1.0,
@@ -128,21 +135,21 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0))
                     ),
                   );
-                } else if(index == 6-1) {
+                } else if(index == widget.gridSize-1) {
                   return Container(
                     decoration: const BoxDecoration(
                       color: Color(0xff373855),
                       borderRadius: BorderRadius.only(topRight: Radius.circular(10.0))
                     ),
                   );
-                } else if(index == 6*(6-1)) {
+                } else if(index == widget.gridSize*(widget.gridSize-1)) {
                   return Container(
                     decoration: const BoxDecoration(
                       color: Color(0xff373855),
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0))
                     ),
                   );
-                } else if(index == 6*6 - 1) {
+                } else if(index == widget.gridSize*widget.gridSize - 1) {
                   return Container(
                     decoration: const BoxDecoration(
                       color: Color(0xff373855),
@@ -160,7 +167,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             ) ,
           ),
           CustomPaint(
-              painter: LinePainter(liens, context),
+              painter: LinePainter(liens, context, widget.gridSize),
               child:  GestureDetector(
             onTapDown: (details) {
               for (int i = 0; i < liens.length; i++) {
@@ -194,9 +201,10 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
 class LinePainter extends CustomPainter {
   final List<List<int>> liens;
+  final int gridSize;
   BuildContext context;
 
-  LinePainter(this.liens, this.context);
+  LinePainter(this.liens, this.context, this.gridSize);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -207,7 +215,7 @@ class LinePainter extends CustomPainter {
     for (int i = 0; i < liens.length; i++) {
       for (int j = 0; j < liens[0].length; j++) {
         if (liens[i][j] == 1) {
-          canvas.drawLine(_getCenterPosition(i), _getCenterPosition(j), paint);
+          canvas.drawLine(_getCenterPosition(i, gridSize), _getCenterPosition(j, gridSize), paint);
         }
       }
     }
@@ -218,12 +226,12 @@ class LinePainter extends CustomPainter {
     return true;
   }
 
-  Offset _getCenterPosition(int index) {
+  Offset _getCenterPosition(int index, int gridSize) {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final cellSize =
-        gridBox.size.width / 6; // La taille d'une case de la grille
-    final row = (index / 6).floor(); // Le numéro de ligne de la case
-    final col = index % 6; // Le numéro de colonne de la case
+        gridBox.size.width / gridSize; // La taille d'une case de la grille
+    final row = (index / gridSize).floor(); // Le numéro de ligne de la case
+    final col = index % gridSize; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
     final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
     return Offset(x, y); // Retourne l'offset du centre de la case
