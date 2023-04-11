@@ -2,6 +2,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
+import 'package:masyu_app/widgets/stopwatch.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -33,13 +34,25 @@ class _GamePageState extends State<GamePage> {
         child: Center(
             child: Column(children: [
       const SizedBox(height: 100),
-      const Text("MASYU",
-          style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 10,
-              fontSize: 40,
-              fontWeight: FontWeight.w600)),
-      const SizedBox(height: 80),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+                onPressed: () => {Navigator.pushNamed(context, '/')},
+                icon: const Icon(
+                  BootstrapIcons.arrow_left,
+                  color: Colors.white,
+                  size: 25,
+                )),
+            const SizedBox(width: 15),
+            Text("MASYU",
+                style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 10,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w600))
+      ]),
+      const SizedBox(height: 30),
+      StopWatchWidget(),
+      const SizedBox(height: 30),
       GrilleWidget(gridSize: _gridSize),
       const SizedBox(height: 40),
       Container(
