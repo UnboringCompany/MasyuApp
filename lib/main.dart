@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masyu_app/LocalString.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
@@ -9,6 +10,7 @@ import 'package:masyu_app/widgets/sizedropdown.dart';
 import 'package:masyu_app/widgets/tile.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:get/get.dart';
 
 import 'game.dart';
 
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-    return MaterialApp(
+    return GetMaterialApp(
+      translations: LocalString(),
+      locale: Locale('fr', 'FR'),
       debugShowCheckedModeBanner: false,
       title: 'MASYU',
       initialRoute: '/',
@@ -46,8 +50,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuState extends State<MenuPage> {
-  
-
   void seeSettings() {
     Navigator.pushReplacement<void, void>(
       context,
@@ -68,7 +70,7 @@ class _MenuState extends State<MenuPage> {
       child: Column(
         children: [
           const SizedBox(height: 100),
-          const Text("MASYU",
+          Text('title'.tr,
               style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 10,
@@ -76,21 +78,19 @@ class _MenuState extends State<MenuPage> {
                   fontWeight: FontWeight.w600)),
           CitationWidget(),
           const SizedBox(height: 80),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Tile(
-                    icon: Icon(
-                      BootstrapIcons.play,
-                      color: Color(0xff3D4AEB),
-                      size: 100,
-                    ),
-                    title: "Reprendre\n6x6 - 1min37"),
-                Tile(
-                    icon: Icon(BootstrapIcons.watch,
-                        color: Color(0xff3D4AEB), size: 80),
-                    title: "Défi\nContre la montre")
-              ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Tile(
+                icon: Icon(
+                  BootstrapIcons.play,
+                  color: Color(0xff3D4AEB),
+                  size: 100,
+                ),
+                title: 'resume'.tr),
+            Tile(
+                icon: Icon(BootstrapIcons.watch,
+                    color: Color(0xff3D4AEB), size: 80),
+                title: 'challenge'.tr)
+          ]),
           const SizedBox(height: 80),
           Container(
             width: 0.85 * size.width,
@@ -106,7 +106,7 @@ class _MenuState extends State<MenuPage> {
                   primary: Colors.transparent,
                   elevation: 0,
                 ),
-                child: Text("Nouvelle partie")),
+                child: Text('new_game'.tr)),
           ),
           const SizedBox(height: 15),
           const GridSizeMenu(),
@@ -126,7 +126,7 @@ class _MenuState extends State<MenuPage> {
                       primary: Colors.transparent,
                       elevation: 0,
                     ),
-                    child: Text("Règles")),
+                    child: Text('rules'.tr)),
               ),
               SizedBox(width: 0.01 * size.width),
               IconButton(

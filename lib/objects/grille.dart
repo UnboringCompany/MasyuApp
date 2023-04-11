@@ -216,15 +216,6 @@ class Grille {
     }
   }
 
-  void replaceCell(int x, int y, int color) {
-    for (int i = 0; i < size; i++) {
-      if (listeCells[i].posX == x && listeCells[i].posY == y) {
-        listeCells[i] = Cercle(x, y, color, false);
-        break;
-      }
-    }
-  }
-
   /// Fonction qui permet de vérifier les conditions pour pouvoir mettre un cercle blanc sur une cellule
   /// @param c : la cellule à vérifier
   /// @return true si on peut mettre un cercle blanc sur la cellule, false sinon
