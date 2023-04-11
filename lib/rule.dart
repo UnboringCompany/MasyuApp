@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/tile.dart';
+import 'LocalString.dart';
+import 'package:get/get.dart';
 
 class Rule extends StatefulWidget {
   const Rule({super.key});
@@ -31,7 +33,7 @@ class _Rule extends State<Rule> {
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         IconButton(
             onPressed: seeHomePage,
-            icon: Icon(
+            icon: const Icon(
               BootstrapIcons.arrow_left,
               color: Colors.white,
               size: 25,
@@ -77,66 +79,65 @@ class _Rule extends State<Rule> {
       Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "But du jeu :",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  "Vous devez relier tous les points de la grille pour faire une boucle unique.\nVous ne pouvez passer qu’une fois dans chaque case.",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 15),
-                Text(
-                  "Pion Blanc :",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  "Pour passer dans un pion blanc, vous devezavancer en ligne droite.\nVous devez tourner de 90° dans la case d’avant, celle d’après ou les deux.",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 15),
-                Text(
-                  "Pion Noir :",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  "Pour passer dans pion noir, vous devez faire un angle de 90° dans la case qui contient le pion.\nVous ne devez surtout pas tourner dans les cases juste avant et juste après.",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ]))
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "goal".tr,
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "goal_text".tr,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "white".tr,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "white_text".tr,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "black".tr,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "black_text".tr,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ]))
     ])));
   }
 }
