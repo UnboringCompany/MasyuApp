@@ -37,6 +37,27 @@ class Partie {
     }
   }
 
+  void startPartie() {
+    grille.generate();
+    chrono = 0;
+  }
+
+  void save() {
+    //TODO
+  }
+
+  void valider() {
+    if (grille.isValid()) {
+      updateScoreJoueur();
+    } else {
+      updateScoreJoueur();
+    }
+  }
+
+  void charger() {
+    //TODO
+  }
+
   @override
   String toString() {
     return 'Partie{grille: $grille, chrono: $chrono, player: $player, scorePartie: $scorePartie}';
