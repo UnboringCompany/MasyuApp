@@ -15,6 +15,8 @@ class Settings extends StatefulWidget {
 class _Settings extends State<Settings> {
   bool? sound = true;
   bool vibrate = true;
+  String _selectedOption = 'Français';
+  List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
 
   @override
   void initState() {
@@ -48,8 +50,6 @@ class _Settings extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    String _selectedOption = 'Français';
-    List<String> _options = ['Français', 'Deutch', 'English', 'Español', '日本'];
 
     return CoreWidget(
         child: Center(
