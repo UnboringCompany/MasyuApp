@@ -18,6 +18,21 @@ class Grille {
         _listeTraits = List<Trait>.empty(growable: true),
         _listeTraitsSolution = List<Trait>.empty(growable: true);
 
+  // Constructeur à partir d'un json
+  Grille.fromJson(Map<String, dynamic> json)
+      : _size = json['size'],
+        _listeCells = json['listeCells'],
+        _listeTraits = json['listeTraits'],
+        _listeTraitsSolution = json['listeTraitsSolution'];
+
+  // Convertit la grille en json
+  Map<String, dynamic> toJson() => {
+        'size': _size,
+        'listeCells': _listeCells,
+        'listeTraits': _listeTraits,
+        'listeTraitsSolution': _listeTraitsSolution,
+      };
+
   // Méthodes
 
   /// Ajoute une cellule à la grille
