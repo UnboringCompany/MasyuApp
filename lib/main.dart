@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
+import 'package:masyu_app/classement.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
         '/solution': (context) => SolutionPage(),
         '/video': (context) => Video(),
         '/settings': (context) => Settings(),
-        '/rules': (context) => Rule()
+        '/rules': (context) => Rule(),
+        '/classement' : (context) => ClassementPage(),
       },
     );
   }
@@ -81,6 +83,11 @@ class _MenuState extends State<MenuPage> {
   void seeSettings() {
     Navigator.of(context).pushNamed('/settings');
   }
+
+  void seeClassement() {
+    Navigator.of(context).pushNamed('/classement');
+  }
+
 
   void seeRules() {
     Navigator.of(context).pushNamed('/rules');
@@ -190,8 +197,18 @@ class _MenuState extends State<MenuPage> {
                       child: Text('rules'.tr),
                     ),
                   ),
-                  SizedBox(width: 0.01 * MediaQuery.of(context).size.width),
-                  IconButton(
+                  SizedBox(width: 0.001 * MediaQuery.of(context).size.width),
+                  Row(children: [
+                    IconButton(
+                    onPressed: seeClassement,
+                    icon: Icon(
+                      BootstrapIcons.trophy,
+                      color: Colors.white,
+                      size: 0.08 * MediaQuery.of(context).size.width,
+                    ),
+                  ),
+                  SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
+                    IconButton(
                     onPressed: seeSettings,
                     icon: Icon(
                       BootstrapIcons.gear,
@@ -199,6 +216,8 @@ class _MenuState extends State<MenuPage> {
                       size: 0.08 * MediaQuery.of(context).size.width,
                     ),
                   ),
+                  ],)
+                  
                 ],
               ),
             ],
