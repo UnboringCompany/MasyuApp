@@ -18,26 +18,25 @@ class Cercle extends Cell {
     // On récupère les cellules précédente et suivante
     Cell? cellPrecedente = getCellPrecedente(grille);
     Cell? cellSuivante = getCellSuivante(grille);
-      if (cellPrecedente != null && cellSuivante != null) {
-        // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
-        if (_color == 1) {
-          if ((cellSuivante.isCellTurning(grille) ||
-              cellPrecedente.isCellTurning(grille)) && !isCellTurning(grille)) {
-            _isValid = true;
-          }
-        } else if (_color == 2) {
-          if (!(cellSuivante.isCellTurning(grille) &&
-                  cellPrecedente.isCellTurning(grille)) &&
-              isCellTurning(grille)) {
-            _isValid = true;
-          }
+    if (cellPrecedente != null && cellSuivante != null) {
+      // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
+      if (_color == 1) {
+        if ((cellSuivante.isCellTurning(grille) ||
+                cellPrecedente.isCellTurning(grille)) &&
+            !isCellTurning(grille)) {
+          _isValid = true;
+        }
+      } else if (_color == 2) {
+        if (!(cellSuivante.isCellTurning(grille) &&
+                cellPrecedente.isCellTurning(grille)) &&
+            isCellTurning(grille)) {
+          _isValid = true;
         }
       }
-    
+    }
+
     _isValid = false;
   }
-
-
 
   // Accesseurs
 
@@ -58,6 +57,7 @@ class Cercle extends Cell {
     validate(grille);
     if (super.isCellValid(grille)) {
       return _isValid;
+      // return true;
     }
     return false;
   }
@@ -70,6 +70,6 @@ class Cercle extends Cell {
     } else if (_color == 2) {
       couleur = 'N';
     }
-    return '$couleur($getPosX(), $getPosY())';
+    return '$couleur(${getPosX()} , ${getPosY()})';
   }
 }

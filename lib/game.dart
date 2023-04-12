@@ -9,6 +9,7 @@ import 'package:masyu_app/widgets/grille.dart';
 import 'package:masyu_app/widgets/stopwatch.dart';
 
 import 'main.dart';
+import 'objects/partie.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -30,7 +31,7 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     int _gridSize;
-    Grille grille;
+    Partie partie;
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -46,10 +47,12 @@ class _GamePageState extends State<GamePage> {
       _gridSize = 6;
     }
 
-    grille = Grille(_gridSize);
-    grille.generate();
+    partie = Partie(
+        _gridSize); //TODO : quand on ajoutera le joueur au constructeur, faudra le faire ici aussi
 
-    void losePopup(BuildContext context) {
+    void losePopup(BuildContext context, int nbPoints) {
+      nbPoints = -nbPoints;
+      String points = nbPoints.toString();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -58,7 +61,7 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text('game_over_text'.trParams({'points': '32'}),
+            content: Text('game_over_text'.trParams({'points': points}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -74,7 +77,7 @@ class _GamePageState extends State<GamePage> {
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/solution',
-                          arguments: {'grille': grille});
+                          arguments: {'grille': partie.grille});
                     },
                   )),
             ],
@@ -109,7 +112,7 @@ class _GamePageState extends State<GamePage> {
                       icon: const Icon(BootstrapIcons.check),
                       onPressed: () {
                         Navigator.pop(context);
-                        losePopup(context);
+                        losePopup(context, partie.getScoreDefaite());
                       },
                       color: Colors.white,
                     )),
@@ -133,7 +136,17 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    
+    valider() {
+      if (partie.valider()) {
+        //TODO la popup de victoire
+        debugPrint('Victoire');
+        Navigator.pushNamed(context, '/');
+      } else {
+        //TOTEST
+        Navigator.pop(context);
+        losePopup(context, partie.getScorePartie());
+      }
+    }
 
     return (CoreWidget(
         child: Center(
@@ -164,7 +177,7 @@ class _GamePageState extends State<GamePage> {
                               onPressed: () {
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
-                                    arguments: {'grille': grille});
+                                    arguments: {'grille': partie.grille});
                                 // TODO: Gérer la perte de points
                               },
                             ),
@@ -179,16 +192,16 @@ class _GamePageState extends State<GamePage> {
                                       FirebaseFirestore.instance
                                           .collection('grilles');
                                   await grillesCollection.add({
-                                    'size': grille.getSize(),
-                                    'listeCells': grille
+                                    'size': partie.grille.getSize(),
+                                    'listeCells': partie.grille
                                         .getListeCells()
                                         .map((cell) => cell.toJson())
                                         .toList(),
-                                    'listeTraits': grille
+                                    'listeTraits': partie.grille
                                         .getListeTraits()
                                         .map((trait) => trait.toJson())
                                         .toList(),
-                                    'listeTraitsSolution': grille
+                                    'listeTraitsSolution': partie.grille
                                         .getListeTraitsSolution()
                                         .map((trait) => trait.toJson())
                                         .toList(),
@@ -226,7 +239,7 @@ class _GamePageState extends State<GamePage> {
       const SizedBox(height: 30),
       GrilleWidget(
         gridSize: _gridSize,
-        grille: grille,
+        grille: partie.grille,
         solution: false,
       ),
       const SizedBox(height: 40),
@@ -252,7 +265,9 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  valider()
+                },
                 icon: const Icon(BootstrapIcons.check2),
                 color: Colors.white,
                 iconSize: 30,
