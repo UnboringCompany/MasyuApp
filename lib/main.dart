@@ -5,6 +5,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
+import 'package:masyu_app/appstate.dart';
+import 'package:masyu_app/classement.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
@@ -21,11 +23,14 @@ import 'package:get/get.dart';
 import 'package:masyu_app/video.dart';
 import 'package:confetti/confetti.dart';
 import 'package:masyu_app/widgets/tripletap.dart';
+import 'package:provider/provider.dart';
 
 import 'game.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => AppState(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +55,8 @@ class MyApp extends StatelessWidget {
         '/solution': (context) => SolutionPage(),
         '/video': (context) => Video(),
         '/settings': (context) => setting.Settings(),
-        '/rules': (context) => Rule()
+        '/rules': (context) => Rule(),
+        '/classement': (context) => ClassementPage(),
       },
     );
   }
@@ -85,6 +91,10 @@ class _MenuState extends State<MenuPage> {
 
   void seeSettings() {
     Navigator.of(context).pushNamed('/settings');
+  }
+
+  void seeClassement() {
+    Navigator.of(context).pushNamed('/classement');
   }
 
   void seeRules() {
@@ -140,7 +150,7 @@ class _MenuState extends State<MenuPage> {
                     icon: Icon(
                       BootstrapIcons.play,
                       color: Color(0xff3D4AEB),
-                      size: 0.15 * MediaQuery.of(context).size.width,
+                      size: 0.20 * MediaQuery.of(context).size.width,
                     ),
                     title: 'resume'.tr,
                     onPressed: () async {
@@ -167,7 +177,7 @@ class _MenuState extends State<MenuPage> {
                     icon: Icon(
                       BootstrapIcons.watch,
                       color: Color(0xff3D4AEB),
-                      size: 0.12 * MediaQuery.of(context).size.width,
+                      size: 0.16 * MediaQuery.of(context).size.width,
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {},
@@ -225,15 +235,28 @@ class _MenuState extends State<MenuPage> {
                       child: Text('rules'.tr),
                     ),
                   ),
-                  SizedBox(width: 0.01 * MediaQuery.of(context).size.width),
-                  IconButton(
-                    onPressed: seeSettings,
-                    icon: Icon(
-                      BootstrapIcons.gear,
-                      color: Colors.white,
-                      size: 0.08 * MediaQuery.of(context).size.width,
-                    ),
-                  ),
+                  SizedBox(width: 0.001 * MediaQuery.of(context).size.width),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: seeClassement,
+                        icon: Icon(
+                          BootstrapIcons.trophy,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
+                      IconButton(
+                        onPressed: seeSettings,
+                        icon: Icon(
+                          BootstrapIcons.gear,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ],

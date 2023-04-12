@@ -1,5 +1,5 @@
 name: masyu_app
-description: A new Flutter project.
+description: La révolution que personne n'attendait mais dont tout le monde à besoin.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -45,6 +45,7 @@ dependencies:
   video_player: ^2.6.1
   flutter_launcher_icons: ^0.13.0
   confetti: ^0.7.0
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
