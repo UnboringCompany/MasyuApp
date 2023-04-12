@@ -1,6 +1,6 @@
 import 'cell.dart';
 
-class Trait{
+class Trait {
   // Attributs
   Cell _cellDep;
   Cell _cellArr;
@@ -8,12 +8,23 @@ class Trait{
   // Constructeur
   Trait(this._cellDep, this._cellArr);
 
+  // Constructeur à partir d'un json
+  // Trait.fromJson(Map<String, dynamic> json)
+  //     : _cellDep = Cell.fromJson(json['cellDep']),
+  //       _cellArr = Cell.fromJson(json['cellArr']);
+
+  Map<String, dynamic> toJson() => {
+        'cellDep': _cellDep.toJson(),
+        'cellArr': _cellArr.toJson(),
+      };
+
   // Méthodes
 
   /// Vérifie si le trait est vertical
   /// @return true si le trait est vertical, false sinon
   bool isVertical() {
-    if (_cellArr.getPosX() == _cellDep.getPosX() && _cellArr.getPosY() != _cellDep.getPosY()) {
+    if (_cellArr.getPosX() == _cellDep.getPosX() &&
+        _cellArr.getPosY() != _cellDep.getPosY()) {
       return true;
     }
     return false;
@@ -22,7 +33,8 @@ class Trait{
   /// Vérifie si le trait est horizontal
   /// @return true si le trait est horizontal, false sinon
   bool isHorizontal() {
-    if (_cellArr.getPosX() != _cellDep.getPosX() && _cellArr.getPosY() == _cellDep.getPosY()) {
+    if (_cellArr.getPosX() != _cellDep.getPosX() &&
+        _cellArr.getPosY() == _cellDep.getPosY()) {
       return true;
     }
     return false;
@@ -53,6 +65,4 @@ class Trait{
       other is Trait &&
           _cellDep == other._cellDep &&
           _cellArr == other._cellArr;
-          
-
 }

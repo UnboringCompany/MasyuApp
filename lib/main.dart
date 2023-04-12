@@ -14,6 +14,8 @@ import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:get/get.dart';
 import 'package:masyu_app/video.dart';
+import 'package:confetti/confetti.dart';
+import 'package:masyu_app/widgets/tripletap.dart';
 
 import 'game.dart';
 
@@ -42,6 +44,8 @@ class MyApp extends StatelessWidget {
         '/game': (context) => GamePage(),
         '/solution': (context) => SolutionPage(),
         '/video': (context) => Video(),
+        '/settings': (context) => Settings(),
+        '/rules': (context) => Rule()
       },
     );
   }
@@ -56,23 +60,30 @@ class MenuPage extends StatefulWidget {
 
 class _MenuState extends State<MenuPage> {
   String _dropdownValue = '';
+  late ConfettiController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ConfettiController(duration: const Duration(seconds: 2));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+    _controller.play();
+  }
 
   void seeSettings() {
-    Navigator.pushReplacement<void, void>(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const Settings(),
-      ),
-    );
+    Navigator.of(context).pushNamed('/settings');
   }
 
   void seeRules() {
-    Navigator.pushReplacement<void, void>(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const Rule(),
-      ),
-    );
+    Navigator.of(context).pushNamed('/rules');
   }
 
   @override
@@ -82,110 +93,132 @@ class _MenuState extends State<MenuPage> {
     List<String> _options = ['6x6', '8x8', '10x10'];
 
     return CoreWidget(
-  child: Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
       children: [
-        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
-        Text(
-          'title'.tr,
-          style: TextStyle(
-            color: Colors.white,
-            letterSpacing: 10,
-            fontSize: 0.10 * MediaQuery.of(context).size.width,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        CitationWidget(),
-        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Tile(
-              icon: Icon(
-                BootstrapIcons.play,
-                color: Color(0xff3D4AEB),
-                size: 0.15 * MediaQuery.of(context).size.width,
-              ),
-              title: 'resume'.tr,
-            ),
-            Tile(
-              icon: Icon(
-                BootstrapIcons.watch,
-                color: Color(0xff3D4AEB),
-                size: 0.12 * MediaQuery.of(context).size.width,
-              ),
-              title: 'challenge'.tr,
-            ),
-          ],
-        ),
-        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
-        Container(
-          width: 0.85 * MediaQuery.of(context).size.width,
-          height: 0.07 * MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: Color(0xff3D4AEB),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                "/game",
-                arguments: {'type': 'new', 'size': _dropdownValue},
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              elevation: 0,
-            ),
-            child: Text('new_game'.tr),
-          ),
-        ),
-        SizedBox(height: 0.015 * MediaQuery.of(context).size.height),
-        GridSizeMenu(
-          onChanged: (newValue) {
-            setState(() {
-              _dropdownValue = newValue;
-            });
-          },
-        ),
-        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              width: 0.3 * MediaQuery.of(context).size.width,
-              height: 0.05 * MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: Color(0xffB15653),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ElevatedButton(
-                onPressed: seeRules,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                  elevation: 0,
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              TripleTapButton(
+                onPressed: _startAnimation,
+                child: Text(
+                  'title'.tr,
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 10,
+                    fontSize: 0.10 * MediaQuery.of(context).size.width,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: Text('rules'.tr),
               ),
-            ),
-            SizedBox(width: 0.01 * MediaQuery.of(context).size.width),
-            IconButton(
-              onPressed: seeSettings,
-              icon: Icon(
-                BootstrapIcons.gear,
-                color: Colors.white,
-                size: 0.08 * MediaQuery.of(context).size.width,
+              CitationWidget(),
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Tile(
+                    icon: Icon(
+                      BootstrapIcons.play,
+                      color: Color(0xff3D4AEB),
+                      size: 0.15 * MediaQuery.of(context).size.width,
+                    ),
+                    title: 'resume'.tr,
+                  ),
+                  Tile(
+                    icon: Icon(
+                      BootstrapIcons.watch,
+                      color: Color(0xff3D4AEB),
+                      size: 0.12 * MediaQuery.of(context).size.width,
+                    ),
+                    title: 'challenge'.tr,
+                  ),
+                ],
               ),
-            ),
-          ],
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Container(
+                width: 0.85 * MediaQuery.of(context).size.width,
+                height: 0.07 * MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  color: Color(0xff3D4AEB),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/game",
+                      arguments: {'type': 'new', 'size': _dropdownValue},
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.transparent,
+                    elevation: 0,
+                  ),
+                  child: Text('new_game'.tr),
+                ),
+              ),
+              SizedBox(height: 0.015 * MediaQuery.of(context).size.height),
+              GridSizeMenu(
+                onChanged: (newValue) {
+                  setState(() {
+                    _dropdownValue = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: 0.3 * MediaQuery.of(context).size.width,
+                    height: 0.05 * MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: Color(0xffB15653),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: seeRules,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Text('rules'.tr),
+                    ),
+                  ),
+                  SizedBox(width: 0.01 * MediaQuery.of(context).size.width),
+                  IconButton(
+                    onPressed: seeSettings,
+                    icon: Icon(
+                      BootstrapIcons.gear,
+                      color: Colors.white,
+                      size: 0.08 * MediaQuery.of(context).size.width,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfettiWidget(
+            confettiController: _controller,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 50,
+            shouldLoop: false,
+            colors: const [
+              Colors.blue,
+              Colors.purple,
+              Colors.pink,
+              Colors.green,
+              Colors.yellow,
+            ],
+          ),
+        )
       ],
-    ),
-  ),
-);
-
+    ));
   }
 }

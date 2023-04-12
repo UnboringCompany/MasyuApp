@@ -11,6 +11,15 @@ class Cell {
   // Constructeur
   Cell(this._posX, this._posY);
 
+  // Cell.fromJson(Map<String, dynamic> json)
+  //     : _cellDep = Cell.fromJson(json['cellDep']),
+  //       _cellArr = Cell.fromJson(json['cellArr']);
+
+  Map<String, dynamic> toJson() => {
+        'posX': _posX,
+        'posY': _posY,
+      };
+
   // Méthodes
 
   /// Vérifie la validité de la cellule
