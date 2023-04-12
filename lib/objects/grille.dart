@@ -295,9 +295,11 @@ class Grille {
   getClue() {
     // Cherche dans la liste des traits de la solution un trait qui n'est pas dans la liste des traits de la grille
     List<Trait> listeTraitNotPlaced = List<Trait>.empty(growable: true);
-    listeTraitNotPlaced = _listeTraitsSolution;
-    listeTraitNotPlaced
-        .removeWhere((element) => _listeTraits.contains(element));
+    for (Trait trait in _listeTraitsSolution) {
+      if (!_listeTraits.contains(trait)) {
+        listeTraitNotPlaced.add(trait);
+      }
+    }
     int size = listeTraitNotPlaced.length;
 
     return listeTraitNotPlaced[Random().nextInt(size)];
