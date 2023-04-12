@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
 import 'package:masyu_app/appstate.dart';
@@ -7,7 +12,7 @@ import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/rule.dart';
-import 'package:masyu_app/setings.dart';
+import 'package:masyu_app/setings.dart' as setting;
 import 'package:masyu_app/solution.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
@@ -23,12 +28,8 @@ import 'package:provider/provider.dart';
 import 'game.dart';
 
 void main() {
-     runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppState(),
-      child: const MyApp()
-      ),
-
+  runApp(
+    ChangeNotifierProvider(create: (_) => AppState(), child: const MyApp()),
   );
 }
 
@@ -53,9 +54,9 @@ class MyApp extends StatelessWidget {
         '/game': (context) => GamePage(),
         '/solution': (context) => SolutionPage(),
         '/video': (context) => Video(),
-        '/settings': (context) => Settings(),
+        '/settings': (context) => setting.Settings(),
         '/rules': (context) => Rule(),
-        '/classement' : (context) => ClassementPage(),
+        '/classement': (context) => ClassementPage(),
       },
     );
   }
@@ -96,9 +97,28 @@ class _MenuState extends State<MenuPage> {
     Navigator.of(context).pushNamed('/classement');
   }
 
-
   void seeRules() {
     Navigator.of(context).pushNamed('/rules');
+  }
+
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+      var data = await deviceInfoPlugin.iosInfo;
+      var identifier = data.identifierForVendor;
+      return identifier;
+    } else if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo;
+      try {
+        androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.serialNumber;
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+    return null;
   }
 
   @override
@@ -140,7 +160,25 @@ class _MenuState extends State<MenuPage> {
                       size: 0.20 * MediaQuery.of(context).size.width,
                     ),
                     title: 'resume'.tr,
-                    onPressed: () {},
+                    onPressed: () async {
+                      print('j ai cliqué');
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      if (docSnapshot.exists) {
+                        print('Le document existe');
+                      } else {
+                        print('Le document n existe pas');
+                      }
+                      final data = docSnapshot.data();
+                      if (data != null) {
+                        Grille grille = Grille.fromJson(data['grille']);
+                        print('La grille a été récupéré');
+                      }
+                    },
                   ),
                   Tile(
                     icon: Icon(
@@ -150,8 +188,7 @@ class _MenuState extends State<MenuPage> {
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {},
-                  ),
-                
+                  )
                 ],
               ),
               SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
@@ -206,26 +243,27 @@ class _MenuState extends State<MenuPage> {
                     ),
                   ),
                   SizedBox(width: 0.001 * MediaQuery.of(context).size.width),
-                  Row(children: [
-                    IconButton(
-                    onPressed: seeClassement,
-                    icon: Icon(
-                      BootstrapIcons.trophy,
-                      color: Colors.white,
-                      size: 0.08 * MediaQuery.of(context).size.width,
-                    ),
-                  ),
-                  SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
-                    IconButton(
-                    onPressed: seeSettings,
-                    icon: Icon(
-                      BootstrapIcons.gear,
-                      color: Colors.white,
-                      size: 0.08 * MediaQuery.of(context).size.width,
-                    ),
-                  ),
-                  ],)
-                  
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: seeClassement,
+                        icon: Icon(
+                          BootstrapIcons.trophy,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
+                      IconButton(
+                        onPressed: seeSettings,
+                        icon: Icon(
+                          BootstrapIcons.gear,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ],

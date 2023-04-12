@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/objects/grille.dart';
@@ -136,6 +139,26 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
+    Future<String?> _getId() async {
+      var deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+        var data = await deviceInfoPlugin.iosInfo;
+        var identifier = data.identifierForVendor;
+        return identifier;
+      } else if (Platform.isAndroid) {
+        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        AndroidDeviceInfo androidInfo;
+        try {
+          androidInfo = await deviceInfo.androidInfo;
+          return androidInfo.id;
+        } catch (e) {
+          print('Error: $e');
+        }
+      }
+      return null;
+    }
+
     valider() {
       if (partie.valider()) {
         //TODO la popup de victoire
@@ -187,15 +210,16 @@ class _GamePageState extends State<GamePage> {
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () async {
                                 try {
+                                  String? id = await _getId();
                                   await Firebase.initializeApp();
-                                  CollectionReference grillesCollection =
-                                      FirebaseFirestore.instance
-                                          .collection('grilles');
-                                  await grillesCollection.add({
+                                  await FirebaseFirestore.instance
+                                      .collection('grilles')
+                                      .doc(id ?? 'loser')
+                                      .set({
                                     'size': partie.grille.getSize(),
-                                    'listeCells': partie.grille
-                                        .getListeCells()
-                                        .map((cell) => cell.toJson())
+                                    'listeCercle': partie.grille
+                                        .getListeCercle()
+                                        .map((cercle) => cercle.toJson())
                                         .toList(),
                                     'listeTraits': partie.grille
                                         .getListeTraits()
