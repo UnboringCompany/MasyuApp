@@ -29,7 +29,7 @@ class _Rule extends State<Rule> {
    return CoreWidget(
   child: Column(
     children: [
-      const SizedBox(height: 30),
+      const SizedBox(height: 50),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
