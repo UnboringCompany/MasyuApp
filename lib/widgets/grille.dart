@@ -10,6 +10,7 @@ import 'package:masyu_app/objects/cercle.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/trait.dart';
 import 'package:masyu_app/widgets/circle.dart';
+import 'package:vibration/vibration.dart';
 
 class GrilleWidget extends StatefulWidget {
   final int gridSize;
@@ -229,7 +230,9 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                               element.getPosY() ==
                                   (endIndex ~/ widget.gridSize))));
                       debugPrint('De case ${startIndex} à case ${endIndex}');
-                      setState(() {});
+                      setState(() {
+                        Vibration.vibrate(duration: 50, amplitude: 5);
+                      });
                     }
                   }
                 }
