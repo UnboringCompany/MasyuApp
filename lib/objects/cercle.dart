@@ -65,12 +65,11 @@ class Cercle extends Cell {
   @override
   bool isCellValid(Grille grille) {
     validate(grille);
-    debugPrint("Le cercle $this est valide : $_isValid");
+    // debugPrint("Le cercle $this est valide : $_isValid");
     if (super.isCellValid(grille)) {
       return _isValid;
-      // return true;
     }
-    debugPrint("Le cercle $this n'est pas valide en tant que cellule");
+    // debugPrint("Le cercle $this n'est pas valide en tant que cellule");
     return false;
   }
 

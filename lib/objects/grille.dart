@@ -284,7 +284,7 @@ class Grille {
     // On vérifie que chaque cellule est valide
     for (Cell cell in _listeCells) {
       if (!cell.isCellValid(this)) {
-        debugPrint("La cellule ${cell.toString()} n'est pas valide");
+        // debugPrint("La cellule ${cell.toString()} n'est pas valide");
         return false;
       }
     }
@@ -353,10 +353,10 @@ class Grille {
             if (cell is Cercle) {
               Cercle cercle = cell;
               if (cercle.getColor() == 1) {
-                debugPrint("B : ${cercle.getPosX()}, ${cercle.getPosY()}");
+                // debugPrint("B : ${cercle.getPosX()}, ${cercle.getPosY()}");
                 cptBlanc++;
               } else if (cercle.getColor() == 2) {
-                debugPrint("N : ${cercle.getPosX()}, ${cercle.getPosY()}");
+                // debugPrint("N : ${cercle.getPosX()}, ${cercle.getPosY()}");
                 cptNoir++;
               }
             } else {}
@@ -364,13 +364,13 @@ class Grille {
         }
       }
     }
-    debugPrint("Nombre de cellules blanches : $cptBlanc");
-    debugPrint("Nombre de cellules noires : $cptNoir");
+    // debugPrint("Nombre de cellules blanches : $cptBlanc");
+    // debugPrint("Nombre de cellules noires : $cptNoir");
   }
 
   void afficheChemin() {
     _listeTraitsSolution.forEach((element) {
-      debugPrint(element.toString());
+      // debugPrint(element.toString());
     });
   }
 

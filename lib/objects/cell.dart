@@ -32,12 +32,12 @@ class Cell {
       return true;
     }
     else if(liste.length == 0){
-      debugPrint("La cellule $this n'a pas de traits");
+      // debugPrint("La cellule $this n'a pas de traits");
       return true;
     }else{
-      debugPrint("La cellule $this a un nombre étrange de traits");
+      // debugPrint("La cellule $this a un nombre étrange de traits");
       for (Trait t in liste) {
-        debugPrint("Trait : $t");
+        // debugPrint("Trait : $t");
       }
     return false;
     }
@@ -53,14 +53,14 @@ class Cell {
       return false;
     }
     if (t1.isHorizontal() && t2.isVertical()) {
-      debugPrint("La cellule $this tourne");
+      // debugPrint("La cellule $this tourne");
       return true;
     }
     if (t1.isVertical() && t2.isHorizontal()) {
-      debugPrint("La cellule $this tourne");
+      // debugPrint("La cellule $this tourne");
       return true;
     }
-    debugPrint("La cellule $this ne tourne pas");
+    // debugPrint("La cellule $this ne tourne pas");
     return false;
   }
 

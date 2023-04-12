@@ -196,8 +196,7 @@ class _GamePageState extends State<GamePage> {
 
     valider() {
       if (partie.valider()) {
-        //TODO la popup de victoire
-        debugPrint('Victoire');
+        // debugPrint('Victoire');
         // Navigator.pop(context);
         winPopup(context, partie.getScorePartie(), partie.getChrono());
       } else {

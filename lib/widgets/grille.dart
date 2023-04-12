@@ -123,8 +123,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         toAdd.getCaseDep().getPosY() * widget.grille.getSize();
     int y = toAdd.getCaseArr().getPosX() +
         toAdd.getCaseArr().getPosY() * widget.grille.getSize();
-    debugPrint("lien ajouté : de $x à $y ");
-    debugPrint("trait ajouté : $toAdd");
+    // debugPrint("lien ajouté : de $x à $y ");
+    // debugPrint("trait ajouté : $toAdd");
 
     setState(() {});
   }
@@ -228,7 +228,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                                   (endIndex % widget.gridSize) &&
                               element.getPosY() ==
                                   (endIndex ~/ widget.gridSize))));
-                      debugPrint('De case ${startIndex} à case ${endIndex}');
+                      // debugPrint('De case ${startIndex} à case ${endIndex}');
                       setState(() {
                         if (isVibrationEnabled) {
                           Vibration.vibrate(duration: 50, amplitude: 5);
