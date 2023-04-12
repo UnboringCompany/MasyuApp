@@ -125,6 +125,7 @@ class _MenuState extends State<MenuPage> {
                       size: 0.15 * MediaQuery.of(context).size.width,
                     ),
                     title: 'resume'.tr,
+                    onPressed: () {},
                   ),
                   Tile(
                     icon: Icon(
@@ -133,7 +134,9 @@ class _MenuState extends State<MenuPage> {
                       size: 0.12 * MediaQuery.of(context).size.width,
                     ),
                     title: 'challenge'.tr,
+                    onPressed: () {},
                   ),
+                
                 ],
               ),
               SizedBox(height: 0.1 * MediaQuery.of(context).size.height),

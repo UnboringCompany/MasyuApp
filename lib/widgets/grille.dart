@@ -28,7 +28,6 @@ class GrilleWidget extends StatefulWidget {
 class _GrilleWidgetState extends State<GrilleWidget> {
   List<CircleWidget> cercles = List.empty(growable: true);
   late List<List<int>> liens;
-  final Key gestureKey = GlobalKey();
 
   int _calculateIndex(Offset offset) {
     final double width = context.size!.width / widget.gridSize;
@@ -39,7 +38,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   bool _isTapOnLine(Offset lineStart, Offset lineEnd, Offset tapPosition) {
     const threshold =
-        10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
+        5; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
     final distanceFromStart = (tapPosition - lineStart).distance;
     final distanceFromEnd = (tapPosition - lineEnd).distance;
     final lineLength = (lineEnd - lineStart).distance;
@@ -49,9 +48,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   Offset _getCenterPosition(int index) {
 
-    final RenderBox gridBox = context.findRenderObject() as RenderBox;
-
-    final cellSize = gridBox.size.width /
+    final cellSize = 350 /
         widget.gridSize; // La taille d'une case de la grille
     final row =
         (index / widget.gridSize).floor(); // Le numéro de ligne de la case
@@ -182,187 +179,194 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column (
+    return Column(
       children: [
         GestureDetector(
-      // Nouveau GestureDetector
-      onPanUpdate: (details) {
-        final RenderBox gridBox = context.findRenderObject() as RenderBox;
-        final startPos = gridBox.globalToLocal(details.globalPosition);
-        final endPos =
-            gridBox.globalToLocal(details.globalPosition + details.delta);
+          // Nouveau GestureDetector
+          onPanUpdate: (details) {
+            final RenderBox gridBox = context.findRenderObject() as RenderBox;
+            final startPos = gridBox.globalToLocal(details.globalPosition);
+            final endPos =
+                gridBox.globalToLocal(details.globalPosition + details.delta);
 
-        final startIndex =
-            ((startPos.dx / gridBox.size.width) * widget.gridSize).floor() +
-                (((startPos.dy / gridBox.size.height) * widget.gridSize)
-                        .floor() *
-                    widget.gridSize);
-        final endIndex =
-            ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
-                (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() *
-                    widget.gridSize);
+            final startIndex =
+                ((startPos.dx / 350) * widget.gridSize).floor() +
+                    (((startPos.dy / 350) * widget.gridSize)
+                            .floor() *
+                        widget.gridSize);
+            final endIndex =
+                ((endPos.dx / 350) * widget.gridSize).floor() +
+                    (((endPos.dy / 350) * widget.gridSize)
+                            .floor() *
+                        widget.gridSize);
 
-        if (!widget.solution) {
-          if (startIndex >= 0 &&
-              startIndex <= (widget.gridSize * widget.gridSize) - 1 &&
-              endIndex >= 0 &&
-              endIndex <= (widget.gridSize * widget.gridSize) - 1) {
-            if (liens[startIndex][endIndex] == 0 &&
-                liens[endIndex][startIndex] == 0 &&
-                startIndex != endIndex) {
-              if ((startIndex - endIndex).abs() == 1 ||
-                  (startIndex - endIndex).abs() == widget.gridSize) {
-                if (((startIndex + 1) % widget.gridSize == 0 &&
-                    (startIndex - endIndex) == -1)) {
-                } else if (((startIndex + 1) % widget.gridSize == 1 &&
-                    (startIndex - endIndex) == 1)) {
-                } else {
-                  liens[startIndex][endIndex] = 1;
-                  liens[endIndex][startIndex] = 1;
-                  widget.grille.addTrait(Trait(
-                      widget.grille.getListeCells().firstWhere((element) =>
-                          element.getPosX() == (startIndex % widget.gridSize) &&
-                          element.getPosY() == (startIndex ~/ widget.gridSize)),
-                      widget.grille.getListeCells().firstWhere((element) =>
-                          element.getPosX() == (endIndex % widget.gridSize) &&
-                          element.getPosY() == (endIndex ~/ widget.gridSize))));
-                  debugPrint('De case ${startIndex} à case ${endIndex}');
-                  setState(() {});
+            if (!widget.solution) {
+              if (startIndex >= 0 &&
+                  startIndex <= (widget.gridSize * widget.gridSize) - 1 &&
+                  endIndex >= 0 &&
+                  endIndex <= (widget.gridSize * widget.gridSize) - 1) {
+                if (liens[startIndex][endIndex] == 0 &&
+                    liens[endIndex][startIndex] == 0 &&
+                    startIndex != endIndex) {
+                  if ((startIndex - endIndex).abs() == 1 ||
+                      (startIndex - endIndex).abs() == widget.gridSize) {
+                    if (((startIndex + 1) % widget.gridSize == 0 &&
+                        (startIndex - endIndex) == -1)) {
+                    } else if (((startIndex + 1) % widget.gridSize == 1 &&
+                        (startIndex - endIndex) == 1)) {
+                    } else {
+                      liens[startIndex][endIndex] = 1;
+                      liens[endIndex][startIndex] = 1;
+                      widget.grille.addTrait(Trait(
+                          widget.grille.getListeCells().firstWhere((element) =>
+                              element.getPosX() ==
+                                  (startIndex % widget.gridSize) &&
+                              element.getPosY() ==
+                                  (startIndex ~/ widget.gridSize)),
+                          widget.grille.getListeCells().firstWhere((element) =>
+                              element.getPosX() ==
+                                  (endIndex % widget.gridSize) &&
+                              element.getPosY() ==
+                                  (endIndex ~/ widget.gridSize))));
+                      debugPrint('De case ${startIndex} à case ${endIndex}');
+                      setState(() {});
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      },
-      child: Container(
-                height: 350,
-                width: 350,
-                child: Stack(children: [
-                  // Déplacez le Stack dans le GestureDetector
-                  Container(
-                    padding: const EdgeInsets.all(1.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.gridSize * widget.gridSize,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: widget.gridSize,
-                        childAspectRatio: 1.0,
-                        crossAxisSpacing: 1.0,
-                        mainAxisSpacing: 1.0,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                                color: Color(0xff373855),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0))),
-                          );
-                        } else if (index == widget.gridSize - 1) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                                color: Color(0xff373855),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10.0))),
-                          );
-                        } else if (index ==
-                            widget.gridSize * (widget.gridSize - 1)) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                                color: Color(0xff373855),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10.0))),
-                          );
-                        } else if (index == widget.gridSize * widget.gridSize - 1) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                                color: Color(0xff373855),
-                                borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(10.0))),
-                          );
-                        }
-
-                        return Container(
-                          decoration: const BoxDecoration(
-                            color: Color(0xff373855),
-                          ),
-                        );
-                      },
-                    ),
+          },
+          child: Container(
+            height: 350,
+            width: 350,
+            child: Stack(children: [
+              // Déplacez le Stack dans le GestureDetector
+              Container(
+                padding: const EdgeInsets.all(1.0),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.gridSize * widget.gridSize,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: widget.gridSize,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 1.0,
                   ),
-                  CustomPaint(
-                    painter: LinePainter(liens, context, widget.gridSize),
-                    child: GestureDetector(
-                      onTapDown: (details) {
-                        for (int i = 0; i < liens.length; i++) {
-                          for (int j = 0; j < liens[0].length; j++) {
-                            if (liens[i][j] == 1) {
-                              final lineStart = _getCenterPosition(i);
-                              final lineEnd = _getCenterPosition(j);
-                              final tapPosition = details.localPosition;
-                              if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
-                                liens[i][j] = 0;
-                                liens[j][i] = 0;
-                                setState(() {});
-                              }
-                            }
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0))),
+                      );
+                    } else if (index == widget.gridSize - 1) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10.0))),
+                      );
+                    } else if (index ==
+                        widget.gridSize * (widget.gridSize - 1)) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10.0))),
+                      );
+                    } else if (index == widget.gridSize * widget.gridSize - 1) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10.0))),
+                      );
+                    }
+
+                    return Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xff373855),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              CustomPaint(
+                painter: LinePainter(liens, context, widget.gridSize),
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    for (int i = 0; i < liens.length; i++) {
+                      for (int j = 0; j < liens[0].length; j++) {
+                        if (liens[i][j] == 1) {
+                          final lineStart = _getCenterPosition(i);
+                          final lineEnd = _getCenterPosition(j);
+                          final tapPosition = details.localPosition;
+                          if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
+                            liens[i][j] = 0;
+                            liens[j][i] = 0;
+                            setState(() {});
                           }
                         }
-                      },
-                    ),
-                  ),
+                      }
+                    }
+                  },
+                ),
+              ),
 
-                  //Ajout des cercles
-                  ...cercles,
-                ]),
-              ),),
-              const SizedBox(height: 30, width: 350),
-              SizedBox(width: 350,
-              child: Row(
-                // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0x7F373855),
-                    ),
-                    child: IconButton(
-                      onPressed: () => {
-                        cluePopup(context),
-                        // TOTEST
-                      },
-                      icon: const Icon(BootstrapIcons.lightbulb),
-                      color: Colors.white,
-                      iconSize: 25,
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0x7F373855),
-                    ),
-                    child: IconButton(
-                      onPressed: () => {
-                        // TOTEST
-                        resetGame(),
-                      },
-                      icon: const Icon(Icons.undo),
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),)
-              
-        ],
-      );
+              //Ajout des cercles
+              ...cercles,
+            ]),
+     
+        ),
+        ),
+        widget.solution ? const SizedBox(height: 30, width: 350) : const SizedBox(),
+        widget.solution ? SizedBox(
+          width: 350,
+          child: Row(
+            // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  onPressed: () => {
+                    cluePopup(context),
+                    // TOTEST
+                  },
+                  icon: const Icon(BootstrapIcons.lightbulb),
+                  color: Colors.white,
+                  iconSize: 25,
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  onPressed: () => {
+                    // TOTEST
+                    resetGame(),
+                  },
+                  icon: const Icon(Icons.undo),
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ) : const SizedBox(),
+      ],
+    );
     // );
-    
   }
 }
 
@@ -395,9 +399,8 @@ class LinePainter extends CustomPainter {
   }
 
   Offset _getCenterPosition(int index, int gridSize) {
-    final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final cellSize =
-        gridBox.size.width / gridSize; // La taille d'une case de la grille
+        350 / gridSize; // La taille d'une case de la grille
     final row = (index / gridSize).floor(); // Le numéro de ligne de la case
     final col = index % gridSize; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
