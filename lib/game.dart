@@ -148,7 +148,7 @@ class _GamePageState extends State<GamePage> {
         AndroidDeviceInfo androidInfo;
         try {
           androidInfo = await deviceInfo.androidInfo;
-          return androidInfo.serialNumber;
+          return androidInfo.id;
         } catch (e) {
           print('Error: $e');
         }
