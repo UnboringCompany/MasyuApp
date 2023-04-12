@@ -104,12 +104,19 @@ class _MenuState extends State<MenuPage> {
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
-      // import 'dart:io'
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+      var data = await deviceInfoPlugin.iosInfo;
+      var identifier = data.identifierForVendor;
+      return identifier;
     } else if (Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.androidId; // unique ID on Android
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo;
+      try {
+        androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.serialNumber;
+      } catch (e) {
+        print('Error: $e');
+      }
     }
     return null;
   }
