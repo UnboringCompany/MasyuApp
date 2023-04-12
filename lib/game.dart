@@ -251,55 +251,7 @@ class _GamePageState extends State<GamePage> {
         solution: false,
       ),
       const SizedBox(height: 40),
-      Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0x7F373855),
-          ),
-          child: IconButton(
-            onPressed: () => {cluePopup(context)},
-            icon: const Icon(BootstrapIcons.lightbulb),
-            color: Colors.white,
-          )),
-      const SizedBox(
-        height: 40,
-      ),
-
-      // Container(
-      //     child : Row (
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //       children: [
-      //       Container(
-      //         decoration: const BoxDecoration(
-      //         shape: BoxShape.circle,
-      //         color: Color(0x7F373855),
-      //         ),
-      //         child : IconButton(
-      //           onPressed: () => {
-      //             Navigator.pushNamed(context, "/video"),
-      //             // TODO : ajoute l'indice dans la grille
-      //           },
-      //           icon: const Icon(BootstrapIcons.lightbulb),
-      //           color: Colors.white,
-      //           iconSize: 25,
-      //         ),
-      //       ),
-      //       Container(
-      //         decoration: const BoxDecoration(
-      //         shape: BoxShape.circle,
-      //         color: Color(0x7F373855),
-      //         ),
-      //         child : IconButton(
-      //           onPressed: () => {
-      //             // TODO : ajoute le reset de la grille
-      //           },
-      //           icon: const Icon(Icons.undo),
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //   ],
-      // ),),
+      
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

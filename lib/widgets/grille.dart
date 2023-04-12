@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,18 +11,20 @@ import 'package:masyu_app/objects/trait.dart';
 import 'package:masyu_app/widgets/circle.dart';
 
 class GrilleWidget extends StatefulWidget {
-
   final int gridSize;
   final Grille grille;
   final bool solution;
-  const GrilleWidget({super.key, required this.gridSize, required this.grille, required this.solution});
+  const GrilleWidget(
+      {super.key,
+      required this.gridSize,
+      required this.grille,
+      required this.solution});
 
   @override
   State<StatefulWidget> createState() => _GrilleWidgetState();
 }
 
 class _GrilleWidgetState extends State<GrilleWidget> {
-
   List<CircleWidget> cercles = List.empty(growable: true);
   late List<List<int>> liens;
 
@@ -33,7 +36,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
   }
 
   bool _isTapOnLine(Offset lineStart, Offset lineEnd, Offset tapPosition) {
-    const threshold = 10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
+    const threshold =
+        10; // Une tolérance pour tenir compte de la taille de l'écran et de la largeur de la ligne
     final distanceFromStart = (tapPosition - lineStart).distance;
     final distanceFromEnd = (tapPosition - lineEnd).distance;
     final lineLength = (lineEnd - lineStart).distance;
@@ -43,39 +47,83 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   Offset _getCenterPosition(int index) {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
-    final cellSize = gridBox.size.width / widget.gridSize; // La taille d'une case de la grille
-    final row = (index / widget.gridSize).floor(); // Le numéro de ligne de la case
+    final cellSize = gridBox.size.width /
+        widget.gridSize; // La taille d'une case de la grille
+    final row =
+        (index / widget.gridSize).floor(); // Le numéro de ligne de la case
     final col = index % widget.gridSize; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case
     final y = (row + 0.5) * cellSize; // La coordonnée y du centre de la case
     return Offset(x, y); // Retourne l'offset du centre de la case
-}
+  }
 
- @override
+  @override
   void initState() {
     super.initState();
-    liens =  List.generate(widget.gridSize * widget.gridSize, (_) => List<int>.filled(widget.gridSize * widget.gridSize, 0));
+    liens = List.generate(widget.gridSize * widget.gridSize,
+        (_) => List<int>.filled(widget.gridSize * widget.gridSize, 0));
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-
-      for(Cell cell in widget.grille.getListeCells()) {
-        if(cell is Cercle) {
+      for (Cell cell in widget.grille.getListeCells()) {
+        if (cell is Cercle) {
           cercles.add(
-            CircleWidget(position: _getCenterPosition(cell.getPosX() + cell.getPosY()*widget.gridSize), couleur: cell.getColor() == 1 ? "blanc" : "noir", size: widget.gridSize),
+            CircleWidget(
+                position: _getCenterPosition(
+                    cell.getPosX() + cell.getPosY() * widget.gridSize),
+                couleur: cell.getColor() == 1 ? "blanc" : "noir",
+                size: widget.gridSize),
           );
         }
       }
 
-      if(widget.solution) {
-
-        for(Trait t in widget.grille.getListeTraitsSolution()) {
-                liens[t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize][t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize] = 1;
-                liens[t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize][t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize] = 1;
+      if (widget.solution) {
+        for (Trait t in widget.grille.getListeTraitsSolution()) {
+          liens[t.getCaseDep().getPosX() +
+                  t.getCaseDep().getPosY() * widget.gridSize][
+              t.getCaseArr().getPosX() +
+                  t.getCaseArr().getPosY() * widget.gridSize] = 1;
+          liens[t.getCaseArr().getPosX() +
+                  t.getCaseArr().getPosY() * widget.gridSize][
+              t.getCaseDep().getPosX() +
+                  t.getCaseDep().getPosY() * widget.gridSize] = 1;
         }
       }
 
-    setState((){}); // Force la mise à jour de l'affichage
-  });
+      setState(() {}); // Force la mise à jour de l'affichage
+    });
+  }
+
+  resetGame() {
+    widget.grille.reset();
+    for (int i = 0; i < widget.gridSize * widget.gridSize; i++) {
+      for (int j = 0; j < widget.gridSize * widget.gridSize; j++) {
+        liens[i][j] = 0;
+      }
+    }
+    setState(() {});
+  }
+
+  addClue() {
+    Trait toAdd = widget.grille.getClue();
+
+    widget.grille.addTrait(toAdd);
+
+    liens[toAdd.getCaseDep().getPosX() +
+            toAdd.getCaseDep().getPosY() * widget.grille.getSize()][
+        toAdd.getCaseArr().getPosX() +
+            toAdd.getCaseArr().getPosY() * widget.grille.getSize()] = 1;
+    liens[toAdd.getCaseArr().getPosX() +
+            toAdd.getCaseArr().getPosY() * widget.grille.getSize()][
+        toAdd.getCaseDep().getPosX() +
+            toAdd.getCaseDep().getPosY() * widget.grille.getSize()] = 1;
+    int x = toAdd.getCaseDep().getPosX() +
+        toAdd.getCaseDep().getPosY() * widget.grille.getSize();
+    int y = toAdd.getCaseArr().getPosX() +
+        toAdd.getCaseArr().getPosY() * widget.grille.getSize();
+    debugPrint("lien ajouté : de $x à $y ");
+    debugPrint("trait ajouté : $toAdd");
+
+    setState(() {});
   }
 
   @override
@@ -88,124 +136,172 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         final endPos =
             gridBox.globalToLocal(details.globalPosition + details.delta);
 
-        final startIndex = ((startPos.dx / gridBox.size.width) * widget.gridSize).floor() +
-            (((startPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
-        final endIndex = ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
-            (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() * widget.gridSize);
+        final startIndex =
+            ((startPos.dx / gridBox.size.width) * widget.gridSize).floor() +
+                (((startPos.dy / gridBox.size.height) * widget.gridSize)
+                        .floor() *
+                    widget.gridSize);
+        final endIndex =
+            ((endPos.dx / gridBox.size.width) * widget.gridSize).floor() +
+                (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() *
+                    widget.gridSize);
 
-        if(!widget.solution) {
+        if (!widget.solution) {
           if (startIndex >= 0 &&
-            startIndex <= (widget.gridSize*widget.gridSize) - 1 &&
-            endIndex >= 0 &&
-            endIndex <= (widget.gridSize * widget.gridSize) - 1) {
-          if (liens[startIndex][endIndex] == 0 &&
-              liens[endIndex][startIndex] == 0 &&
-              startIndex != endIndex) {
-            if ((startIndex - endIndex).abs() == 1 ||
-                (startIndex - endIndex).abs() == widget.gridSize) {
-              if (((startIndex + 1) % widget.gridSize == 0 &&
-                  (startIndex - endIndex) == -1)) {
-              } else if (((startIndex + 1) % widget.gridSize == 1 &&
-                  (startIndex - endIndex) == 1)) {
-              } else {
-                liens[startIndex][endIndex] = 1;
-                liens[endIndex][startIndex] = 1;
-                widget.grille.addTrait(Trait(widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (startIndex % widget.gridSize) && element.getPosY() == (startIndex ~/ widget.gridSize)), widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (endIndex % widget.gridSize) && element.getPosY() == (endIndex ~/ widget.gridSize))));
-                print('De case ${startIndex} à case ${endIndex}');
-                setState(() {});
+              startIndex <= (widget.gridSize * widget.gridSize) - 1 &&
+              endIndex >= 0 &&
+              endIndex <= (widget.gridSize * widget.gridSize) - 1) {
+            if (liens[startIndex][endIndex] == 0 &&
+                liens[endIndex][startIndex] == 0 &&
+                startIndex != endIndex) {
+              if ((startIndex - endIndex).abs() == 1 ||
+                  (startIndex - endIndex).abs() == widget.gridSize) {
+                if (((startIndex + 1) % widget.gridSize == 0 &&
+                    (startIndex - endIndex) == -1)) {
+                } else if (((startIndex + 1) % widget.gridSize == 1 &&
+                    (startIndex - endIndex) == 1)) {
+                } else {
+                  liens[startIndex][endIndex] = 1;
+                  liens[endIndex][startIndex] = 1;
+                  widget.grille.addTrait(Trait(
+                      widget.grille.getListeCells().firstWhere((element) =>
+                          element.getPosX() == (startIndex % widget.gridSize) &&
+                          element.getPosY() == (startIndex ~/ widget.gridSize)),
+                      widget.grille.getListeCells().firstWhere((element) =>
+                          element.getPosX() == (endIndex % widget.gridSize) &&
+                          element.getPosY() == (endIndex ~/ widget.gridSize))));
+                  print('De case ${startIndex} à case ${endIndex}');
+                  setState(() {});
+                }
               }
             }
           }
         }
-        }
-        
       },
-
-      child: Container(
-        height: 350,
-        width: 350,
-        child: Stack(children: [
-          // Déplacez le Stack dans le GestureDetector
+      child: Column(
+        children : [
           Container(
-            padding: EdgeInsets.all(1.0),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.gridSize * widget.gridSize,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: widget.gridSize,
-                childAspectRatio: 1.0,
-                crossAxisSpacing: 1.0,
-                mainAxisSpacing: 1.0,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-
-                if(index == 0) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff373855),
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0))
-                    ),
-                  );
-                } else if(index == widget.gridSize-1) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff373855),
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(10.0))
-                    ),
-                  );
-                } else if(index == widget.gridSize*(widget.gridSize-1)) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff373855),
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0))
-                    ),
-                  );
-                } else if(index == widget.gridSize*widget.gridSize - 1) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff373855),
-                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0))
-                    ),
-                  );
-                }
-
-                return Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xff373855),
+            height: 350,
+            width: 350,
+            child: Stack(children: [
+              // Déplacez le Stack dans le GestureDetector
+              Container(
+                padding: const EdgeInsets.all(1.0),
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.gridSize * widget.gridSize,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: widget.gridSize,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 1.0,
                   ),
-                );
-              },
-            ) ,
-          ),
-          CustomPaint(
-              painter: LinePainter(liens, context, widget.gridSize),
-              child:  GestureDetector(
-            onTapDown: (details) {
-              for (int i = 0; i < liens.length; i++) {
-                for (int j = 0; j < liens[0].length; j++) {
-                  if (liens[i][j] == 1) {
-                    final lineStart = _getCenterPosition(i);
-                    final lineEnd = _getCenterPosition(j);
-                    final tapPosition = details.localPosition;
-                    if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
-                      liens[i][j] = 0;
-                      liens[j][i] = 0;
-                      setState(() {
-                        
-                      });
-                    }
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius:
+                                BorderRadius.only(topLeft: Radius.circular(10.0))),
+                      );
+                    } else if (index == widget.gridSize - 1) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius:
+                                BorderRadius.only(topRight: Radius.circular(10.0))),
+                      );
+                    } else if (index == widget.gridSize * (widget.gridSize - 1)) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10.0))),
+                      );
+                    } else if (index == widget.gridSize * widget.gridSize - 1) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xff373855),
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10.0))),
+                      );
                   }
-                }
-              }
-            },),
-            ),
 
-            //Ajout des cercles
-            ...cercles,          
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                    ),
+                  );
+                  },
+                ),
+              ),
+              CustomPaint(
+                painter: LinePainter(liens, context, widget.gridSize),
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    for (int i = 0; i < liens.length; i++) {
+                      for (int j = 0; j < liens[0].length; j++) {
+                        if (liens[i][j] == 1) {
+                          final lineStart = _getCenterPosition(i);
+                          final lineEnd = _getCenterPosition(j);
+                          final tapPosition = details.localPosition;
+                          if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
+                            liens[i][j] = 0;
+                            liens[j][i] = 0;
+                            setState(() {});
+                          }
+                        }
+                      }
+                    }
+                  },
+                ),
+              ),
 
-
-        ]),
+              //Ajout des cercles
+              ...cercles,
+            ]),),
+      
+          const SizedBox(height: 30),
+          Row(
+            // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  onPressed: () => {
+                    Navigator.pushNamed(context, "/video"),
+                    // TOTEST
+                    addClue(),
+                  },
+                  icon: const Icon(BootstrapIcons.lightbulb),
+                  color: Colors.white,
+                  iconSize: 25,
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  onPressed: () => {
+                    // TOTEST
+                    resetGame(),
+                  },
+                  icon: const Icon(Icons.undo),
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+      ],
       ),
     ));
   }
@@ -227,7 +323,8 @@ class LinePainter extends CustomPainter {
     for (int i = 0; i < liens.length; i++) {
       for (int j = 0; j < liens[0].length; j++) {
         if (liens[i][j] == 1) {
-          canvas.drawLine(_getCenterPosition(i, gridSize), _getCenterPosition(j, gridSize), paint);
+          canvas.drawLine(_getCenterPosition(i, gridSize),
+              _getCenterPosition(j, gridSize), paint);
         }
       }
     }

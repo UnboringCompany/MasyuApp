@@ -105,7 +105,11 @@ class _Settings extends State<Settings> {
                     fontWeight: FontWeight.w600))
           ]),
           const SizedBox(height: 80),
-          Container(
+          Expanded(
+            child: SingleChildScrollView(
+              child : Column(children: [
+
+                  Container(
             width: 125,
             height: 48,
             decoration: BoxDecoration(
@@ -221,7 +225,10 @@ class _Settings extends State<Settings> {
               )
             ],
           )
-        ],
+
+              ],)),
+          
+      )],
       ),
     ));
   }
