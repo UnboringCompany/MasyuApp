@@ -5,11 +5,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/cercle.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/trait.dart';
 import 'package:masyu_app/widgets/circle.dart';
+import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
 class GrilleWidget extends StatefulWidget {
@@ -180,6 +182,11 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    final appState = Provider.of<AppState>(context);
+    final isVibrationEnabled = appState.isVibrationEnabled;
+
+
     return Column(
       children: [
         GestureDetector(
@@ -231,7 +238,10 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                                   (endIndex ~/ widget.gridSize))));
                       debugPrint('De case ${startIndex} à case ${endIndex}');
                       setState(() {
-                        Vibration.vibrate(duration: 50, amplitude: 5);
+                        if(isVibrationEnabled) {
+                          Vibration.vibrate(duration: 50, amplitude: 5);
+                        }
+                        
                       });
                     }
                   }

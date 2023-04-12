@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
+import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/classement.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
@@ -17,11 +18,18 @@ import 'package:get/get.dart';
 import 'package:masyu_app/video.dart';
 import 'package:confetti/confetti.dart';
 import 'package:masyu_app/widgets/tripletap.dart';
+import 'package:provider/provider.dart';
 
 import 'game.dart';
 
 void main() {
-  runApp(const MyApp());
+     runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppState(),
+      child: const MyApp()
+      ),
+
+  );
 }
 
 class MyApp extends StatelessWidget {

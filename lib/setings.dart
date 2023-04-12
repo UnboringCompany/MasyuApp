@@ -1,11 +1,13 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
+import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/tile.dart';
 import 'main.dart';
 import 'LocalString.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -77,6 +79,8 @@ class _Settings extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final appState = Provider.of<AppState>(context);
+    final isVibrationEnabled = appState.isVibrationEnabled;
 
     return CoreWidget(
         child: Center(
@@ -150,11 +154,11 @@ class _Settings extends State<Settings> {
                       ),
                       const SizedBox(width: 15),
                       Switch(
-                        value: vibrate,
+                        value: appState.isVibrationEnabled,
                         onChanged: (bool value) {
                           // This is called when the user toggles the switch.
                           setState(() {
-                            vibrate = value;
+                            appState.isVibrationEnabled = value;
                           });
                         },
                         activeColor: Colors.white,
