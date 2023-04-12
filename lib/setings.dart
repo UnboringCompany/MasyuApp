@@ -25,7 +25,6 @@ class _Settings extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    getMuteState();
     getLocal();
   }
 
@@ -49,19 +48,6 @@ class _Settings extends State<Settings> {
     Navigator.of(context).pushNamed('/');
   }
 
-  Future<void> getMuteState() async {
-    bool? muted = await FlutterVolumeController.getMute();
-    setState(() {
-      sound = !muted!;
-    });
-  }
-
-  Future<void> onSoundChanged(bool value) async {
-    await FlutterVolumeController.setMute(!value);
-    setState(() {
-      sound = value;
-    });
-  }
 
   final List locale = [
     {'name': 'Français', 'locale': Locale('fr', 'FR')},
@@ -80,7 +66,6 @@ class _Settings extends State<Settings> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final appState = Provider.of<AppState>(context);
-    final isVibrationEnabled = appState.isVibrationEnabled;
 
     return CoreWidget(
         child: Center(
@@ -127,8 +112,12 @@ class _Settings extends State<Settings> {
                       ),
                       const SizedBox(width: 15),
                       Switch(
-                        value: sound ?? true,
-                        onChanged: onSoundChanged,
+                        value: appState.isSoundEnabled,
+                        onChanged: (bool value) {
+                          setState(() {
+                            appState.isSoundEnabled = value;
+                          });
+                        },
                         activeColor: Colors.white,
                       )
                     ],
