@@ -305,7 +305,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                           final lineStart = _getCenterPosition(i);
                           final lineEnd = _getCenterPosition(j);
                           final tapPosition = details.localPosition;
-                          if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
+                          if (_isTapOnLine(lineStart, lineEnd, tapPosition) && !widget.solution) {
                             liens[i][j] = 0;
                             liens[j][i] = 0;
                             setState(() {});
@@ -323,8 +323,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
      
         ),
         ),
-        widget.solution ? const SizedBox(height: 30, width: 350) : const SizedBox(),
-        widget.solution ? SizedBox(
+        !widget.solution ? const SizedBox(height: 30, width: 350) : const SizedBox(),
+        !widget.solution ? SizedBox(
           width: 350,
           child: Row(
             // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
