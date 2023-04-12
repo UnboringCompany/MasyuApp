@@ -1,4 +1,6 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:get/get.dart';
@@ -216,13 +218,36 @@ class _GamePageState extends State<GamePage> {
                               child: Text('save'.tr,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                // faire quelque chose ici
+                              onPressed: () async {
+                                try {
+                                  await Firebase.initializeApp();
+                                  CollectionReference grillesCollection =
+                                      FirebaseFirestore.instance
+                                          .collection('grilles');
+                                  await grillesCollection.add({
+                                    'size': grille.getSize(),
+                                    'listeCells': grille
+                                        .getListeCells()
+                                        .map((cell) => cell.toJson())
+                                        .toList(),
+                                    'listeTraits': grille
+                                        .getListeTraits()
+                                        .map((trait) => trait.toJson())
+                                        .toList(),
+                                    'listeTraitsSolution': grille
+                                        .getListeTraitsSolution()
+                                        .map((trait) => trait.toJson())
+                                        .toList(),
+                                  });
+                                  print('Grille ajoutée avec succès');
+                                } catch (error) {
+                                  print(
+                                      'Erreur lors de l\'ajout des données à Firebase: $error');
+                                }
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pushNamed('/');
-                                //TODO: Gérer la sauvegarde
                               },
-                            ),
+                            )
                           ])
                     ],
                   );
@@ -251,7 +276,6 @@ class _GamePageState extends State<GamePage> {
         solution: false,
       ),
       const SizedBox(height: 40),
-      
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
