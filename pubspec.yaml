@@ -42,6 +42,7 @@ dependencies:
   vibration: ^1.7.6
   get :
   video_player: ^2.6.1
+  flutter_launcher_icons: ^0.13.0
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,13 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "assets/images/background.png"
+  adaptive_icon_foreground: "assets/images/foreground.png"
+  min_sdk_android: 21 
 
 # The following section is specific to Flutter packages.
 flutter:
