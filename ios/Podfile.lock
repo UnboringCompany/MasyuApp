@@ -607,6 +607,8 @@ PODS:
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - device_info_plus (0.0.1):
+    - Flutter
   - Firebase/CoreOnly (10.6.0):
     - FirebaseCore (= 10.6.0)
   - Firebase/Firestore (10.6.0):
@@ -713,6 +715,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_volume_controller (from `.symlinks/plugins/flutter_volume_controller/ios`)
@@ -738,6 +741,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
@@ -753,6 +758,7 @@ SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: ad043705a33fa70971b31cb760ce54051576aa84
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: f13680471b021937f2230ea8503c7809d8c29806
   firebase_core: 58542d7399889ebdbb034baa72d081e54c5c814d
   FirebaseCore: fa80ad16a62d52f67274b5b88304c3a318bbf9a4

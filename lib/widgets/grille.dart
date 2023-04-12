@@ -50,9 +50,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
   }
 
   Offset _getCenterPosition(int index) {
-
-    final cellSize = 350 /
-        widget.gridSize; // La taille d'une case de la grille
+    final cellSize = 350 / widget.gridSize; // La taille d'une case de la grille
     final row =
         (index / widget.gridSize).floor(); // Le numéro de ligne de la case
     final col = index % widget.gridSize; // Le numéro de colonne de la case
@@ -182,10 +180,8 @@ class _GrilleWidgetState extends State<GrilleWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     final appState = Provider.of<AppState>(context);
     final isVibrationEnabled = appState.isVibrationEnabled;
-
 
     return Column(
       children: [
@@ -197,16 +193,12 @@ class _GrilleWidgetState extends State<GrilleWidget> {
             final endPos =
                 gridBox.globalToLocal(details.globalPosition + details.delta);
 
-            final startIndex =
-                ((startPos.dx / 350) * widget.gridSize).floor() +
-                    (((startPos.dy / 350) * widget.gridSize)
-                            .floor() *
-                        widget.gridSize);
-            final endIndex =
-                ((endPos.dx / 350) * widget.gridSize).floor() +
-                    (((endPos.dy / 350) * widget.gridSize)
-                            .floor() *
-                        widget.gridSize);
+            final startIndex = ((startPos.dx / 350) * widget.gridSize).floor() +
+                (((startPos.dy / 350) * widget.gridSize).floor() *
+                    widget.gridSize);
+            final endIndex = ((endPos.dx / 350) * widget.gridSize).floor() +
+                (((endPos.dy / 350) * widget.gridSize).floor() *
+                    widget.gridSize);
 
             if (!widget.solution) {
               if (startIndex >= 0 &&
@@ -238,10 +230,9 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                                   (endIndex ~/ widget.gridSize))));
                       debugPrint('De case ${startIndex} à case ${endIndex}');
                       setState(() {
-                        if(isVibrationEnabled) {
+                        if (isVibrationEnabled) {
                           Vibration.vibrate(duration: 50, amplitude: 5);
                         }
-                        
                       });
                     }
                   }
@@ -318,9 +309,23 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                           final lineStart = _getCenterPosition(i);
                           final lineEnd = _getCenterPosition(j);
                           final tapPosition = details.localPosition;
-                          if (_isTapOnLine(lineStart, lineEnd, tapPosition) && !widget.solution) {
+                          if (_isTapOnLine(lineStart, lineEnd, tapPosition) &&
+                              !widget.solution) {
                             liens[i][j] = 0;
                             liens[j][i] = 0;
+                            widget.grille.removeTrait(Trait(
+                                widget.grille.getListeCells().firstWhere(
+                                    (element) =>
+                                        element.getPosX() ==
+                                            (i % widget.gridSize) &&
+                                        element.getPosY() ==
+                                            (i ~/ widget.gridSize)),
+                                widget.grille.getListeCells().firstWhere(
+                                    (element) =>
+                                        element.getPosX() ==
+                                            (j % widget.gridSize) &&
+                                        element.getPosY() ==
+                                            (j ~/ widget.gridSize))));
                             setState(() {});
                           }
                         }
@@ -333,50 +338,53 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               //Ajout des cercles
               ...cercles,
             ]),
-     
-        ),
-        ),
-        !widget.solution ? const SizedBox(height: 30, width: 350) : const SizedBox(),
-        !widget.solution ? SizedBox(
-          width: 350,
-          child: Row(
-            // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x7F373855),
-                ),
-                child: IconButton(
-                  onPressed: () => {
-                    cluePopup(context),
-                    // TOTEST
-                  },
-                  icon: const Icon(BootstrapIcons.lightbulb),
-                  color: Colors.white,
-                  iconSize: 25,
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x7F373855),
-                ),
-                child: IconButton(
-                  onPressed: () => {
-                    // TOTEST
-                    resetGame(),
-                  },
-                  icon: const Icon(Icons.undo),
-                  color: Colors.white,
-                ),
-              ),
-            ],
           ),
-        ) : const SizedBox(),
+        ),
+        !widget.solution
+            ? const SizedBox(height: 30, width: 350)
+            : const SizedBox(),
+        !widget.solution
+            ? SizedBox(
+                width: 350,
+                child: Row(
+                  // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x7F373855),
+                      ),
+                      child: IconButton(
+                        onPressed: () => {
+                          cluePopup(context),
+                          // TOTEST
+                        },
+                        icon: const Icon(BootstrapIcons.lightbulb),
+                        color: Colors.white,
+                        iconSize: 25,
+                      ),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x7F373855),
+                      ),
+                      child: IconButton(
+                        onPressed: () => {
+                          // TOTEST
+                          resetGame(),
+                        },
+                        icon: const Icon(Icons.undo),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox(),
       ],
     );
     // );
@@ -412,8 +420,7 @@ class LinePainter extends CustomPainter {
   }
 
   Offset _getCenterPosition(int index, int gridSize) {
-    final cellSize =
-        350 / gridSize; // La taille d'une case de la grille
+    final cellSize = 350 / gridSize; // La taille d'une case de la grille
     final row = (index / gridSize).floor(); // Le numéro de ligne de la case
     final col = index % gridSize; // Le numéro de colonne de la case
     final x = (col + 0.5) * cellSize; // La coordonnée x du centre de la case

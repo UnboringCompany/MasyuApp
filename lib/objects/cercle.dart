@@ -65,6 +65,7 @@ class Cercle extends Cell {
     validate(grille);
     if (super.isCellValid(grille)) {
       return _isValid;
+      // return true;
     }
     return false;
   }
@@ -77,6 +78,6 @@ class Cercle extends Cell {
     } else if (_color == 2) {
       couleur = 'N';
     }
-    return '$couleur($getPosX(), $getPosY())';
+    return '$couleur(${getPosX()} , ${getPosY()})';
   }
 }

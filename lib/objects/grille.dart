@@ -284,6 +284,7 @@ class Grille {
     // On vérifie que chaque cellule est valide
     for (Cell cell in _listeCells) {
       if (!cell.isCellValid(this)) {
+        debugPrint("La cellule ${cell.toString()} n'est pas valide");
         return false;
       }
     }
