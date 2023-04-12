@@ -158,95 +158,93 @@ class _GrilleWidgetState extends State<GrilleWidget> {
           }
         }
         }
-        
       },
-
+        child: Container(
+          height: 350,
+          width: 350,
+          child: Stack(children: [
+            // Déplacez le Stack dans le GestureDetector
             Container(
-              height: 350,
-              width: 350,
-              child: Stack(children: [
-                // Déplacez le Stack dans le GestureDetector
-                Container(
-                  padding: const EdgeInsets.all(1.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.gridSize * widget.gridSize,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: widget.gridSize,
-                      childAspectRatio: 1.0,
-                      crossAxisSpacing: 1.0,
-                      mainAxisSpacing: 1.0,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Color(0xff373855),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0))),
-                        );
-                      } else if (index == widget.gridSize - 1) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Color(0xff373855),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10.0))),
-                        );
-                      } else if (index ==
-                          widget.gridSize * (widget.gridSize - 1)) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Color(0xff373855),
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(10.0))),
-                        );
-                      } else if (index ==
-                          widget.gridSize * widget.gridSize - 1) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Color(0xff373855),
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(10.0))),
-                        );
-                      }
-
-                      return Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xff373855),
-                        ),
-                      );
-                    },
-                  ),
+              padding: const EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.gridSize * widget.gridSize,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: widget.gridSize,
+                  childAspectRatio: 1.0,
+                  crossAxisSpacing: 1.0,
+                  mainAxisSpacing: 1.0,
                 ),
-                CustomPaint(
-                  painter: LinePainter(liens, context, widget.gridSize),
-                  child: GestureDetector(
-                    onTapDown: (details) {
-                      for (int i = 0; i < liens.length; i++) {
-                        for (int j = 0; j < liens[0].length; j++) {
-                          if (liens[i][j] == 1) {
-                            final lineStart = _getCenterPosition(i);
-                            final lineEnd = _getCenterPosition(j);
-                            final tapPosition = details.localPosition;
-                            if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
-                              liens[i][j] = 0;
-                              liens[j][i] = 0;
-                              setState(() {});
-                            }
-                          }
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff373855),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0))),
+                    );
+                  } else if (index == widget.gridSize - 1) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff373855),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10.0))),
+                    );
+                  } else if (index ==
+                      widget.gridSize * (widget.gridSize - 1)) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff373855),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0))),
+                    );
+                  } else if (index ==
+                      widget.gridSize * widget.gridSize - 1) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff373855),
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(10.0))),
+                    );
+                  }
+
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff373855),
+                    ),
+                  );
+                },
+              ),
+            ),
+            CustomPaint(
+              painter: LinePainter(liens, context, widget.gridSize),
+              child: GestureDetector(
+                onTapDown: (details) {
+                  for (int i = 0; i < liens.length; i++) {
+                    for (int j = 0; j < liens[0].length; j++) {
+                      if (liens[i][j] == 1) {
+                        final lineStart = _getCenterPosition(i);
+                        final lineEnd = _getCenterPosition(j);
+                        final tapPosition = details.localPosition;
+                        if (_isTapOnLine(lineStart, lineEnd, tapPosition)) {
+                          liens[i][j] = 0;
+                          liens[j][i] = 0;
+                          setState(() {});
                         }
                       }
-                    },
-                  ),
-                ),
-
-                //Ajout des cercles
-                ...cercles,
-              ]),
+                    }
+                  }
+                },
+              ),
             ),
+
+            //Ajout des cercles
+            ...cercles,
+          ]),
+        ),
             const SizedBox(height: 30),
             Row(
               // TODO : les faire apparaitre que lorsque l'on joue pas dans la solution
@@ -286,8 +284,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                 ),
               ],
             ),
-          ],
-        )));
+        ));
   }
 }
 
