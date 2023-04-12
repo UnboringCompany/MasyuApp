@@ -9,9 +9,10 @@ class Cercle extends Cell {
   // Constructeur
   Cercle(int posX, int posY, this._color, this._isValid) : super(posX, posY);
 
+  @override
   Map<String, dynamic> toJson() => {
-        'posX': _posX,
-        'posY': _posY,
+        'posX': getPosX(),
+        'posY': getPosY(),
         'color': _color,
         'isValid': _isValid,
       };

@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
 import 'package:masyu_app/objects/grille.dart';
@@ -5,7 +10,7 @@ import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/rule.dart';
-import 'package:masyu_app/setings.dart';
+import 'package:masyu_app/setings.dart' as setting;
 import 'package:masyu_app/solution.dart';
 import 'package:masyu_app/widgets/citation.dart';
 import 'package:masyu_app/widgets/sizedropdown.dart';
@@ -44,7 +49,7 @@ class MyApp extends StatelessWidget {
         '/game': (context) => GamePage(),
         '/solution': (context) => SolutionPage(),
         '/video': (context) => Video(),
-        '/settings': (context) => Settings(),
+        '/settings': (context) => setting.Settings(),
         '/rules': (context) => Rule()
       },
     );
@@ -86,6 +91,19 @@ class _MenuState extends State<MenuPage> {
     Navigator.of(context).pushNamed('/rules');
   }
 
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.androidId; // unique ID on Android
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -125,7 +143,25 @@ class _MenuState extends State<MenuPage> {
                       size: 0.15 * MediaQuery.of(context).size.width,
                     ),
                     title: 'resume'.tr,
-                    onPressed: () {},
+                    onPressed: () async {
+                      print('j ai cliqué');
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      if (docSnapshot.exists) {
+                        print('Le document existe');
+                      } else {
+                        print('Le document n existe pas');
+                      }
+                      final data = docSnapshot.data();
+                      if (data != null) {
+                        Grille grille = Grille.fromJson(data['grille']);
+                        print('La grille a été récupéré');
+                      }
+                    },
                   ),
                   Tile(
                     icon: Icon(
@@ -135,8 +171,7 @@ class _MenuState extends State<MenuPage> {
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {},
-                  ),
-                
+                  )
                 ],
               ),
               SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
