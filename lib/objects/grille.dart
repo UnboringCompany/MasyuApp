@@ -12,6 +12,7 @@ class Grille {
   List<Cercle> _listeCercle;
   List<Trait> _listeTraits;
   List<Trait> _listeTraitsSolution;
+  int _nbIndices = 0;
 
   // Constructeur
   Grille(this._size)
@@ -312,6 +313,14 @@ class Grille {
   /// @return la taille de la grille
   int getSize() {
     return _size;
+  }
+
+  int getNbIndices() {
+    return _nbIndices;
+  }
+
+  void addNbIndices() {
+    _nbIndices++;
   }
 
   /// Fonction qui permet de récupérer la liste des cellules de la grille

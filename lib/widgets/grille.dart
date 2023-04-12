@@ -14,6 +14,8 @@ import 'package:masyu_app/widgets/circle.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import '../objects/partie.dart';
+
 class GrilleWidget extends StatefulWidget {
   final int gridSize;
   final Grille grille;
@@ -110,6 +112,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
     Trait toAdd = widget.grille.getClue();
 
     widget.grille.addTrait(toAdd);
+    widget.grille.addNbIndices();
 
     liens[toAdd.getCaseDep().getPosX() +
             toAdd.getCaseDep().getPosY() * widget.grille.getSize()][
@@ -123,8 +126,6 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         toAdd.getCaseDep().getPosY() * widget.grille.getSize();
     int y = toAdd.getCaseArr().getPosX() +
         toAdd.getCaseArr().getPosY() * widget.grille.getSize();
-    // debugPrint("lien ajouté : de $x à $y ");
-    // debugPrint("trait ajouté : $toAdd");
 
     setState(() {});
   }
@@ -313,12 +314,26 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                               !widget.solution) {
                             liens[i][j] = 0;
                             liens[j][i] = 0;
-                            widget.grille.removeTrait(widget.grille.getListeTraits().firstWhere((element) => 
-                            element.getCaseDep().getPosX() == (i % widget.gridSize) 
-                            && element.getCaseDep().getPosY() == (i ~/ widget.gridSize) 
-                            && element.getCaseArr().getPosX() == (j % widget.gridSize) 
-                            && element.getCaseArr().getPosY() == (j ~/ widget.gridSize)
-                            ));
+                            widget.grille.removeTrait(widget.grille
+                                .getListeTraits()
+                                .firstWhere((element) =>
+                                    element.getCaseDep().getPosX() ==
+                                        (i % widget.gridSize) &&
+                                    element.getCaseDep().getPosY() ==
+                                        (i ~/ widget.gridSize) &&
+                                    element.getCaseArr().getPosX() ==
+                                        (j % widget.gridSize) &&
+                                    element.getCaseArr().getPosY() ==
+                                        (j ~/ widget.gridSize) ||
+                                    (element.getCaseDep().getPosX() ==
+                                        (j % widget.gridSize) &&
+                                    element.getCaseDep().getPosY() ==
+                                        (j ~/ widget.gridSize) &&
+                                    element.getCaseArr().getPosX() ==
+                                        (i % widget.gridSize) &&
+                                    element.getCaseArr().getPosY() ==
+                                        (i ~/ widget.gridSize)))
+                              );
                             setState(() {});
                           }
                         }

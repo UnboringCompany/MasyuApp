@@ -58,6 +58,7 @@ class Partie {
     // debugPrint("Validation de la partie");
     // debugPrint("Liste trait : ${grille.getListeTraits()}");
     if (grille.isValid()) {
+      nbIndices = grille.getNbIndices();
       scorePartie = scorePartie - (chrono ~/ 12);
       scorePartie = scorePartie - (5 * nbIndices);
       player.score += scorePartie;
