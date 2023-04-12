@@ -40,7 +40,10 @@ class LocalString extends Translations {
           'game_back_text':
               'Si vous abandonnez la partie vous perdrez @points points',
           'give_up': 'Abandonner',
-          'save': 'Sauvegarder'
+          'save': 'Sauvegarder',
+          'timer_defeat_title': 'Défaite',
+          'timer_defeat_content':
+              'Temps de résolution dépassé vous avez perdu @points points'
         },
         'en_UK': {
           'title': 'MASYU',
@@ -78,7 +81,10 @@ class LocalString extends Translations {
           'game_back_text':
               'If you abandon the game you will lose @points points',
           'give_up': 'Give up',
-          'save': 'Save'
+          'save': 'Save',
+          'timer_defeat_title': 'Defeat',
+          'timer_defeat_content':
+              'Resolution time exceeded you have lost @points points'
         },
         'de_DE': {
           'title': 'MASYU',
@@ -117,7 +123,10 @@ class LocalString extends Translations {
           'game_back_text':
               'Wenn Sie das Spiel abbrechen, verlieren Sie @points Punkte',
           'give_up': 'Aufgeben',
-          'save': 'Zu schützen'
+          'save': 'Zu schützen',
+          'timer_defeat_title': 'Niederlage',
+          'timer_defeat_content':
+              'Lösungszeit überschritten Sie haben @points Punkte verloren'
         },
         'es_ES': {
           'title': 'MASYU',
@@ -153,7 +162,10 @@ class LocalString extends Translations {
           'game_back': 'Guardar o abandonar',
           'game_back_text': 'Si abandonas el juego perderás @points puntos',
           'give_up': 'Abandonar',
-          'save': 'Guardar'
+          'save': 'Guardar',
+          'timer_defeat_title': 'Derrota',
+          'timer_defeat_content':
+              'Tiempo de resolución excedido ha perdido @points puntos'
         },
         'ja_JP': {
           'title': 'MASYU',
@@ -186,7 +198,9 @@ class LocalString extends Translations {
           'game_back': '保存または放棄',
           'game_back_text': 'ゲームを放棄すると、@points ポイントを失います',
           'give_up': 'あきらめる',
-          'save': '守るために'
+          'save': '守るために',
+          'timer_defeat_title': '敗戦',
+          'timer_defeat_content': '解決時間超過で@points点減点'
         },
       };
 }

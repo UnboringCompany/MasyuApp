@@ -1,19 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TimerWatch extends StatefulWidget {
-  const TimerWatch({super.key, required this.time});
+  const TimerWatch({super.key, required this.time, required this.point});
 
   final int time;
+  final int point;
 
   @override
-  State<StatefulWidget> createState() => _TimerWatchState(time: time);
+  State<StatefulWidget> createState() =>
+      _TimerWatchState(time: time, point: point);
 }
 
 class _TimerWatchState extends State<TimerWatch> {
-  _TimerWatchState({required this.time});
+  _TimerWatchState({required this.time, required this.point});
   final int time;
+  final int point;
 
   Duration duration = const Duration();
   Timer? timer;
@@ -55,8 +59,8 @@ class _TimerWatchState extends State<TimerWatch> {
         timer?.cancel();
       } else if (seconds == 0 && !popup) {
         popup = true;
-        afficherPopup(
-            context, "Défaite", "Temps de résolution dépassé dommage");
+        afficherPopup(context, "timer_defeat_title".tr,
+            "timer_defeat_content".trParams({"points": point.toString()}));
       } else {
         duration = Duration(seconds: seconds);
       }
