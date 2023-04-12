@@ -313,19 +313,12 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                               !widget.solution) {
                             liens[i][j] = 0;
                             liens[j][i] = 0;
-                            widget.grille.removeTrait(Trait(
-                                widget.grille.getListeCells().firstWhere(
-                                    (element) =>
-                                        element.getPosX() ==
-                                            (i % widget.gridSize) &&
-                                        element.getPosY() ==
-                                            (i ~/ widget.gridSize)),
-                                widget.grille.getListeCells().firstWhere(
-                                    (element) =>
-                                        element.getPosX() ==
-                                            (j % widget.gridSize) &&
-                                        element.getPosY() ==
-                                            (j ~/ widget.gridSize))));
+                            widget.grille.removeTrait(widget.grille.getListeTraits().firstWhere((element) => 
+                            element.getCaseDep().getPosX() == (i % widget.gridSize) 
+                            && element.getCaseDep().getPosY() == (i ~/ widget.gridSize) 
+                            && element.getCaseArr().getPosX() == (j % widget.gridSize) 
+                            && element.getCaseArr().getPosY() == (j ~/ widget.gridSize)
+                            ));
                             setState(() {});
                           }
                         }

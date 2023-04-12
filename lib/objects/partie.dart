@@ -90,4 +90,8 @@ class Partie {
   String toString() {
     return 'Partie{grille: $grille, chrono: $chrono, player: $player, scorePartie: $scorePartie}';
   }
+
+  int getChrono() {
+    return chrono;
+  }
 }

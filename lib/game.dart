@@ -53,6 +53,41 @@ class _GamePageState extends State<GamePage> {
     partie = Partie(
         _gridSize); //TODO : quand on ajoutera le joueur au constructeur, faudra le faire ici aussi
 
+    void winPopup(BuildContext context, int nbPoints, int chrono) {
+      String points = nbPoints.toString();
+      String chrono2 = chrono.toString();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('bravo'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            backgroundColor: Colors.transparent,
+            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono2}),
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.x),
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/');
+                    },
+                  )),
+            ],
+          );
+        },
+      );
+    }
+
     void losePopup(BuildContext context, int nbPoints) {
       nbPoints = -nbPoints;
       String points = nbPoints.toString();
@@ -163,7 +198,8 @@ class _GamePageState extends State<GamePage> {
       if (partie.valider()) {
         //TODO la popup de victoire
         debugPrint('Victoire');
-        Navigator.pushNamed(context, '/');
+        // Navigator.pop(context);
+        winPopup(context, partie.getScorePartie(), partie.getChrono());
       } else {
         //TOTEST
         Navigator.pop(context);

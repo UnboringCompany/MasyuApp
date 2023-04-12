@@ -249,9 +249,9 @@ class Grille {
   /// @param c : la cellule à vérifier
   /// @return true si on peut mettre un cercle blanc sur la cellule, false sinon
   bool iCanPutAWhiteCellHere(Cell c) {
-    Cell cellPrecedente = c.getCellPrecedente(this);
-    Cell cellSuivante = c.getCellSuivante(this);
-    if (cellPrecedente != Cell(-1, -1) && cellSuivante != Cell(-1, -1)) {
+    Cell? cellPrecedente = c.getCellPrecedente(this);
+    Cell? cellSuivante = c.getCellSuivante(this);
+    if (cellPrecedente != null && cellSuivante != null) {
       if ((cellPrecedente.isCellTurning(this) ||
               cellSuivante.isCellTurning(this)) &&
           !c.isCellTurning(this)) {
@@ -266,9 +266,9 @@ class Grille {
   /// @param c : la cellule à vérifier
   /// @return true si on peut mettre un cercle noir sur la cellule, false sinon
   bool iCanPutABlackCellHere(Cell c) {
-    Cell cellPrecedente = c.getCellPrecedente(this);
-    Cell cellSuivante = c.getCellSuivante(this);
-    if (cellPrecedente != Cell(-1, -1) && cellSuivante != Cell(-1, -1)) {
+    Cell? cellPrecedente = c.getCellPrecedente(this);
+    Cell? cellSuivante = c.getCellSuivante(this);
+    if (cellPrecedente != null && cellSuivante != null) {
       if (!cellPrecedente.isCellTurning(this) &&
           !cellSuivante.isCellTurning(this) &&
           c.isCellTurning(this)) {
