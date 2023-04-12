@@ -149,54 +149,6 @@ class _GamePageState extends State<GamePage> {
       return null;
     }
 
-    void cluePopup(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('clue'.tr,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            backgroundColor: Colors.transparent,
-            content: Text('clue_text'.trParams({'points': '10'}),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            actions: <Widget>[
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
-                    alignment: Alignment.bottomCenter,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0x7F373855),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(BootstrapIcons.check),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.pushNamed(context, "/video");
-                      },
-                      color: Colors.white,
-                    )),
-                const SizedBox(width: 50),
-                Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0x7F373855),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(BootstrapIcons.x),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: Colors.red,
-                    ))
-              ]),
-            ],
-          );
-        },
-      );
-    }
-
     return (CoreWidget(
         child: Center(
             child: Column(children: [
