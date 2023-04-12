@@ -14,6 +14,8 @@ import 'package:masyu_app/widgets/core.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:get/get.dart';
 import 'package:masyu_app/video.dart';
+import 'package:confetti/confetti.dart';
+import 'package:masyu_app/widgets/tripletap.dart';
 
 import 'game.dart';
 
@@ -52,10 +54,31 @@ class MenuPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _MenuState();
+
 }
 
 class _MenuState extends State<MenuPage> {
   String _dropdownValue = '';
+  late ConfettiController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ConfettiController(duration: const Duration(seconds: 2));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+
+
+
+    _controller.play();
+  }
 
   void seeSettings() {
     Navigator.pushReplacement<void, void>(
@@ -82,13 +105,15 @@ class _MenuState extends State<MenuPage> {
     List<String> _options = ['6x6', '8x8', '10x10'];
 
     return CoreWidget(
-  child: Center(
+      child : Stack(
+        children: [
+          Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
-        Text(
+        TripleTapButton(onPressed: _startAnimation, child: Text(
           'title'.tr,
           style: TextStyle(
             color: Colors.white,
@@ -96,7 +121,8 @@ class _MenuState extends State<MenuPage> {
             fontSize: 0.10 * MediaQuery.of(context).size.width,
             fontWeight: FontWeight.w600,
           ),
-        ),
+        ),),
+        
         CitationWidget(),
         SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
         Row(
@@ -185,6 +211,27 @@ class _MenuState extends State<MenuPage> {
       ],
     ),
   ),
+  Align(
+    alignment: Alignment.topCenter,
+    child: ConfettiWidget(
+            confettiController: _controller,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 50,
+            shouldLoop: false,
+            colors: const [
+              Colors.blue,
+              Colors.purple,
+              Colors.pink,
+              Colors.green,
+              Colors.yellow,
+            ],
+          ),
+  )
+   
+        ],
+      )
+  
 );
 
   }
