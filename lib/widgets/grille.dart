@@ -67,7 +67,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
       }
 
       if(widget.solution) {
-        //TODO: Ajouter le traçage des traits de solution
+
         for(Trait t in widget.grille.getListeTraitsSolution()) {
                 liens[t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize][t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize] = 1;
                 liens[t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize][t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize] = 1;
@@ -110,8 +110,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               } else {
                 liens[startIndex][endIndex] = 1;
                 liens[endIndex][startIndex] = 1;
-                // TODO: Ajouter le calcul des coordonnées de cases
-                widget.grille.addTrait(Trait(widget.grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0), widget.grille.getListeCells().firstWhere((element) => element.getPosX() == 1 && element.getPosY() == 0)));
+                widget.grille.addTrait(Trait(widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (startIndex % widget.gridSize) && element.getPosY() == (startIndex ~/ widget.gridSize)), widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (endIndex % widget.gridSize) && element.getPosY() == (endIndex ~/ widget.gridSize))));
                 print('De case ${startIndex} à case ${endIndex}');
                 setState(() {});
               }

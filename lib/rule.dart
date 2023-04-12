@@ -26,118 +26,155 @@ class _Rule extends State<Rule> {
 
   @override
   Widget build(BuildContext context) {
-    return CoreWidget(
-        child: Center(
-            child: Column(children: [
-      const SizedBox(height: 30),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        IconButton(
+   return CoreWidget(
+  child: Column(
+    children: [
+      const SizedBox(height: 50),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
             onPressed: seeHomePage,
             icon: const Icon(
               BootstrapIcons.arrow_left,
               color: Colors.white,
               size: 25,
-            )),
-        const SizedBox(width: 15),
-        const Text("MASYU",
-            style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 10,
-                fontSize: 40,
-                fontWeight: FontWeight.w600))
-      ]),
-      const SizedBox(height: 20),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/rule1.png',
-            width: 181,
-            height: 182.31,
+            ),
           ),
-          Image.asset(
-            'assets/images/rule2.png',
-            width: 181,
-            height: 182.31,
-          )
+          const SizedBox(width: 15),
+          const Text(
+            "MASYU",
+            style: TextStyle(
+              color: Colors.white,
+              letterSpacing: 10,
+              fontSize: 40,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
       const SizedBox(height: 20),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Image.asset(
-          'assets/images/rule3.png',
-          width: 181,
-          height: 182.31,
+      SizedBox(
+        height: 200,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Image.asset(
+                  'assets/images/rule1.png',
+                  width: double.infinity,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Image.asset(
+                  'assets/images/rule2.png',
+                  width: double.infinity,
+                ),
+              ),
+            ],
+          ),
         ),
-        Image.asset(
-          'assets/images/rule4.png',
-          width: 181,
-          height: 182.31,
-        )
-      ]),
+      ),
+      const SizedBox(height: 20),
+      SizedBox(
+        height: 200,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Image.asset(
+                  'assets/images/rule3.png',
+                  width: double.infinity,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Image.asset(
+                  'assets/images/rule4.png',
+                  width: double.infinity,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       const SizedBox(height: 15),
-      Container(
-          alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              "goal".tr,
-              textAlign: TextAlign.left,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
+      Expanded(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 15),
+                Text(
+                  "goal".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "goal_text".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  "white".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "white_text".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  "black".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "black_text".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
-            const SizedBox(height: 15),
-            Text(
-              "goal_text".tr,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "white".tr,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "white_text".tr,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "black".tr,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              "black_text".tr,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ]))
-    ])));
+          ),
+        ),
+      ),
+    ],
+  ),
+   );
+
+ 
+
+
+
   }
 }
