@@ -72,7 +72,7 @@ class _GamePageState extends State<GamePage> {
                     icon: const Icon(BootstrapIcons.x),
                     color: Colors.red,
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       Navigator.pushNamed(context, '/solution',
                           arguments: {'grille': grille});
                     },
@@ -108,7 +108,7 @@ class _GamePageState extends State<GamePage> {
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.check),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         losePopup(context);
                       },
                       color: Colors.white,
@@ -122,7 +122,7 @@ class _GamePageState extends State<GamePage> {
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.x),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                       color: Colors.red,
                     ))
@@ -170,7 +170,7 @@ class _GamePageState extends State<GamePage> {
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.x),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                       color: Colors.red,
                     ))
@@ -208,7 +208,7 @@ class _GamePageState extends State<GamePage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
                                     arguments: {'grille': grille});
                                 // TODO: Gérer la perte de points
@@ -244,7 +244,7 @@ class _GamePageState extends State<GamePage> {
                                   print(
                                       'Erreur lors de l\'ajout des données à Firebase: $error');
                                 }
-                                Navigator.of(context).pop();
+                                Navigator.pop(context);
                                 Navigator.of(context).pushNamed('/');
                               },
                             )
