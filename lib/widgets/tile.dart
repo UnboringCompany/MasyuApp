@@ -6,8 +6,9 @@ class Tile extends StatefulWidget {
 
   final String title;
   final Icon icon;
+  final VoidCallback onPressed;
 
-  const Tile({Key? key, required this.title, required this.icon}) : super(key: key);
+  const Tile({Key? key, required this.title, required this.icon, required this.onPressed}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TileState();
@@ -22,7 +23,7 @@ class _TileState extends State<Tile> {
 
     return 
     InkWell(
-      onTap: () {},
+      onTap: widget.onPressed,
       customBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
       ),
