@@ -129,7 +129,7 @@ class _MenuState extends State<MenuPage> {
                     icon: Icon(
                       BootstrapIcons.play,
                       color: Color(0xff3D4AEB),
-                      size: 0.15 * MediaQuery.of(context).size.width,
+                      size: 0.20 * MediaQuery.of(context).size.width,
                     ),
                     title: 'resume'.tr,
                     onPressed: () {},
@@ -138,7 +138,7 @@ class _MenuState extends State<MenuPage> {
                     icon: Icon(
                       BootstrapIcons.watch,
                       color: Color(0xff3D4AEB),
-                      size: 0.12 * MediaQuery.of(context).size.width,
+                      size: 0.16 * MediaQuery.of(context).size.width,
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {},
