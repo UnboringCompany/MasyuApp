@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masyu_app/objects/grille.dart';
@@ -133,6 +136,19 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
+    Future<String?> _getId() async {
+      var deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        // import 'dart:io'
+        var iosDeviceInfo = await deviceInfo.iosInfo;
+        return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      } else if (Platform.isAndroid) {
+        var androidDeviceInfo = await deviceInfo.androidInfo;
+        return androidDeviceInfo.androidId; // unique ID on Android
+      }
+      return null;
+    }
+
     void cluePopup(BuildContext context) {
       showDialog(
         context: context,
@@ -220,11 +236,12 @@ class _GamePageState extends State<GamePage> {
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () async {
                                 try {
+                                  String? id = await _getId();
                                   await Firebase.initializeApp();
-                                  CollectionReference grillesCollection =
-                                      FirebaseFirestore.instance
-                                          .collection('grilles');
-                                  await grillesCollection.add({
+                                  await FirebaseFirestore.instance
+                                      .collection('grilles')
+                                      .doc(id ?? 'loser')
+                                      .set({
                                     'size': grille.getSize(),
                                     'listeCells': grille
                                         .getListeCells()

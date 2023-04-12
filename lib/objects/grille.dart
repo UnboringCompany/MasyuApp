@@ -9,12 +9,14 @@ class Grille {
   // Attributs
   int _size;
   List<Cell> _listeCells;
+  List<Cercle> _listeCercle;
   List<Trait> _listeTraits;
   List<Trait> _listeTraitsSolution;
 
   // Constructeur
   Grille(this._size)
       : _listeCells = List<Cell>.empty(growable: true),
+        _listeCercle = List<Cercle>.empty(growable: true),
         _listeTraits = List<Trait>.empty(growable: true),
         _listeTraitsSolution = List<Trait>.empty(growable: true);
 
@@ -22,6 +24,7 @@ class Grille {
   Grille.fromJson(Map<String, dynamic> json)
       : _size = json['size'],
         _listeCells = json['listeCells'],
+        _listeCercle = json['listeCercle'],
         _listeTraits = json['listeTraits'],
         _listeTraitsSolution = json['listeTraitsSolution'];
 
@@ -41,6 +44,14 @@ class Grille {
     _listeCells.add(c);
   }
 
+  void addCercle(Cercle c) {
+    _listeCercle.add(c);
+  }
+
+  void removeCercle(Cercle c) {
+    _listeCercle.remove(c);
+  }
+
   /// Supprime une cellule de la grille
   /// @param c la cellule à supprimer
   void removeCell(Cell c) {
@@ -51,8 +62,9 @@ class Grille {
   /// @param c la cellule à remplacer
   /// @param couleur la couleur du cercle, 1 pour blanc et 2 pour noir
   void replaceCellbyCercle(Cell c, int couleur) {
-    _listeCells[_listeCells.indexOf(c)] =
-        Cercle(c.getPosX(), c.getPosY(), couleur, false);
+    Cercle c2 = Cercle(c.getPosX(), c.getPosY(), couleur, false);
+    _listeCells[_listeCells.indexOf(c)] = c2;
+    addCercle(c2);
   }
 
   /// Ajoute un trait à la grille
@@ -303,6 +315,10 @@ class Grille {
   /// @return la liste des cellules de la grille
   List<Cell> getListeCells() {
     return _listeCells;
+  }
+
+  List<Cercle> getListeCercle() {
+    return _listeCercle;
   }
 
   /// Fonction qui permet de récupérer la liste des traits de la grille

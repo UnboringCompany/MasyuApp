@@ -9,6 +9,13 @@ class Cercle extends Cell {
   // Constructeur
   Cercle(int posX, int posY, this._color, this._isValid) : super(posX, posY);
 
+  Map<String, dynamic> toJson() => {
+        'posX': _posX,
+        'posY': _posY,
+        'color': _color,
+        'isValid': _isValid,
+      };
+
   // Méthodes
 
   /// Modifie la validité du cercle
@@ -18,26 +25,25 @@ class Cercle extends Cell {
     // On récupère les cellules précédente et suivante
     Cell? cellPrecedente = getCellPrecedente(grille);
     Cell? cellSuivante = getCellSuivante(grille);
-      if (cellPrecedente != null && cellSuivante != null) {
-        // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
-        if (_color == 1) {
-          if ((cellSuivante.isCellTurning(grille) ||
-              cellPrecedente.isCellTurning(grille)) && !isCellTurning(grille)) {
-            _isValid = true;
-          }
-        } else if (_color == 2) {
-          if (!(cellSuivante.isCellTurning(grille) &&
-                  cellPrecedente.isCellTurning(grille)) &&
-              isCellTurning(grille)) {
-            _isValid = true;
-          }
+    if (cellPrecedente != null && cellSuivante != null) {
+      // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
+      if (_color == 1) {
+        if ((cellSuivante.isCellTurning(grille) ||
+                cellPrecedente.isCellTurning(grille)) &&
+            !isCellTurning(grille)) {
+          _isValid = true;
+        }
+      } else if (_color == 2) {
+        if (!(cellSuivante.isCellTurning(grille) &&
+                cellPrecedente.isCellTurning(grille)) &&
+            isCellTurning(grille)) {
+          _isValid = true;
         }
       }
-    
+    }
+
     _isValid = false;
   }
-
-
 
   // Accesseurs
 
