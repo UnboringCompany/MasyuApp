@@ -298,7 +298,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               CustomPaint(
                 painter: LinePainter(liens, context, widget.gridSize),
                 child: GestureDetector(
-                  onTapDown: (details) {
+                  onTapUp: (details) {
                     for (int i = 0; i < liens.length; i++) {
                       for (int j = 0; j < liens[0].length; j++) {
                         if (liens[i][j] == 1) {
