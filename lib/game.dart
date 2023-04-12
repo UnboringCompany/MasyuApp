@@ -216,12 +216,12 @@ class _GamePageState extends State<GamePage> {
                                       .collection('grilles')
                                       .doc(id ?? 'loser')
                                       .set({
-                                    'size': grille.getSize(),
-                                    'listeCells': grille
+                                    'size': partie.grille.getSize(),
+                                    'listeCells': partie.grille
                                         .getListeCells()
                                         .map((cell) => cell.toJson())
                                         .toList(),
-                                    'listeCercle': grille
+                                    'listeCercle': partie.grille
                                         .getListeCercle()
                                         .map((cercle) => cercle.toJson())
                                         .toList(),
