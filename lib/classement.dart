@@ -15,7 +15,6 @@ class ClassementPage extends StatefulWidget {
 }
 
 class _ClassementPageState extends State<ClassementPage> {
-
   void seeHomePage() {
     Navigator.of(context).pushNamed('/');
   }
@@ -26,6 +25,24 @@ class _ClassementPageState extends State<ClassementPage> {
 
     return CoreWidget(
         child: Center(
-      ));
+            child: Column(children: [
+      const SizedBox(height: 100),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        IconButton(
+            onPressed: seeHomePage,
+            icon: const Icon(
+              BootstrapIcons.arrow_left,
+              color: Colors.white,
+              size: 25,
+            )),
+        const SizedBox(width: 15),
+        Text('title'.tr,
+            style: const TextStyle(
+                color: Colors.white,
+                letterSpacing: 10,
+                fontSize: 40,
+                fontWeight: FontWeight.w600))
+      ]),
+    ])));
   }
 }
