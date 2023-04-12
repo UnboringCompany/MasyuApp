@@ -43,6 +43,7 @@ class Partie {
 
   void startPartie() {
     grille.generate();
+    chrono = 0;
     if (grille.getSize() == 6) {
       scorePartie = 40;
     } else if (grille.getSize() == 8) {
@@ -58,7 +59,7 @@ class Partie {
 
   void valider() {
     if (grille.isValid()) {
-      scorePartie = scorePartie - (chrono % 12);
+      scorePartie = scorePartie - (chrono ~/ 12);
       scorePartie = scorePartie - (5 * nbIndices);
       updateScoreJoueur();
     } else {
