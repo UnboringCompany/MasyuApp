@@ -82,86 +82,110 @@ class _MenuState extends State<MenuPage> {
     List<String> _options = ['6x6', '8x8', '10x10'];
 
     return CoreWidget(
-      child: Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 100),
-          Text('title'.tr,
-              style: TextStyle(
-                  color: Colors.white,
-                  letterSpacing: 10,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w600)),
-          CitationWidget(),
-          const SizedBox(height: 80),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+  child: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+        Text(
+          'title'.tr,
+          style: TextStyle(
+            color: Colors.white,
+            letterSpacing: 10,
+            fontSize: 0.10 * MediaQuery.of(context).size.width,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        CitationWidget(),
+        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
             Tile(
-                icon: Icon(
-                  BootstrapIcons.play,
-                  color: Color(0xff3D4AEB),
-                  size: 100,
-                ),
-                title: 'resume'.tr),
-            Tile(
-                icon: Icon(BootstrapIcons.watch,
-                    color: Color(0xff3D4AEB), size: 80),
-                title: 'challenge'.tr)
-          ]),
-          const SizedBox(height: 80),
-          Container(
-            width: 0.85 * size.width,
-            height: 60,
-            decoration: BoxDecoration(
+              icon: Icon(
+                BootstrapIcons.play,
                 color: Color(0xff3D4AEB),
-                borderRadius: BorderRadius.circular(10)),
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/game",
-                      arguments: {'type': 'new', 'size': _dropdownValue});
-                },
+                size: 0.15 * MediaQuery.of(context).size.width,
+              ),
+              title: 'resume'.tr,
+            ),
+            Tile(
+              icon: Icon(
+                BootstrapIcons.watch,
+                color: Color(0xff3D4AEB),
+                size: 0.12 * MediaQuery.of(context).size.width,
+              ),
+              title: 'challenge'.tr,
+            ),
+          ],
+        ),
+        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+        Container(
+          width: 0.85 * MediaQuery.of(context).size.width,
+          height: 0.07 * MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: Color(0xff3D4AEB),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                "/game",
+                arguments: {'type': 'new', 'size': _dropdownValue},
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              elevation: 0,
+            ),
+            child: Text('new_game'.tr),
+          ),
+        ),
+        SizedBox(height: 0.015 * MediaQuery.of(context).size.height),
+        GridSizeMenu(
+          onChanged: (newValue) {
+            setState(() {
+              _dropdownValue = newValue;
+            });
+          },
+        ),
+        SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: 0.3 * MediaQuery.of(context).size.width,
+              height: 0.05 * MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                color: Color(0xffB15653),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ElevatedButton(
+                onPressed: seeRules,
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
                   elevation: 0,
                 ),
-                child: Text('new_game'.tr)),
-          ),
-          const SizedBox(height: 15),
-          GridSizeMenu(
-            onChanged: (newValue) {
-              setState(() {
-                _dropdownValue = newValue;
-              });
-            },
-          ),
-          const SizedBox(height: 70),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                width: 0.3 * size.width,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Color(0xffB15653),
-                    borderRadius: BorderRadius.circular(10)),
-                child: ElevatedButton(
-                    onPressed: seeRules,
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
-                      elevation: 0,
-                    ),
-                    child: Text('rules'.tr)),
+                child: Text('rules'.tr),
               ),
-              SizedBox(width: 0.01 * size.width),
-              IconButton(
-                  onPressed: seeSettings,
-                  icon: const Icon(
-                    BootstrapIcons.gear,
-                    color: Colors.white,
-                  ))
-            ],
-          )
-        ],
-      ),
-    ));
+            ),
+            SizedBox(width: 0.01 * MediaQuery.of(context).size.width),
+            IconButton(
+              onPressed: seeSettings,
+              icon: Icon(
+                BootstrapIcons.gear,
+                color: Colors.white,
+                size: 0.08 * MediaQuery.of(context).size.width,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 }

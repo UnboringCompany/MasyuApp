@@ -76,17 +76,11 @@ class _GrilleWidgetState extends State<GrilleWidget> {
         }
       }
 
-      if (widget.solution) {
-        //TODO: Ajouter le traçage des traits de solution
-        for (Trait t in widget.grille.getListeTraitsSolution()) {
-          liens[t.getCaseDep().getPosX() +
-                  t.getCaseDep().getPosY() * widget.gridSize][
-              t.getCaseArr().getPosX() +
-                  t.getCaseArr().getPosY() * widget.gridSize] = 1;
-          liens[t.getCaseArr().getPosX() +
-                  t.getCaseArr().getPosY() * widget.gridSize][
-              t.getCaseDep().getPosX() +
-                  t.getCaseDep().getPosY() * widget.gridSize] = 1;
+      if(widget.solution) {
+
+        for(Trait t in widget.grille.getListeTraitsSolution()) {
+                liens[t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize][t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize] = 1;
+                liens[t.getCaseArr().getPosX() + t.getCaseArr().getPosY() * widget.gridSize][t.getCaseDep().getPosX() + t.getCaseDep().getPosY() * widget.gridSize] = 1;
         }
       }
 
@@ -139,39 +133,33 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               (((endPos.dy / gridBox.size.height) * widget.gridSize).floor() *
                   widget.gridSize);
 
-          if (!widget.solution) {
-            if (startIndex >= 0 &&
-                startIndex <= (widget.gridSize * widget.gridSize) - 1 &&
-                endIndex >= 0 &&
-                endIndex <= (widget.gridSize * widget.gridSize) - 1) {
-              if (liens[startIndex][endIndex] == 0 &&
-                  liens[endIndex][startIndex] == 0 &&
-                  startIndex != endIndex) {
-                if ((startIndex - endIndex).abs() == 1 ||
-                    (startIndex - endIndex).abs() == widget.gridSize) {
-                  if (((startIndex + 1) % widget.gridSize == 0 &&
-                      (startIndex - endIndex) == -1)) {
-                  } else if (((startIndex + 1) % widget.gridSize == 1 &&
-                      (startIndex - endIndex) == 1)) {
-                  } else {
-                    liens[startIndex][endIndex] = 1;
-                    liens[endIndex][startIndex] = 1;
-                    // TODO: Ajouter le calcul des coordonnées de cases
-                    widget.grille.addTrait(Trait(
-                        widget.grille.getListeCells().firstWhere((element) =>
-                            element.getPosX() == 1 && element.getPosY() == 0),
-                        widget.grille.getListeCells().firstWhere((element) =>
-                            element.getPosX() == 1 && element.getPosY() == 0)));
-                    print('De case ${startIndex} à case ${endIndex}');
-                    setState(() {});
-                  }
-                }
+        if(!widget.solution) {
+          if (startIndex >= 0 &&
+            startIndex <= (widget.gridSize*widget.gridSize) - 1 &&
+            endIndex >= 0 &&
+            endIndex <= (widget.gridSize * widget.gridSize) - 1) {
+          if (liens[startIndex][endIndex] == 0 &&
+              liens[endIndex][startIndex] == 0 &&
+              startIndex != endIndex) {
+            if ((startIndex - endIndex).abs() == 1 ||
+                (startIndex - endIndex).abs() == widget.gridSize) {
+              if (((startIndex + 1) % widget.gridSize == 0 &&
+                  (startIndex - endIndex) == -1)) {
+              } else if (((startIndex + 1) % widget.gridSize == 1 &&
+                  (startIndex - endIndex) == 1)) {
+              } else {
+                liens[startIndex][endIndex] = 1;
+                liens[endIndex][startIndex] = 1;
+                widget.grille.addTrait(Trait(widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (startIndex % widget.gridSize) && element.getPosY() == (startIndex ~/ widget.gridSize)), widget.grille.getListeCells().firstWhere((element) => element.getPosX() == (endIndex % widget.gridSize) && element.getPosY() == (endIndex ~/ widget.gridSize))));
+                print('De case ${startIndex} à case ${endIndex}');
+                setState(() {});
               }
             }
           }
-        },
-        child: Column(
-          children: [
+        }
+        }
+        
+      },
 
             Container(
               height: 350,

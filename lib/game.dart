@@ -47,28 +47,6 @@ class _GamePageState extends State<GamePage> {
     grille = Grille(_gridSize);
     grille.generate();
 
-    void showPopupMenu(BuildContext context) async {
-      final result = await showMenu(
-        context: context,
-        position: RelativeRect.fromLTRB(1000.0, 1000.0, 0.0, 0.0),
-        items: [
-          PopupMenuItem(
-            value: 1,
-            child: Text("Option 1"),
-          ),
-          PopupMenuItem(
-            value: 2,
-            child: Text("Option 2"),
-          ),
-          PopupMenuItem(
-            value: 3,
-            child: Text("Option 3"),
-          ),
-        ],
-        elevation: 8.0,
-      );
-    }
-
     void losePopup(BuildContext context) {
       showDialog(
         context: context,
