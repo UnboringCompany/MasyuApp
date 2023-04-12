@@ -113,7 +113,7 @@ class _MenuState extends State<MenuPage> {
       AndroidDeviceInfo androidInfo;
       try {
         androidInfo = await deviceInfo.androidInfo;
-        return androidInfo.serialNumber;
+        return androidInfo.id;
       } catch (e) {
         print('Error: $e');
       }
@@ -175,8 +175,9 @@ class _MenuState extends State<MenuPage> {
                       }
                       final data = docSnapshot.data();
                       if (data != null) {
-                        Grille grille = Grille.fromJson(data['grille']);
                         print('La grille a été récupéré');
+                        Grille grille = Grille.fromJson(data);
+                        print(grille);
                       }
                     },
                   ),

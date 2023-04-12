@@ -253,6 +253,10 @@ class _GamePageState extends State<GamePage> {
                                       .doc(id ?? 'loser')
                                       .set({
                                     'size': partie.grille.getSize(),
+                                    'listeCells': partie.grille
+                                        .getListeCells()
+                                        .map((cell) => cell.toJson())
+                                        .toList(),
                                     'listeCercle': partie.grille
                                         .getListeCercle()
                                         .map((cercle) => cercle.toJson())
@@ -325,9 +329,7 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {
-                  valider()
-                },
+                onPressed: () => {valider()},
                 icon: const Icon(BootstrapIcons.check2),
                 color: Colors.white,
                 iconSize: 30,
