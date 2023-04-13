@@ -85,7 +85,7 @@ class _ClassementPageState extends State<ClassementPage> {
   Widget build(BuildContext context) {
     return CoreWidget(
         child: Column(children: [
-      const SizedBox(height: 100),
+      SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         IconButton(
             onPressed: seeHomePage,
