@@ -135,9 +135,20 @@ class _GamePageState extends State<GamePage> {
                   child: IconButton(
                     icon: const Icon(BootstrapIcons.x),
                     color: Colors.red,
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/');
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      docRef
+                          .delete()
+                          .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
                     },
                   )),
             ],
@@ -206,9 +217,20 @@ class _GamePageState extends State<GamePage> {
                     ),
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.check),
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.pop(context);
                         losePopup(context, partie.getScoreDefaite());
+                        String? id = await _getId();
+                        await Firebase.initializeApp();
+                        final docRef = FirebaseFirestore.instance
+                            .collection('grilles')
+                            .doc(id);
+                        final docSnapshot = await docRef.get();
+                        docRef
+                            .delete()
+                            .then((value) => print('Document supprimé'))
+                            .catchError((error) => print(
+                                'Erreur lors de la suppression du document : $error'));
                       },
                       color: Colors.white,
                     )),
@@ -270,7 +292,18 @@ class _GamePageState extends State<GamePage> {
                               child: Text('give_up'.tr,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
-                              onPressed: () {
+                              onPressed: () async {
+                                String? id = await _getId();
+                                await Firebase.initializeApp();
+                                final docRef = FirebaseFirestore.instance
+                                    .collection('grilles')
+                                    .doc(id);
+                                final docSnapshot = await docRef.get();
+                                docRef
+                                    .delete()
+                                    .then((value) => print('Document supprimé'))
+                                    .catchError((error) => print(
+                                        'Erreur lors de la suppression du document : $error'));
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
                                     arguments: {'grille': partie.grille});
