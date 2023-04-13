@@ -262,8 +262,7 @@ class _ClassementPageState extends State<ClassementPage> {
                                 (document['partiePerdu'] == 0
                                     ? document["partieGagne"].toString()
                                     : (document["partieGagne"] /
-                                            document["partiePerdu"])
-                                        .toString()),
+                                            document["partiePerdu"]).toStringAsFixed(2)),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 20),
                                 textAlign: TextAlign.center),
