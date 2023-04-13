@@ -55,9 +55,10 @@ class Partie {
   }
 
   bool valider() {
-    debugPrint("Validation de la partie");
-    debugPrint("Liste trait : ${grille.getListeTraits()}");
+    // debugPrint("Validation de la partie");
+    // debugPrint("Liste trait : ${grille.getListeTraits()}");
     if (grille.isValid()) {
+      nbIndices = grille.getNbIndices();
       scorePartie = scorePartie - (chrono ~/ 12);
       scorePartie = scorePartie - (5 * nbIndices);
       player.score += scorePartie;
@@ -89,5 +90,9 @@ class Partie {
   @override
   String toString() {
     return 'Partie{grille: $grille, chrono: $chrono, player: $player, scorePartie: $scorePartie}';
+  }
+
+  int getChrono() {
+    return chrono;
   }
 }

@@ -27,14 +27,20 @@ class Cell {
   /// @return true si la cellule est valide, false sinon
   bool isCellValid(Grille grille) {
     // Vérifie que la cellule a bien soit 2 traits, soit aucun trait
-    Trait? t = getTraitArrivant(grille);
-    Trait? t2 = getTraitPartant(grille);
-    if (t != null && t2 != null) {
-      return true;
-    } else if (t == null && t2 == null) {
+    List<Trait> liste = getTraitsVoisins(grille);
+    if(liste.length == 2){
       return true;
     }
+    else if(liste.length == 0){
+      // debugPrint("La cellule $this n'a pas de traits");
+      return true;
+    }else{
+      // debugPrint("La cellule $this a un nombre étrange de traits");
+      for (Trait t in liste) {
+        // debugPrint("Trait : $t");
+      }
     return false;
+    }
   }
 
   /// Vérifie si la cellule est une intersection
@@ -44,11 +50,14 @@ class Cell {
     Trait t1 = getTraitArrivant(grille)!;
     Trait t2 = getTraitPartant(grille)!;
     if (t1.isHorizontal() && t2.isVertical()) {
+      // debugPrint("La cellule $this tourne");
       return true;
     }
     if (t1.isVertical() && t2.isHorizontal()) {
+      // debugPrint("La cellule $this tourne");
       return true;
     }
+    // debugPrint("La cellule $this ne tourne pas");
     return false;
   }
 
@@ -62,6 +71,42 @@ class Cell {
       }
     }
     return null;
+  }
+
+  getTraitsVoisins(Grille grille) {
+    List<Trait> liste = [];
+    for (Trait t in grille.getListeTraits()) {
+      if (t.getCaseDep() == this || t.getCaseArr() == this) {
+        liste.add(t);
+      }
+    }
+    return liste;
+  }
+
+  getCellsVoisines(Grille grille){
+    List<Cell> liste = [];
+    for (Trait t in grille.getListeTraits()) {
+      if (t.getCaseDep() == this) {
+        liste.add(t.getCaseArr());
+      }
+      if (t.getCaseArr() == this) {
+        liste.add(t.getCaseDep());
+      }
+    }
+    return liste;
+  }
+
+  verifCellTurning(Grille grille){
+    List<Trait> liste = getTraitsVoisins(grille);
+    if(liste.length == 2){
+      if(liste[0].isHorizontal() && liste[1].isVertical()){
+        return true;
+      }
+      if(liste[0].isVertical() && liste[1].isHorizontal()){
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Récupère le trait partant de la cellule s'il existe
@@ -79,23 +124,23 @@ class Cell {
   /// Récupère la cellule précédente de la cellule s'il existe
   /// @param grille Grille de jeu
   /// @return Cellule précédente de la cellule
-  Cell getCellPrecedente(Grille grille) {
+  Cell? getCellPrecedente(Grille grille) {
     Trait? t = getTraitArrivant(grille);
     if (t != null) {
       return t.getCaseDep();
     }
-    return Cell(-1, -1);
+    return null;
   }
 
   /// Récupère la cellule suivante de la cellule s'il existe
   /// @param grille Grille de jeu
   /// @return Cellule suivante de la cellule
-  Cell getCellSuivante(Grille grille) {
+  Cell? getCellSuivante(Grille grille) {
     Trait? t = getTraitPartant(grille);
     if (t != null) {
       return t.getCaseArr();
     }
-    return Cell(-1, -1);
+    return null;
   }
 
   // Accesseurs

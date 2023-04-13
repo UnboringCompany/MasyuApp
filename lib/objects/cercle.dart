@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'cell.dart';
 import 'grille.dart';
 
@@ -24,26 +26,26 @@ class Cercle extends Cell {
   /// @param isValid true si le cercle est valide, false sinon
   void validate(Grille grille) {
     // On récupère les cellules précédente et suivante
-    Cell? cellPrecedente = getCellPrecedente(grille);
-    Cell? cellSuivante = getCellSuivante(grille);
-    if (cellPrecedente != null && cellSuivante != null) {
-      // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
-      if (_color == 1) {
-        if ((cellSuivante.isCellTurning(grille) ||
-                cellPrecedente.isCellTurning(grille)) &&
-            !isCellTurning(grille)) {
-          _isValid = true;
-        }
-      } else if (_color == 2) {
-        if (!(cellSuivante.isCellTurning(grille) &&
-                cellPrecedente.isCellTurning(grille)) &&
-            isCellTurning(grille)) {
-          _isValid = true;
+    List<Cell> liste = getCellsVoisines(grille);
+    if(liste.length == 2){
+      if (liste[0] != null && liste[1] != null) {
+        // Si elles existent, on vérifie si les conditions en fonction des couleurs sont respectées
+        if (_color == 1) {
+          if ((liste[0].verifCellTurning(grille) ||
+                  liste[1].verifCellTurning(grille)) &&
+              !verifCellTurning(grille)) {
+            _isValid = true;
+          }
+        } else if (_color == 2) {
+          if (!(liste[0].verifCellTurning(grille) &&
+                  liste[1].verifCellTurning(grille)) &&
+              verifCellTurning(grille)) {
+            _isValid = true;
+          }
         }
       }
     }
-
-    _isValid = false;
+    
   }
 
   // Accesseurs
@@ -63,10 +65,11 @@ class Cercle extends Cell {
   @override
   bool isCellValid(Grille grille) {
     validate(grille);
+    // debugPrint("Le cercle $this est valide : $_isValid");
     if (super.isCellValid(grille)) {
       return _isValid;
-      // return true;
     }
+    // debugPrint("Le cercle $this n'est pas valide en tant que cellule");
     return false;
   }
 

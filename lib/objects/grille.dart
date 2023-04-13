@@ -12,6 +12,7 @@ class Grille {
   List<Cercle> _listeCercle;
   List<Trait> _listeTraits;
   List<Trait> _listeTraitsSolution;
+  int _nbIndices = 0;
 
   // Constructeur
   Grille(this._size)
@@ -249,9 +250,9 @@ class Grille {
   /// @param c : la cellule à vérifier
   /// @return true si on peut mettre un cercle blanc sur la cellule, false sinon
   bool iCanPutAWhiteCellHere(Cell c) {
-    Cell cellPrecedente = c.getCellPrecedente(this);
-    Cell cellSuivante = c.getCellSuivante(this);
-    if (cellPrecedente != Cell(-1, -1) && cellSuivante != Cell(-1, -1)) {
+    Cell? cellPrecedente = c.getCellPrecedente(this);
+    Cell? cellSuivante = c.getCellSuivante(this);
+    if (cellPrecedente != null && cellSuivante != null) {
       if ((cellPrecedente.isCellTurning(this) ||
               cellSuivante.isCellTurning(this)) &&
           !c.isCellTurning(this)) {
@@ -266,9 +267,9 @@ class Grille {
   /// @param c : la cellule à vérifier
   /// @return true si on peut mettre un cercle noir sur la cellule, false sinon
   bool iCanPutABlackCellHere(Cell c) {
-    Cell cellPrecedente = c.getCellPrecedente(this);
-    Cell cellSuivante = c.getCellSuivante(this);
-    if (cellPrecedente != Cell(-1, -1) && cellSuivante != Cell(-1, -1)) {
+    Cell? cellPrecedente = c.getCellPrecedente(this);
+    Cell? cellSuivante = c.getCellSuivante(this);
+    if (cellPrecedente != null && cellSuivante != null) {
       if (!cellPrecedente.isCellTurning(this) &&
           !cellSuivante.isCellTurning(this) &&
           c.isCellTurning(this)) {
@@ -284,6 +285,7 @@ class Grille {
     // On vérifie que chaque cellule est valide
     for (Cell cell in _listeCells) {
       if (!cell.isCellValid(this)) {
+        //debugPrint("La cellule ${cell.toString()} n'est pas valide");
         return false;
       }
     }
@@ -311,6 +313,14 @@ class Grille {
   /// @return la taille de la grille
   int getSize() {
     return _size;
+  }
+
+  int getNbIndices() {
+    return _nbIndices;
+  }
+
+  void addNbIndices() {
+    _nbIndices++;
   }
 
   /// Fonction qui permet de récupérer la liste des cellules de la grille
@@ -352,10 +362,10 @@ class Grille {
             if (cell is Cercle) {
               Cercle cercle = cell;
               if (cercle.getColor() == 1) {
-                debugPrint("B : ${cercle.getPosX()}, ${cercle.getPosY()}");
+                // debugPrint("B : ${cercle.getPosX()}, ${cercle.getPosY()}");
                 cptBlanc++;
               } else if (cercle.getColor() == 2) {
-                debugPrint("N : ${cercle.getPosX()}, ${cercle.getPosY()}");
+                // debugPrint("N : ${cercle.getPosX()}, ${cercle.getPosY()}");
                 cptNoir++;
               }
             } else {}
@@ -363,13 +373,13 @@ class Grille {
         }
       }
     }
-    debugPrint("Nombre de cellules blanches : $cptBlanc");
-    debugPrint("Nombre de cellules noires : $cptNoir");
+    // debugPrint("Nombre de cellules blanches : $cptBlanc");
+    // debugPrint("Nombre de cellules noires : $cptNoir");
   }
 
   void afficheChemin() {
     _listeTraitsSolution.forEach((element) {
-      debugPrint(element.toString());
+      // debugPrint(element.toString());
     });
   }
 
