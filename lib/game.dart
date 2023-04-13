@@ -293,7 +293,7 @@ class _GamePageState extends State<GamePage> {
     return (CoreWidget(
         child: Center(
             child: Column(children: [
-      const SizedBox(height: 100),
+      SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         IconButton(
             onPressed: () {
