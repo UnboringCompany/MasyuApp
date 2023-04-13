@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:masyu_app/LocalString.dart';
 import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/classement.dart';
+import 'package:masyu_app/gameagainstclock.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:masyu_app/objects/cell.dart';
 import 'package:masyu_app/objects/trait.dart';
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => setting.Settings(),
         '/rules': (context) => Rule(),
         '/classement': (context) => ClassementPage(),
+        '/challenge': (context) => GameAgainstClockPage(),
       },
     );
   }
@@ -287,13 +290,18 @@ class _MenuState extends State<MenuPage> {
                     },
                   ),
                   Tile(
-                    icon: Icon(
+                    icon : Icon(
                       BootstrapIcons.watch,
                       color: Color(0xff3D4AEB),
                       size: 0.16 * MediaQuery.of(context).size.width,
                     ),
                     title: 'challenge'.tr,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/challenge', arguments:{
+                        'type': 'new',
+                        'size': _dropdownValue,
+                      });
+                    },
                   )
                 ],
               ),

@@ -10,18 +10,19 @@ import 'package:get/get.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
 import 'package:masyu_app/widgets/stopwatch.dart';
+import 'package:masyu_app/widgets/timer.dart';
 
 import 'main.dart';
 import 'objects/partie.dart';
 
-class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+class GameAgainstClockPage extends StatefulWidget {
+  const GameAgainstClockPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _GamePageState();
+  State<StatefulWidget> createState() => _GameAgainstClockPageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
   void seeHomePage() {
     Navigator.pushReplacement<void, void>(
       context,
@@ -31,13 +32,11 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     int _gridSize;
     Partie partie;
-    final StopWatchWidget stopwtach = StopWatchWidget(key: UniqueKey());
+    final TimerWatch timer = TimerWatch(key: UniqueKey(), time: 60);
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -124,7 +123,8 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono}),
+            content: Text(
+                'bravo_text'.trParams({'points': points, 'time': chrono}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -234,22 +234,22 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    String getTime(int chrono){
+    String getTime(int chrono) {
       debugPrint("chrono : $chrono");
-      int minutes = (chrono/60).floor();
-      int secondes = ((chrono)%60).floor();
+      int minutes = (chrono / 60).floor();
+      int secondes = ((chrono) % 60).floor();
       String minutes2 = minutes.toString();
       String secondes2 = secondes.toString();
-      if (minutes < 10){
+      if (minutes < 10) {
         minutes2 = '0$minutes2';
       }
-      if (secondes < 10){
+      if (secondes < 10) {
         secondes2 = '0$secondes2';
       }
       return '$minutes2:$secondes2';
     }
-    
-    valider(Stopwatch chrono){
+
+    valider(Stopwatch chrono) {
       chrono.stop();
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
@@ -264,9 +264,18 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
-    
-
     Stopwatch chrono = Stopwatch()..start();
+
+    int nbpointToLose = 0;
+    if (partie.grille.getSize() == 6) {
+      nbpointToLose = 25;
+    }
+    if (partie.grille.getSize() == 8) {
+      nbpointToLose = 40;
+    }
+    if (partie.grille.getSize() == 10) {
+      nbpointToLose = 50;
+    }
 
     return (CoreWidget(
         child: Center(
@@ -283,7 +292,9 @@ class _GamePageState extends State<GamePage> {
                     title: Text('game_back'.tr,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
-                    content: Text('game_back_text'.trParams({'points': '40'}),  //TODO : Gérer les points
+                    content: Text(
+                        'game_back_text'
+                            .trParams({'points': nbpointToLose.toString()}),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[
@@ -295,6 +306,7 @@ class _GamePageState extends State<GamePage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () {
+                                partie.getScoreDefaite();
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
                                     arguments: {'grille': partie.grille});
@@ -331,7 +343,7 @@ class _GamePageState extends State<GamePage> {
                 fontWeight: FontWeight.w600))
       ]),
       const SizedBox(height: 30),
-      stopwtach,
+      timer,
       // StopWatchWidget(),
       const SizedBox(height: 30),
       GrilleWidget(
@@ -344,20 +356,6 @@ class _GamePageState extends State<GamePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x7F373855),
-              ),
-              child: IconButton(
-                onPressed: () async {
-                  saveGame();
-                  Navigator.pop(context);
-                  Navigator.of(context).pushNamed('/');
-                },
-                icon: const Icon(BootstrapIcons.cloud_upload),
-                color: Colors.white,
-              )),
           Container(
               width: 70.0,
               height: 70.0,

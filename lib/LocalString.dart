@@ -43,7 +43,10 @@ class LocalString extends Translations {
           'save': 'Sauvegarder',
           'timer_defeat_title': 'Défaite',
           'timer_defeat_content':
-              'Temps de résolution dépassé vous avez perdu @points points'
+              'Temps de résolution dépassé vous avez perdu @points points',
+          'timer_victory_title': 'Victoire',
+          'timer_victory_content':
+              'Vous avez gagné avant la fin du chrono\nVous avez ainsi gagné @points points',
         },
         'en_UK': {
           'title': 'MASYU',
@@ -84,7 +87,10 @@ class LocalString extends Translations {
           'save': 'Save',
           'timer_defeat_title': 'Defeat',
           'timer_defeat_content':
-              'Resolution time exceeded you have lost @points points'
+              'Resolution time exceeded you have lost @points points',
+          'timer_victory_title': 'Victory',
+          'timer_victory_content':
+              'You won before the end of the clock\nYou thus won @points points',
         },
         'de_DE': {
           'title': 'MASYU',
@@ -126,7 +132,10 @@ class LocalString extends Translations {
           'save': 'Zu schützen',
           'timer_defeat_title': 'Niederlage',
           'timer_defeat_content':
-              'Lösungszeit überschritten Sie haben @points Punkte verloren'
+              'Lösungszeit überschritten Sie haben @points Punkte verloren',
+          'timer_victory_title': 'Gute Arbeit !',
+          'timer_victory_content':
+              'Sie haben vor Ablauf der Uhr gewonnen\nSie haben also @points Punkte gewonnen',
         },
         'es_ES': {
           'title': 'MASYU',
@@ -165,7 +174,10 @@ class LocalString extends Translations {
           'save': 'Guardar',
           'timer_defeat_title': 'Derrota',
           'timer_defeat_content':
-              'Tiempo de resolución excedido ha perdido @points puntos'
+              'Tiempo de resolución excedido ha perdido @points puntos',
+          'timer_victory_title': '¡Bien hecho!',
+          'timer_victory_content':
+              'Has ganado antes de que se agote el tiempo\nHas ganado @points puntos',
         },
         'ja_JP': {
           'title': 'MASYU',
@@ -200,7 +212,10 @@ class LocalString extends Translations {
           'give_up': 'あきらめる',
           'save': '守るために',
           'timer_defeat_title': '敗戦',
-          'timer_defeat_content': '解決時間超過で@points点減点'
+          'timer_defeat_content': '解決時間超過で@points点減点',
+          'timer_victory_title': 'よくできました！',
+          'timer_victory_content':
+              'あなたは時間内に勝ちました\nあなたは@pointsポイントを獲得しました',
         },
       };
 }
