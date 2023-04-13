@@ -47,11 +47,8 @@ class Cell {
   /// @param grille Grille de jeu
   /// @return true si la cellule est une intersection, false sinon
   bool isCellTurning(Grille grille) {
-    Trait? t1 = getTraitArrivant(grille);
-    Trait? t2 = getTraitPartant(grille);
-    if (t1 == null || t2 == null) {
-      return false;
-    }
+    Trait t1 = getTraitArrivant(grille)!;
+    Trait t2 = getTraitPartant(grille)!;
     if (t1.isHorizontal() && t2.isVertical()) {
       // debugPrint("La cellule $this tourne");
       return true;
@@ -162,7 +159,7 @@ class Cell {
 
   @override
   String toString() {
-    return 'C(${getPosX()}, ${getPosY()})';
+    return 'C($_posX, $_posY)';
   }
 
   @override
