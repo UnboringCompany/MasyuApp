@@ -125,6 +125,9 @@ class Partie {
       scorePartie = -50;
     }
     player.score += scorePartie;
+    if (player.score <= 0) {
+      player.score == 0;
+    }
     return scorePartie;
   }
 
