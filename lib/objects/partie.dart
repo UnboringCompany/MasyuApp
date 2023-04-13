@@ -18,6 +18,14 @@ class Partie {
     startPartie(tailleGrille);
   }
 
+  Partie.fromJson(Map<String, dynamic> json)
+      : grille = Grille.fromJson(json['grille']),
+        chrono = json['chrono'],
+        tailleGrille = json['grille']['size'],
+        player = /*Joueur.fromJson(json['player'])*/ Joueur("Joueur", 0, 0, 0),
+        scorePartie = json['scorePartie'],
+        nbIndices = json['nbIndices'];
+
   int getScorePartie() => scorePartie;
 
   void startPartie(int tailleGrille) {
@@ -33,14 +41,6 @@ class Partie {
 
     grille.generate();
   }
-
-  Partie.fromJson(Map<String, dynamic> json)
-      : grille = Grille.fromJson(json['grille']),
-        chrono = 0,
-        tailleGrille = json['grille']['size'],
-        player = Joueur.fromJson(json['player']),
-        scorePartie = 0,
-        nbIndices = 0;
 
   Map<String, dynamic> toJson() => {
         'grille': grille,
@@ -95,5 +95,9 @@ class Partie {
 
   int getChrono() {
     return chrono;
+  }
+
+  int getnbIndices() {
+    return nbIndices;
   }
 }
