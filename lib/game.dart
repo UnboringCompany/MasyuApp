@@ -26,7 +26,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-
   void seeHomePage() {
     Navigator.pushReplacement<void, void>(
       context,
@@ -40,7 +39,6 @@ class _GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     int _gridSize;
     Partie partie;
-    final StopWatchWidget stopwtach = StopWatchWidget(key: UniqueKey());
     final appState = Provider.of<AppState>(context);
 
     final Map<String, dynamic> args =
@@ -64,6 +62,9 @@ class _GamePageState extends State<GamePage> {
       partie = args['partie'];
     }
 
+    final StopWatchWidget stopwtach =
+        StopWatchWidget(key: UniqueKey(), time: partie.chrono);
+
     Future<String?> _getId() async {
       var deviceInfo = DeviceInfoPlugin();
       if (Platform.isIOS) {
@@ -84,6 +85,10 @@ class _GamePageState extends State<GamePage> {
       return null;
     }
 
+    Stopwatch chrono = Stopwatch()..start();
+    // chrono.elapsed = Duration(seconds: partie.chrono);
+    // chrono = Stopwatch()..start();
+
     void saveGame() async {
       try {
         String? id = await _getId();
@@ -92,7 +97,7 @@ class _GamePageState extends State<GamePage> {
             .collection('grilles')
             .doc(id ?? 'loser')
             .set({
-          'chrono': partie.getChrono(),
+          'chrono': chrono.elapsedMilliseconds ~/ 1000 + partie.chrono,
           'scorePartie': partie.getScorePartie(),
           'nbIndices': partie.getnbIndices(),
           'grille': {
@@ -148,7 +153,8 @@ class _GamePageState extends State<GamePage> {
                     color: Colors.red,
                     onPressed: () async {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/solution', arguments: {'grille': partie.grille});
+                      Navigator.pushNamed(context, '/solution',
+                          arguments: {'grille': partie.grille});
                       String? id = await _getId();
                       await Firebase.initializeApp();
                       final docRef = FirebaseFirestore.instance
@@ -298,22 +304,20 @@ class _GamePageState extends State<GamePage> {
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
         // debugPrint('Victoire');
-        if(appState.isSoundEnabled) {
-            appState.playSound(appState.victoireSound);
+        if (appState.isSoundEnabled) {
+          appState.playSound(appState.victoireSound);
         }
         Navigator.pop(context);
         winPopup(context, partie.getScorePartie(), getTime(partie.getChrono()));
       } else {
         //TOTEST
-        if(appState.isSoundEnabled) {
+        if (appState.isSoundEnabled) {
           appState.playSound(appState.defaiteSound);
-        }        
+        }
         Navigator.pop(context);
         losePopup(context, partie.getScorePartie());
       }
     }
-
-    Stopwatch chrono = Stopwatch()..start();
 
     int nbpointToLose = 0;
     if (partie.grille.getSize() == 6) {

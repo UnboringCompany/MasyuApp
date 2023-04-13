@@ -5,25 +5,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class StopWatchWidget extends StatefulWidget {
-  const StopWatchWidget({Key? key}) : super(key: key);
+  const StopWatchWidget({super.key, required this.time});
+
+  final int time;
+
   @override
-  State<StatefulWidget> createState() => _StopWatchWidgetState();
+  State<StatefulWidget> createState() => _StopWatchWidgetState(time: time);
 }
 
 class _StopWatchWidgetState extends State<StopWatchWidget> {
+  _StopWatchWidgetState({required this.time});
   Duration duration = const Duration();
+  final int time;
   Timer? _timer;
 
   @override
   initState() {
     super.initState();
+    duration = Duration(seconds: time);
     startTimer();
   }
 
   void addTime() {
     const addSeconds = 1;
 
-    if (mounted){
+    if (mounted) {
       setState(() {
         final seconds = duration.inSeconds + addSeconds;
 
@@ -47,7 +53,6 @@ class _StopWatchWidgetState extends State<StopWatchWidget> {
     return (Text('$minutes:$seconds',
         style: const TextStyle(color: Colors.white, fontSize: 30),
         textAlign: TextAlign.center));
-    
   }
 
   @override

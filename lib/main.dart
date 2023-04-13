@@ -241,9 +241,23 @@ class _MenuState extends State<MenuPage> {
 
   Future<void> fetchSave() async {
     final result = await getSave();
+
     setState(() {
       if (result != null) {
         _save = result;
+
+        int chrono = _save!.chrono;
+        int minutes = (chrono / 60).floor();
+        int secondes = chrono % 60;
+        String minutesString = minutes.toString();
+        String secondesString = secondes.toString();
+        if (minutes < 10) {
+          minutesString = '0' + minutesString;
+        }
+        if (secondes < 10) {
+          secondesString = '0' + secondesString;
+        }
+
         setState(() {
           _titleSave = 'resume'.tr +
               '\n' +
@@ -251,7 +265,9 @@ class _MenuState extends State<MenuPage> {
               'x' +
               _save!.grille.getSize().toString() +
               ' - ' +
-              _save!.chrono.toString();
+              minutesString +
+              ':' +
+              secondesString;
         });
       } else {
         _save = null;
@@ -311,14 +327,14 @@ class _MenuState extends State<MenuPage> {
                     },
                   ),
                   Tile(
-                    icon : Icon(
+                    icon: Icon(
                       BootstrapIcons.watch,
                       color: Color(0xff3D4AEB),
                       size: 0.16 * MediaQuery.of(context).size.width,
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/challenge', arguments:{
+                      Navigator.pushNamed(context, '/challenge', arguments: {
                         'type': 'new',
                         'size': _dropdownValue,
                       });
