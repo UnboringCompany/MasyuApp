@@ -51,6 +51,10 @@ class LocalString extends Translations {
           'database_change': 'Changement du nom fait avec succés',
           'tuto': 'Tutoriel',
           'no_save': 'Aucune Sauvegarde',
+          'classement': 'Classement',
+          'nom': 'Nom',
+          'scrore': 'Score',
+          'ratio': 'Ratio'
         },
         'en_UK': {
           'title': 'MASYU',
@@ -99,6 +103,10 @@ class LocalString extends Translations {
           'database_change': 'Name change successfully completed',
           'tuto': 'Tutorial',
           'no_save': 'No save',
+          'classement': 'Ranking',
+          'nom': 'Name',
+          'scrore': 'Score',
+          'ratio': 'Ratio'
         },
         'de_DE': {
           'title': 'MASYU',
@@ -148,6 +156,10 @@ class LocalString extends Translations {
           'database_change': 'Namensänderung erfolgreich durchgeführt',
           'tuto': 'Tutorial',
           'no_save': 'Keine Sicherung',
+          'classement': 'Ranking',
+          'nom': 'Name',
+          'scrore': 'Punktzahl',
+          'ratio': 'Verhältnis'
         },
         'es_ES': {
           'title': 'MASYU',
@@ -194,6 +206,10 @@ class LocalString extends Translations {
           'database_change': 'Cambio de nombre realizado con éxito',
           'tuto': 'Tutorial',
           'no_save': 'Sin respaldo',
+          'classement': 'Clasificación',
+          'nom': 'Nombre',
+          'scrore': 'Puntuación',
+          'ratio': 'Ratio'
         },
         'ja_JP': {
           'title': 'MASYU',
@@ -235,6 +251,10 @@ class LocalString extends Translations {
           'database_change': '名義変更が無事完了',
           'tuto': 'チュートリアル',
           'no_save': 'バックアップなし',
+          'classement': 'ランキング',
+          'nom': '名称',
+          'scrore': 'スコア',
+          'ratio': '比率'
         },
       };
 }

@@ -104,75 +104,75 @@ class _ClassementPageState extends State<ClassementPage> {
       ]),
       const SizedBox(height: 50),
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                BootstrapIcons.person,
-                size: 30,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                player.getPseudo(),
-                style: const TextStyle(color: Colors.white, fontSize: 20),
-              )
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    BootstrapIcons.trophy,
-                    size: 30,
-                    color: Colors.yellow,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    player.getScore().toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    BootstrapIcons.check2,
-                    size: 30,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    player.getPartieGagne().toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    BootstrapIcons.x,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    player.getPartiePerdue().toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ])),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  BootstrapIcons.person,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  player.getPseudo(),
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      BootstrapIcons.trophy,
+                      size: 30,
+                      color: Colors.yellow,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      player.getScore().toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      BootstrapIcons.check2,
+                      size: 30,
+                      color: Colors.green,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      player.getPartieGagne().toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      BootstrapIcons.x,
+                      size: 30,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      player.getPartiePerdue().toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ])),
       const SizedBox(height: 50),
-      const Text('Classement',
+      Text('classement'.tr,
           style: TextStyle(color: Colors.white, fontSize: 25)),
       const SizedBox(height: 20),
       Container(
@@ -191,19 +191,19 @@ class _ClassementPageState extends State<ClassementPage> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width / 4,
-                child: const Text('Nom',
+                child: Text('nom'.tr,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center),
               ),
               Container(
                 width: MediaQuery.of(context).size.width / 4,
-                child: const Text('Score',
+                child: Text('scrore'.tr,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center),
               ),
               Container(
                 width: MediaQuery.of(context).size.width / 4,
-                child: Text('Ratio V/D',
+                child: Text('ratio'.tr,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center),
               ),
@@ -262,7 +262,8 @@ class _ClassementPageState extends State<ClassementPage> {
                                 (document['partiePerdu'] == 0
                                     ? document["partieGagne"].toString()
                                     : (document["partieGagne"] /
-                                            document["partiePerdu"]).toStringAsFixed(2)),
+                                            document["partiePerdu"])
+                                        .toStringAsFixed(2)),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 20),
                                 textAlign: TextAlign.center),
