@@ -120,7 +120,7 @@ class _GamePageState extends State<GamePage> {
             .collection('utilisateur')
             .doc(id)
             .set(partie.player.toJson());
-        print('Grille ajoutée avec succès');
+        // print('Grille ajoutée avec succès');
       } catch (error) {
         print('Erreur lors de l\'ajout des données à Firebase: $error');
       }
@@ -163,7 +163,7 @@ class _GamePageState extends State<GamePage> {
                       final docSnapshot = await docRef.get();
                       docRef
                           .delete()
-                          .then((value) => print('Document supprimé'))
+                          // .then((value) => print('Document supprimé'))
                           .catchError((error) => print(
                               'Erreur lors de la suppression du document : $error'));
                     },
@@ -210,7 +210,7 @@ class _GamePageState extends State<GamePage> {
                       final docSnapshot = await docRef.get();
                       docRef
                           .delete()
-                          .then((value) => print('Document supprimé'))
+                          // .then((value) => print('Document supprimé'))
                           .catchError((error) => print(
                               'Erreur lors de la suppression du document : $error'));
                     },
@@ -258,7 +258,7 @@ class _GamePageState extends State<GamePage> {
                         final docSnapshot = await docRef.get();
                         docRef
                             .delete()
-                            .then((value) => print('Document supprimé'))
+                            // .then((value) => print('Document supprimé'))
                             .catchError((error) => print(
                                 'Erreur lors de la suppression du document : $error'));
                       },
@@ -285,7 +285,7 @@ class _GamePageState extends State<GamePage> {
     }
 
     String getTime(int chrono) {
-      debugPrint("chrono : $chrono");
+      // debugPrint("chrono : $chrono");
       int minutes = (chrono / 60).floor();
       int secondes = ((chrono) % 60).floor();
       String minutes2 = minutes.toString();
@@ -369,7 +369,7 @@ class _GamePageState extends State<GamePage> {
                                 final docSnapshot = await docRef.get();
                                 docRef
                                     .delete()
-                                    .then((value) => print('Document supprimé'))
+                                    // .then((value) => print('Document supprimé'))
                                     .catchError((error) => print(
                                         'Erreur lors de la suppression du document : $error'));
                                 Navigator.pop(context);

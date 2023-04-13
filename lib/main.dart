@@ -171,7 +171,7 @@ class _MenuState extends State<MenuPage> {
                       final docSnapshot = await docRef.get();
                       docRef
                           .delete()
-                          .then((value) => print('Document supprimé'))
+                          // .then((value) => print('Document supprimé'))
                           .catchError((error) => print(
                               'Erreur lors de la suppression du document : $error'));
                       setState(() {
@@ -348,7 +348,6 @@ class _MenuState extends State<MenuPage> {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
-                    print('j ai cliqué');
                     String? id = await _getId();
                     await Firebase.initializeApp();
                     final docRef = FirebaseFirestore.instance
@@ -356,7 +355,7 @@ class _MenuState extends State<MenuPage> {
                         .doc(id);
                     final docSnapshot = await docRef.get();
                     if (docSnapshot.exists) {
-                      print('Le document existe');
+                      // print('Le document existe');
                       abandon2Popup(context);
                     } else {
                       Navigator.pushNamed(

@@ -187,7 +187,7 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
     }
 
     String getTime(int chrono) {
-      debugPrint("chrono : $chrono");
+      // debugPrint("chrono : $chrono");
       int minutes = (chrono / 60).floor();
       int secondes = ((chrono) % 60).floor();
       String minutes2 = minutes.toString();
