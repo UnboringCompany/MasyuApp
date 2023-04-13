@@ -334,6 +334,9 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                                     element.getCaseArr().getPosY() ==
                                         (i ~/ widget.gridSize)))
                               );
+                            // debugPrint("Suppression du trait de case $i à case $j");
+                            // debugPrint("Suppression du trait de case $j à case $i");
+                            // debugPrint("Liste des traits : ${widget.grille.getListeTraits()}");
                             setState(() {});
                           }
                         }

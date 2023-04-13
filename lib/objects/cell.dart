@@ -37,7 +37,7 @@ class Cell {
     }else{
       // debugPrint("La cellule $this a un nombre étrange de traits");
       for (Trait t in liste) {
-        // debugPrint("Trait : $t");
+        // debugPrint("Trait étrange : $t");
       }
     return false;
     }
