@@ -85,7 +85,7 @@ class _ClassementPageState extends State<ClassementPage> {
   Widget build(BuildContext context) {
     return CoreWidget(
         child: Column(children: [
-      const SizedBox(height: 100),
+      SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         IconButton(
             onPressed: seeHomePage,
@@ -103,80 +103,112 @@ class _ClassementPageState extends State<ClassementPage> {
                 fontWeight: FontWeight.w600))
       ]),
       const SizedBox(height: 50),
-      Expanded(
-          child: SingleChildScrollView(
-              child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              BootstrapIcons.person,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              player.getPseudo(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              BootstrapIcons.trophy,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              player.getScore().toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              BootstrapIcons.check,
-                              size: 35,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              player.getPartieGagne().toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              BootstrapIcons.x,
-                              size: 35,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              player.getPartiePerdue().toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            )
-                          ],
-                        ),
-                      ])))),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                BootstrapIcons.person,
+                size: 30,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                player.getPseudo(),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    BootstrapIcons.trophy,
+                    size: 30,
+                    color: Colors.yellow,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    player.getScore().toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    BootstrapIcons.check2,
+                    size: 30,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    player.getPartieGagne().toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    BootstrapIcons.x,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    player.getPartiePerdue().toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ])),
+      const SizedBox(height: 50),
       const Text('Classement',
           style: TextStyle(color: Colors.white, fontSize: 25)),
       const SizedBox(height: 20),
+      Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          height: MediaQuery.of(context).size.height / 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 10,
+                child: const Icon(
+                  BootstrapIcons.hash,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const Text('Nom',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const Text('Score',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 4,
+                child: Text('Ratio V/D',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center),
+              ),
+            ],
+          )),
       _initialized
           ? Expanded(
               child: StreamBuilder(
@@ -193,28 +225,51 @@ class _ClassementPageState extends State<ClassementPage> {
                 }
 
                 return ListView(
-                  children: snapshot.data!.docs.map((document) {
+                  children: snapshot.data!.docs.asMap().entries.map((entry) {
+                    final index = entry.key + 1;
+                    final document = entry.value;
+
                     return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        height: MediaQuery.of(context).size.height / 20,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              BootstrapIcons.person,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(document["pseudo"],
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      height: MediaQuery.of(context).size.height / 20,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 10,
+                            child: Text("$index",
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                            const SizedBox(width: 10),
-                            Text(document["score"].toString(),
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 4,
+                            child: Text(document["pseudo"],
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                          ],
-                        ));
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 4,
+                            child: Text(document["score"].toString(),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 4,
+                            child: Text(
+                                (document['partiePerdu'] == 0
+                                    ? document["partieGagne"].toString()
+                                    : (document["partieGagne"] /
+                                            document["partiePerdu"]).toStringAsFixed(2)),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ],
+                      ),
+                    );
                   }).toList(),
                 );
               },

@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:masyu_app/objects/joueur.dart';
 
@@ -13,16 +18,53 @@ class Partie {
 
   Partie(this.tailleGrille) {
     grille = Grille(tailleGrille);
-    player = Joueur(
-        "Joueur", 0, 0, 0); // TODO : A modifier quand on aura des joueurs biens
+    generatePlayer();
     startPartie(tailleGrille);
   }
 
-  Partie.fromJson(Map<String, dynamic> json)
+  Future<String?> _getId() async {
+    if (Platform.isIOS) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      var data = await deviceInfoPlugin.iosInfo;
+      var identifier = data.identifierForVendor;
+      return identifier;
+    } else if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo;
+      try {
+        androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.id;
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+    return null;
+  }
+
+  Future<Joueur> _getPlayer() async {
+    String? id = await _getId();
+    await Firebase.initializeApp();
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance
+            .collection('utilisateur')
+            .doc(id)
+            .get();
+    if (documentSnapshot.exists) {
+      return Joueur.fromJson(documentSnapshot.data());
+    } else {
+      return Joueur(id ?? 'Joueur', 0, 0, 0);
+    }
+  }
+
+  void generatePlayer() async {
+    player = await _getPlayer();
+  }
+
+  Partie.fromJson(Map<String, dynamic> json, Map<String, dynamic> joueur)
       : grille = Grille.fromJson(json['grille']),
         chrono = json['chrono'],
         tailleGrille = json['grille']['size'],
-        player = /*Joueur.fromJson(json['player'])*/ Joueur("Joueur", 0, 0, 0),
+        player = Joueur.fromJson(joueur),
         scorePartie = json['scorePartie'],
         nbIndices = json['nbIndices'];
 
@@ -64,9 +106,11 @@ class Partie {
       scorePartie = scorePartie - (5 * nbIndices);
       player.score += scorePartie;
       player.partieGagne += 1;
+      updateJoueur();
       return true;
     } else {
       getScoreDefaite();
+      updateJoueur();
       return false;
     }
   }
@@ -99,5 +143,25 @@ class Partie {
 
   int getnbIndices() {
     return nbIndices;
+  }
+
+  Future<void> updateJoueur() async {
+    String? id = await _getId();
+    await Firebase.initializeApp();
+    if (player.pseudo != id && player.pseudo != 'Joueur') {
+      await FirebaseFirestore.instance
+          .collection('utilisateur')
+          .doc(id)
+          .update({
+        'partieGagne': player.partieGagne,
+        'score': player.score,
+        'partiePerdu': player.partiePerdu
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('utilisateur')
+          .doc(id)
+          .set(player.toJson());
+    }
   }
 }

@@ -151,7 +151,9 @@ class _MenuState extends State<MenuPage> {
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.transparent,
-          content: Text('abandon_text'.tr,
+          content: Text(
+              'game_over_text'
+                  .trParams({'points': _save!.scorePartie.toString()}),
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white)),
           actions: <Widget>[
@@ -164,7 +166,21 @@ class _MenuState extends State<MenuPage> {
                   ),
                   child: IconButton(
                     icon: const Icon(BootstrapIcons.check),
-                    onPressed: () {
+                    onPressed: () async {
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      docRef
+                          .delete()
+                          .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
+                      setState(() {
+                        _titleSave = 'resume'.tr + '\n' + 'Aucune Sauvegarde';
+                      });
                       Navigator.pop(context);
                     },
                     color: Colors.white,
@@ -215,8 +231,13 @@ class _MenuState extends State<MenuPage> {
     final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
     final docSnapshot = await docRef.get();
     final data = docSnapshot.data();
-    if (data != null) {
-      return Partie.fromJson(data);
+    final joueurData = await FirebaseFirestore.instance
+        .collection('utilisateur')
+        .doc(id)
+        .get();
+    final joueur = joueurData.data();
+    if (data != null && joueur != null) {
+      return Partie.fromJson(data, joueur);
     }
     return null;
   }
@@ -324,12 +345,7 @@ class _MenuState extends State<MenuPage> {
                     final docSnapshot = await docRef.get();
                     if (docSnapshot.exists) {
                       print('Le document existe');
-
-                      docRef
-                          .delete()
-                          .then((value) => print('Document supprimé'))
-                          .catchError((error) => print(
-                              'Erreur lors de la suppression du document : $error'));
+                      abandon2Popup(context);
                     } else {
                       Navigator.pushNamed(
                         context,

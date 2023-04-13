@@ -31,8 +31,6 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     int _gridSize;
@@ -107,6 +105,10 @@ class _GamePageState extends State<GamePage> {
                 .toList(),
           }
         });
+        await FirebaseFirestore.instance
+            .collection('utilisateur')
+            .doc(id)
+            .set(partie.player.toJson());
         print('Grille ajoutée avec succès');
       } catch (error) {
         print('Erreur lors de l\'ajout des données à Firebase: $error');
@@ -124,7 +126,8 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono}),
+            content: Text(
+                'bravo_text'.trParams({'points': points, 'time': chrono}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -137,9 +140,20 @@ class _GamePageState extends State<GamePage> {
                   child: IconButton(
                     icon: const Icon(BootstrapIcons.x),
                     color: Colors.red,
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/');
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      docRef
+                          .delete()
+                          .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
                     },
                   )),
             ],
@@ -208,9 +222,20 @@ class _GamePageState extends State<GamePage> {
                     ),
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.check),
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.pop(context);
                         losePopup(context, partie.getScoreDefaite());
+                        String? id = await _getId();
+                        await Firebase.initializeApp();
+                        final docRef = FirebaseFirestore.instance
+                            .collection('grilles')
+                            .doc(id);
+                        final docSnapshot = await docRef.get();
+                        docRef
+                            .delete()
+                            .then((value) => print('Document supprimé'))
+                            .catchError((error) => print(
+                                'Erreur lors de la suppression du document : $error'));
                       },
                       color: Colors.white,
                     )),
@@ -234,22 +259,22 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    String getTime(int chrono){
+    String getTime(int chrono) {
       debugPrint("chrono : $chrono");
-      int minutes = (chrono/60).floor();
-      int secondes = ((chrono)%60).floor();
+      int minutes = (chrono / 60).floor();
+      int secondes = ((chrono) % 60).floor();
       String minutes2 = minutes.toString();
       String secondes2 = secondes.toString();
-      if (minutes < 10){
+      if (minutes < 10) {
         minutes2 = '0$minutes2';
       }
-      if (secondes < 10){
+      if (secondes < 10) {
         secondes2 = '0$secondes2';
       }
       return '$minutes2:$secondes2';
     }
-    
-    valider(Stopwatch chrono){
+
+    valider(Stopwatch chrono) {
       chrono.stop();
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
@@ -264,14 +289,12 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
-    
-
     Stopwatch chrono = Stopwatch()..start();
 
     return (CoreWidget(
         child: Center(
             child: Column(children: [
-      const SizedBox(height: 100),
+      SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         IconButton(
             onPressed: () {
@@ -294,7 +317,18 @@ class _GamePageState extends State<GamePage> {
                               child: Text('give_up'.tr,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
-                              onPressed: () {
+                              onPressed: () async {
+                                String? id = await _getId();
+                                await Firebase.initializeApp();
+                                final docRef = FirebaseFirestore.instance
+                                    .collection('grilles')
+                                    .doc(id);
+                                final docSnapshot = await docRef.get();
+                                docRef
+                                    .delete()
+                                    .then((value) => print('Document supprimé'))
+                                    .catchError((error) => print(
+                                        'Erreur lors de la suppression du document : $error'));
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
                                     arguments: {'grille': partie.grille});
