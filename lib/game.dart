@@ -186,10 +186,21 @@ class _GamePageState extends State<GamePage> {
                   child: IconButton(
                     icon: const Icon(BootstrapIcons.x),
                     color: Colors.red,
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/solution',
                           arguments: {'grille': partie.grille});
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      docRef
+                          .delete()
+                          .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
                     },
                   )),
             ],
@@ -306,7 +317,9 @@ class _GamePageState extends State<GamePage> {
                     title: Text('game_back'.tr,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
-                    content: Text('game_back_text'.trParams({'points': '40'}),  //TODO : Gérer les points
+                    content: Text(
+                        'game_back_text'.trParams(
+                            {'points': '40'}), //TODO : Gérer les points
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[
