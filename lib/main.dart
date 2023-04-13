@@ -72,12 +72,15 @@ class MenuPage extends StatefulWidget {
 
 class _MenuState extends State<MenuPage> {
   String _dropdownValue = '';
+  String _titleSave = 'resume'.tr + '\n' + 'Aucune Sauvegarde';
   late ConfettiController _controller;
+  Partie? _save = null;
 
   @override
   void initState() {
     super.initState();
     _controller = ConfettiController(duration: const Duration(seconds: 2));
+    fetchSave();
   }
 
   @override
@@ -102,6 +105,87 @@ class _MenuState extends State<MenuPage> {
     Navigator.of(context).pushNamed('/rules');
   }
 
+  void losePopup(BuildContext context, int nbPoints) {
+    nbPoints = -nbPoints;
+    String points = nbPoints.toString();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('game_over'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          backgroundColor: Colors.transparent,
+          content: Text('game_over_text'.trParams({'points': points}),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            Container(
+                alignment: Alignment.bottomCenter,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  icon: const Icon(BootstrapIcons.x),
+                  color: Colors.red,
+                  onPressed: () {},
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  void abandon2Popup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'abandon'.tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.transparent,
+          content: Text('abandon_text'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.check),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.white,
+                  )),
+              const SizedBox(width: 50),
+              Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.x),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.red,
+                  ))
+            ]),
+          ],
+        );
+      },
+    );
+  }
+
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
@@ -120,6 +204,38 @@ class _MenuState extends State<MenuPage> {
       }
     }
     return null;
+  }
+
+  Future<Partie?> getSave() async {
+    String? id = await _getId();
+    await Firebase.initializeApp();
+    final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
+    final docSnapshot = await docRef.get();
+    final data = docSnapshot.data();
+    if (data != null) {
+      return Partie.fromJson(data);
+    }
+    return null;
+  }
+
+  Future<void> fetchSave() async {
+    final result = await getSave();
+    setState(() {
+      if (result != null) {
+        _save = result;
+        setState(() {
+          _titleSave = 'resume'.tr +
+              '\n' +
+              _save!.grille.getSize().toString() +
+              'x' +
+              _save!.grille.getSize().toString() +
+              ' - ' +
+              _save!.chrono.toString();
+        });
+      } else {
+        _save = null;
+      }
+    });
   }
 
   @override
@@ -160,31 +276,14 @@ class _MenuState extends State<MenuPage> {
                       color: Color(0xff3D4AEB),
                       size: 0.20 * MediaQuery.of(context).size.width,
                     ),
-                    title: 'resume'.tr,
+                    title: _titleSave,
                     onPressed: () async {
-                      print('j ai cliqué');
-                      String? id = await _getId();
-                      await Firebase.initializeApp();
-                      final docRef = FirebaseFirestore.instance
-                          .collection('grilles')
-                          .doc(id);
-                      final docSnapshot = await docRef.get();
-                      if (docSnapshot.exists) {
-                        print('Le document existe');
-                      } else {
-                        print('Le document n existe pas');
-                      }
-                      final data = docSnapshot.data();
-                      if (data != null) {
-                        print('La partie a été récupéré');
-                        Partie partie = Partie.fromJson(data);
-                        Navigator.pushNamed(context, '/game', arguments: {
-                          'type': 'fromSave',
-                          'size': partie.grille.getSize(),
-                          'partie': partie
-                        });
-                        print(partie);
-                      }
+                      Partie? partie = await getSave();
+                      Navigator.pushNamed(context, '/game', arguments: {
+                        'type': 'fromSave',
+                        'size': partie!.grille.getSize(),
+                        'partie': partie
+                      });
                     },
                   ),
                   Tile(
@@ -207,12 +306,29 @@ class _MenuState extends State<MenuPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/game",
-                      arguments: {'type': 'new', 'size': _dropdownValue},
-                    );
+                  onPressed: () async {
+                    print('j ai cliqué');
+                    String? id = await _getId();
+                    await Firebase.initializeApp();
+                    final docRef = FirebaseFirestore.instance
+                        .collection('grilles')
+                        .doc(id);
+                    final docSnapshot = await docRef.get();
+                    if (docSnapshot.exists) {
+                      print('Le document existe');
+
+                      docRef
+                          .delete()
+                          .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
+                    } else {
+                      Navigator.pushNamed(
+                        context,
+                        "/game",
+                        arguments: {'type': 'new', 'size': _dropdownValue},
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,

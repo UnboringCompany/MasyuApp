@@ -57,6 +57,59 @@ class _GamePageState extends State<GamePage> {
       partie = args['partie'];
     }
 
+    Future<String?> _getId() async {
+      var deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+        var data = await deviceInfoPlugin.iosInfo;
+        var identifier = data.identifierForVendor;
+        return identifier;
+      } else if (Platform.isAndroid) {
+        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        AndroidDeviceInfo androidInfo;
+        try {
+          androidInfo = await deviceInfo.androidInfo;
+          return androidInfo.id;
+        } catch (e) {
+          print('Error: $e');
+        }
+      }
+      return null;
+    }
+
+    void saveGame() async {
+      try {
+        String? id = await _getId();
+        await Firebase.initializeApp();
+        await FirebaseFirestore.instance
+            .collection('grilles')
+            .doc(id ?? 'loser')
+            .set({
+          'chrono': partie.getChrono(),
+          'scorePartie': partie.getScorePartie(),
+          'nbIndices': partie.getnbIndices(),
+          'grille': {
+            'size': partie.grille.getSize(),
+            'listeCells': partie.grille
+                .getListeCells()
+                .map((cell) => cell.toJson())
+                .toList(),
+            'listeTraits': partie.grille
+                .getListeTraits()
+                .map((trait) => trait.toJson())
+                .toList(),
+            'listeTraitsSolution': partie.grille
+                .getListeTraitsSolution()
+                .map((trait) => trait.toJson())
+                .toList(),
+          }
+        });
+        print('Grille ajoutée avec succès');
+      } catch (error) {
+        print('Erreur lors de l\'ajout des données à Firebase: $error');
+      }
+    }
+
     void winPopup(BuildContext context, int nbPoints, int chrono) {
       String points = nbPoints.toString();
       String chrono2 = chrono.toString();
@@ -179,26 +232,6 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    Future<String?> _getId() async {
-      var deviceInfo = DeviceInfoPlugin();
-      if (Platform.isIOS) {
-        final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
-        var data = await deviceInfoPlugin.iosInfo;
-        var identifier = data.identifierForVendor;
-        return identifier;
-      } else if (Platform.isAndroid) {
-        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo;
-        try {
-          androidInfo = await deviceInfo.androidInfo;
-          return androidInfo.id;
-        } catch (e) {
-          print('Error: $e');
-        }
-      }
-      return null;
-    }
-
     valider() {
       if (partie.valider()) {
         // debugPrint('Victoire');
@@ -249,37 +282,7 @@ class _GamePageState extends State<GamePage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () async {
-                                try {
-                                  String? id = await _getId();
-                                  await Firebase.initializeApp();
-                                  await FirebaseFirestore.instance
-                                      .collection('grilles')
-                                      .doc(id ?? 'loser')
-                                      .set({
-                                    'chrono': partie.getChrono(),
-                                    'scorePartie': partie.getScorePartie(),
-                                    'nbIndices': partie.getnbIndices(),
-                                    'grille': {
-                                      'size': partie.grille.getSize(),
-                                      'listeCells': partie.grille
-                                          .getListeCells()
-                                          .map((cell) => cell.toJson())
-                                          .toList(),
-                                      'listeTraits': partie.grille
-                                          .getListeTraits()
-                                          .map((trait) => trait.toJson())
-                                          .toList(),
-                                      'listeTraitsSolution': partie.grille
-                                          .getListeTraitsSolution()
-                                          .map((trait) => trait.toJson())
-                                          .toList(),
-                                    }
-                                  });
-                                  print('Grille ajoutée avec succès');
-                                } catch (error) {
-                                  print(
-                                      'Erreur lors de l\'ajout des données à Firebase: $error');
-                                }
+                                saveGame();
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed('/');
                               },
@@ -322,7 +325,11 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {},
+                onPressed: () async {
+                  saveGame();
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed('/');
+                },
                 icon: const Icon(BootstrapIcons.cloud_upload),
                 color: Colors.white,
               )),
