@@ -160,7 +160,7 @@ class _Rule extends State<Rule> {
             onPressed: () {
               buildImageList(images);
             },
-            child: Text('Tutoriel'),
+            child: Text('tuto'.tr),
           ),
           const SizedBox(height: 15),
           Expanded(

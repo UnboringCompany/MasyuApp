@@ -48,6 +48,9 @@ class LocalString extends Translations {
           'timer_victory_content':
               'Vous avez gagné avant la fin du chrono\nVous avez ainsi gagné @points points',
           'give_up_timer': 'Abandonner',
+          'database_change': 'Changement du nom fait avec succés',
+          'tuto': 'Tutoriel',
+          'no_save': 'Aucune Sauvegarde',
         },
         'en_UK': {
           'title': 'MASYU',
@@ -93,6 +96,9 @@ class LocalString extends Translations {
           'timer_victory_content':
               'You won before the end of the clock\nYou thus won @points points',
           'give_up_timer': 'Give up',
+          'database_change': 'Name change successfully completed',
+          'tuto': 'Tutorial',
+          'no_save': 'No save',
         },
         'de_DE': {
           'title': 'MASYU',
@@ -139,6 +145,9 @@ class LocalString extends Translations {
           'timer_victory_content':
               'Sie haben vor Ablauf der Uhr gewonnen\nSie haben also @points Punkte gewonnen',
           'give_up_timer': 'Aufgeben',
+          'database_change': 'Namensänderung erfolgreich durchgeführt',
+          'tuto': 'Tutorial',
+          'no_save': 'Keine Sicherung',
         },
         'es_ES': {
           'title': 'MASYU',
@@ -182,6 +191,9 @@ class LocalString extends Translations {
           'timer_victory_content':
               'Has ganado antes de que se agote el tiempo\nHas ganado @points puntos',
           'give_up_timer': 'Abandonar',
+          'database_change': 'Cambio de nombre realizado con éxito',
+          'tuto': 'Tutorial',
+          'no_save': 'Sin respaldo',
         },
         'ja_JP': {
           'title': 'MASYU',
@@ -218,9 +230,11 @@ class LocalString extends Translations {
           'timer_defeat_title': '敗戦',
           'timer_defeat_content': '解決時間超過で@points点減点',
           'timer_victory_title': 'よくできました！',
-          'timer_victory_content':
-              'あなたは時間内に勝ちました\nあなたは@pointsポイントを獲得しました',
+          'timer_victory_content': 'あなたは時間内に勝ちました\nあなたは@pointsポイントを獲得しました',
           'give_up_timer': 'あきらめる',
+          'database_change': '名義変更が無事完了',
+          'tuto': 'チュートリアル',
+          'no_save': 'バックアップなし',
         },
       };
 }

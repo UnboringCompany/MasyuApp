@@ -23,7 +23,6 @@ import 'package:confetti/confetti.dart';
 import 'package:masyu_app/widgets/tripletap.dart';
 import 'package:provider/provider.dart';
 
-
 import 'game.dart';
 import 'objects/partie.dart';
 
@@ -72,7 +71,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuState extends State<MenuPage> {
   String _dropdownValue = '';
-  String _titleSave = 'resume'.tr + '\n' + 'Aucune Sauvegarde';
+  String _titleSave = 'resume'.tr + '\n' + 'no_save'.tr;
   late ConfettiController _controller;
   Partie? _save = null;
 
@@ -257,18 +256,15 @@ class _MenuState extends State<MenuPage> {
         if (secondes < 10) {
           secondesString = '0' + secondesString;
         }
-
-        setState(() {
-          _titleSave = 'resume'.tr +
-              '\n' +
-              _save!.grille.getSize().toString() +
-              'x' +
-              _save!.grille.getSize().toString() +
-              ' - ' +
-              minutesString +
-              ':' +
-              secondesString;
-        });
+        _titleSave = 'resume'.tr +
+            '\n' +
+            _save!.grille.getSize().toString() +
+            'x' +
+            _save!.grille.getSize().toString() +
+            ' - ' +
+            minutesString +
+            ':' +
+            secondesString;
       } else {
         _save = null;
       }

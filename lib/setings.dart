@@ -103,7 +103,6 @@ class _Settings extends State<Settings> {
   ];
 
   updatelanguage(Locale locale) {
-    Get.back();
     Get.updateLocale(locale);
   }
 
@@ -245,14 +244,7 @@ class _Settings extends State<Settings> {
                             .update({'pseudo': pseudo});
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text('Changement du nom fait avec succés')),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Mettre un pseudo complet')),
+                        SnackBar(content: Text('database_change'.tr)),
                       );
                     }
                   },
