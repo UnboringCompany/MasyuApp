@@ -142,7 +142,7 @@ class _GamePageState extends State<GamePage> {
                     color: Colors.red,
                     onPressed: () async {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/');
+                      Navigator.pushNamed(context, '/solution');
                       String? id = await _getId();
                       await Firebase.initializeApp();
                       final docRef = FirebaseFirestore.instance
