@@ -67,6 +67,9 @@ class _Settings extends State<Settings> {
     if (documentSnapshot.exists) {
       setState(() {
         pseudo = documentSnapshot.data()?['pseudo'];
+        if (pseudo != "") {
+          newJoueur = false;
+        }
       });
     }
   }
@@ -217,9 +220,6 @@ class _Settings extends State<Settings> {
                       ),
                       style: TextStyle(color: Colors.white),
                       onChanged: (value) async {
-                        if (pseudo != "") {
-                          newJoueur = false;
-                        }
                         pseudo = value;
                       },
                     )),
