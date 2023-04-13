@@ -19,6 +19,47 @@ class _Rule extends State<Rule> {
     Navigator.of(context).pushNamed('/');
   }
 
+  List<String> images = [
+    "Jeu.png",
+    "Jeu (1).png",
+    "Jeu (2).png",
+    "Jeu (3).png",
+    "Jeu (4).png",
+    "Jeu (5).png",
+    "Jeu (6).png",
+    "Jeu (7).png",
+    "Jeu (8).png",
+    "Jeu (9).png",
+    "Jeu (10).png",
+  ];
+
+  void buildImageList(List<String> images) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: Text('Tutoriel')),
+          body: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: images.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                width: 200.0,
+                height: 200.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(images[index]),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CoreWidget(
@@ -97,6 +138,12 @@ class _Rule extends State<Rule> {
                 ],
               ),
             ),
+          ),
+          TextButton(
+            onPressed: () {
+              buildImageList(images);
+            },
+            child: Text('Tutoriel'),
           ),
           const SizedBox(height: 15),
           Expanded(
