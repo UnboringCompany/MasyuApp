@@ -4,21 +4,30 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../objects/partie.dart';
+
 class TimerWatch extends StatefulWidget {
-  const TimerWatch({super.key, required this.time});
+  const TimerWatch({super.key, required this.time, required this.partie});
 
   final int time;
   final int nbPoints = 0;
+  final Partie partie;
+
+  void stopTimer() {
+    _TimerWatchState(nbPoints: nbPoints, partie: partie, time : time).timer?.cancel();
+  }
 
   @override
   State<StatefulWidget> createState() =>
-      _TimerWatchState(time: time, nbPoints: nbPoints);
+      _TimerWatchState(time: time, nbPoints: nbPoints, partie: partie);
 }
 
 class _TimerWatchState extends State<TimerWatch> {
-  _TimerWatchState({required this.time, required this.nbPoints});
+  _TimerWatchState(
+      {required this.time, required this.nbPoints, required this.partie});
   final int time;
   final int nbPoints;
+  final Partie partie;
 
   Duration duration = const Duration();
   Timer? timer;
@@ -44,75 +53,40 @@ class _TimerWatchState extends State<TimerWatch> {
     );
   }
 
-  void winTimerPopup(BuildContext context, int nbPoints) {
-      String points = nbPoints.toString();
-      // String chrono2 = chrono.toString();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('timer_victory_title'.tr,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            backgroundColor: Colors.transparent,
-            content: Text('timer_victory_content'.trParams({'points': points}),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            actions: <Widget>[
-              Container(
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0x7F373855),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(BootstrapIcons.x),
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/');
-                    },
-                  )),
-            ],
-          );
-        },
-      );
-    }
-
   void loseTimerPopup(BuildContext context, int nbPoints) {
-      nbPoints = -nbPoints;
-      String points = nbPoints.toString();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('timer_defeat_title'.tr,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            backgroundColor: Colors.transparent,
-            content: Text('timer_defeat_content'.trParams({'points': points}),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white)),
-            actions: <Widget>[
-              Container(
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0x7F373855),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(BootstrapIcons.x),
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/');
-                    },
-                  )),
-            ],
-          );
-        },
-      );
-    }
+    nbPoints = -nbPoints;
+    String points = nbPoints.toString();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('timer_defeat_title'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          backgroundColor: Colors.transparent,
+          content: Text('timer_defeat_content'.trParams({'points': points}),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            Container(
+                alignment: Alignment.bottomCenter,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  icon: const Icon(BootstrapIcons.x),
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/');
+                  },
+                )),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   initState() {
@@ -130,7 +104,10 @@ class _TimerWatchState extends State<TimerWatch> {
         timer?.cancel();
       } else if (seconds == 0 && !popup) {
         popup = true;
-        loseTimerPopup(context, -25);
+        partie.player.score += -15;
+        partie.player.partiePerdu += 1;
+        partie.updateJoueur();
+        loseTimerPopup(context, -15);
       } else {
         duration = Duration(seconds: seconds);
       }
@@ -139,6 +116,16 @@ class _TimerWatchState extends State<TimerWatch> {
 
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
+  }
+
+  void stopTimer() {
+    timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
   }
 
   @override

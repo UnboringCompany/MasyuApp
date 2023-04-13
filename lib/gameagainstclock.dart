@@ -36,7 +36,7 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
   Widget build(BuildContext context) {
     int _gridSize;
     Partie partie;
-    final TimerWatch timer = TimerWatch(key: UniqueKey(), time: 60);
+    
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -59,72 +59,21 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
       partie = args['partie'];
     }
 
-    Future<String?> _getId() async {
-      var deviceInfo = DeviceInfoPlugin();
-      if (Platform.isIOS) {
-        final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
-        var data = await deviceInfoPlugin.iosInfo;
-        var identifier = data.identifierForVendor;
-        return identifier;
-      } else if (Platform.isAndroid) {
-        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo;
-        try {
-          androidInfo = await deviceInfo.androidInfo;
-          return androidInfo.id;
-        } catch (e) {
-          print('Error: $e');
-        }
-      }
-      return null;
-    }
+    final TimerWatch timer = TimerWatch(key: UniqueKey(), time: 60, partie : partie);
 
-    void saveGame() async {
-      try {
-        String? id = await _getId();
-        await Firebase.initializeApp();
-        await FirebaseFirestore.instance
-            .collection('grilles')
-            .doc(id ?? 'loser')
-            .set({
-          'chrono': partie.getChrono(),
-          'scorePartie': partie.getScorePartie(),
-          'nbIndices': partie.getnbIndices(),
-          'grille': {
-            'size': partie.grille.getSize(),
-            'listeCells': partie.grille
-                .getListeCells()
-                .map((cell) => cell.toJson())
-                .toList(),
-            'listeTraits': partie.grille
-                .getListeTraits()
-                .map((trait) => trait.toJson())
-                .toList(),
-            'listeTraitsSolution': partie.grille
-                .getListeTraitsSolution()
-                .map((trait) => trait.toJson())
-                .toList(),
-          }
-        });
-        print('Grille ajoutée avec succès');
-      } catch (error) {
-        print('Erreur lors de l\'ajout des données à Firebase: $error');
-      }
-    }
-
-    void winPopup(BuildContext context, int nbPoints, String chrono) {
+    void winPopup(BuildContext context, int nbPoints) {
       String points = nbPoints.toString();
       // String chrono2 = chrono.toString();
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('bravo'.tr,
+            title: Text('timer_victory_title'.tr,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
             content: Text(
-                'bravo_text'.trParams({'points': points, 'time': chrono}),
+                'timer_victory_content'.trParams({'points': points}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -209,8 +158,11 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.check),
                       onPressed: () {
+                        partie.player.score += -15;
+                        partie.player.partiePerdu += 1;
+                        partie.updateJoueur();
                         Navigator.pop(context);
-                        losePopup(context, partie.getScoreDefaite());
+                        losePopup(context, -15);
                       },
                       color: Colors.white,
                     )),
@@ -254,28 +206,23 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
         // debugPrint('Victoire');
+        timer.stopTimer();
         Navigator.pop(context);
-
-        winPopup(context, partie.getScorePartie(), getTime(partie.getChrono()));
+        partie.player.score += 20;
+        partie.player.partieGagne += 1;
+        partie.updateJoueur();
+        winPopup(context, 20);
       } else {
         //TOTEST
         Navigator.pop(context);
-        losePopup(context, partie.getScorePartie());
+        partie.player.score += -15;
+        partie.player.partiePerdu += 1;
+        partie.updateJoueur();
+        losePopup(context, -15);
       }
     }
 
     Stopwatch chrono = Stopwatch()..start();
-
-    int nbpointToLose = 0;
-    if (partie.grille.getSize() == 6) {
-      nbpointToLose = 25;
-    }
-    if (partie.grille.getSize() == 8) {
-      nbpointToLose = 40;
-    }
-    if (partie.grille.getSize() == 10) {
-      nbpointToLose = 50;
-    }
 
     return (CoreWidget(
         child: Center(
@@ -289,12 +236,12 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     backgroundColor: Colors.transparent,
-                    title: Text('game_back'.tr,
+                    title: Text('give_up_timer'.tr,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     content: Text(
                         'game_back_text'
-                            .trParams({'points': nbpointToLose.toString()}),
+                            .trParams({'points': 15.toString()}),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[
@@ -306,23 +253,15 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () {
-                                partie.getScoreDefaite();
+                                partie.player.score += -15;
+                                partie.player.partiePerdu += 1;
+                                partie.updateJoueur();
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/solution',
                                     arguments: {'grille': partie.grille});
                                 // TODO: Gérer la perte de points
                               },
                             ),
-                            TextButton(
-                              child: Text('save'.tr,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: Colors.white)),
-                              onPressed: () async {
-                                saveGame();
-                                Navigator.pop(context);
-                                Navigator.of(context).pushNamed('/');
-                              },
-                            )
                           ])
                     ],
                   );

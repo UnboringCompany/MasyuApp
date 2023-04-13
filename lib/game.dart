@@ -234,8 +234,10 @@ class _GamePageState extends State<GamePage> {
                     child: IconButton(
                       icon: const Icon(BootstrapIcons.check),
                       onPressed: () async {
+                        int nbPoints = partie.getScoreDefaite();
+                        partie.updateJoueur();
                         Navigator.pop(context);
-                        losePopup(context, partie.getScoreDefaite());
+                        losePopup(context, nbPoints);
                         String? id = await _getId();
                         await Firebase.initializeApp();
                         final docRef = FirebaseFirestore.instance
@@ -302,6 +304,17 @@ class _GamePageState extends State<GamePage> {
 
     Stopwatch chrono = Stopwatch()..start();
 
+    int nbpointToLose = 0;
+    if (partie.grille.getSize() == 6) {
+      nbpointToLose = 25;
+    }
+    if (partie.grille.getSize() == 8) {
+      nbpointToLose = 40;
+    }
+    if (partie.grille.getSize() == 10) {
+      nbpointToLose = 50;
+    }
+
     return (CoreWidget(
         child: Center(
             child: Column(children: [
@@ -318,8 +331,8 @@ class _GamePageState extends State<GamePage> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     content: Text(
-                        'game_back_text'.trParams(
-                            {'points': '40'}), //TODO : Gérer les points
+                        'game_back_text'
+                            .trParams({'points': nbpointToLose.toString()}),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[
@@ -331,6 +344,8 @@ class _GamePageState extends State<GamePage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.white)),
                               onPressed: () async {
+                                partie.getScoreDefaite();
+                                partie.updateJoueur();
                                 String? id = await _getId();
                                 await Firebase.initializeApp();
                                 final docRef = FirebaseFirestore.instance
@@ -379,7 +394,6 @@ class _GamePageState extends State<GamePage> {
       ]),
       const SizedBox(height: 30),
       stopwtach,
-      // StopWatchWidget(),
       const SizedBox(height: 30),
       GrilleWidget(
         gridSize: _gridSize,
