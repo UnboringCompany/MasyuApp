@@ -5,11 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/objects/grille.dart';
 import 'package:get/get.dart';
 import 'package:masyu_app/widgets/core.dart';
 import 'package:masyu_app/widgets/grille.dart';
 import 'package:masyu_app/widgets/stopwatch.dart';
+import 'package:provider/provider.dart';
+import 'package:soundpool/soundpool.dart';
 
 import 'main.dart';
 import 'objects/partie.dart';
@@ -22,6 +26,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+
   void seeHomePage() {
     Navigator.pushReplacement<void, void>(
       context,
@@ -36,6 +41,7 @@ class _GamePageState extends State<GamePage> {
     int _gridSize;
     Partie partie;
     final StopWatchWidget stopwtach = StopWatchWidget(key: UniqueKey());
+    final appState = Provider.of<AppState>(context);
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -142,7 +148,7 @@ class _GamePageState extends State<GamePage> {
                     color: Colors.red,
                     onPressed: () async {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/solution');
+                      Navigator.pushNamed(context, '/solution', arguments: {'grille': partie.grille});
                       String? id = await _getId();
                       await Firebase.initializeApp();
                       final docRef = FirebaseFirestore.instance
@@ -292,11 +298,16 @@ class _GamePageState extends State<GamePage> {
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
         // debugPrint('Victoire');
+        if(appState.isSoundEnabled) {
+            appState.playSound(appState.victoireSound);
+        }
         Navigator.pop(context);
-
         winPopup(context, partie.getScorePartie(), getTime(partie.getChrono()));
       } else {
         //TOTEST
+        if(appState.isSoundEnabled) {
+          appState.playSound(appState.defaiteSound);
+        }        
         Navigator.pop(context);
         losePopup(context, partie.getScorePartie());
       }
