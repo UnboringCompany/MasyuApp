@@ -68,6 +68,19 @@ class _GrilleWidgetState extends State<GrilleWidget> {
     liens = List.generate(widget.gridSize * widget.gridSize,
         (_) => List<int>.filled(widget.gridSize * widget.gridSize, 0));
 
+    if (widget.grille.getListeTraits().isNotEmpty && !widget.solution) {
+      for (Trait t in widget.grille.getListeTraits()) {
+        liens[t.getCaseDep().getPosX() +
+                t.getCaseDep().getPosY() * widget.gridSize][
+            t.getCaseArr().getPosX() +
+                t.getCaseArr().getPosY() * widget.gridSize] = 1;
+        liens[t.getCaseArr().getPosX() +
+                t.getCaseArr().getPosY() * widget.gridSize][
+            t.getCaseDep().getPosX() +
+                t.getCaseDep().getPosY() * widget.gridSize] = 1;
+      }
+    }
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
       for (Cell cell in widget.grille.getListeCells()) {
         if (cell is Cercle) {
@@ -318,22 +331,21 @@ class _GrilleWidgetState extends State<GrilleWidget> {
                                 .getListeTraits()
                                 .firstWhere((element) =>
                                     element.getCaseDep().getPosX() ==
-                                        (i % widget.gridSize) &&
-                                    element.getCaseDep().getPosY() ==
-                                        (i ~/ widget.gridSize) &&
-                                    element.getCaseArr().getPosX() ==
-                                        (j % widget.gridSize) &&
-                                    element.getCaseArr().getPosY() ==
-                                        (j ~/ widget.gridSize) ||
+                                            (i % widget.gridSize) &&
+                                        element.getCaseDep().getPosY() ==
+                                            (i ~/ widget.gridSize) &&
+                                        element.getCaseArr().getPosX() ==
+                                            (j % widget.gridSize) &&
+                                        element.getCaseArr().getPosY() ==
+                                            (j ~/ widget.gridSize) ||
                                     (element.getCaseDep().getPosX() ==
-                                        (j % widget.gridSize) &&
-                                    element.getCaseDep().getPosY() ==
-                                        (j ~/ widget.gridSize) &&
-                                    element.getCaseArr().getPosX() ==
-                                        (i % widget.gridSize) &&
-                                    element.getCaseArr().getPosY() ==
-                                        (i ~/ widget.gridSize)))
-                              );
+                                            (j % widget.gridSize) &&
+                                        element.getCaseDep().getPosY() ==
+                                            (j ~/ widget.gridSize) &&
+                                        element.getCaseArr().getPosX() ==
+                                            (i % widget.gridSize) &&
+                                        element.getCaseArr().getPosY() ==
+                                            (i ~/ widget.gridSize))));
                             setState(() {});
                           }
                         }

@@ -26,6 +26,7 @@ import 'package:masyu_app/widgets/tripletap.dart';
 import 'package:provider/provider.dart';
 
 import 'game.dart';
+import 'objects/partie.dart';
 
 void main() {
   runApp(
@@ -175,9 +176,14 @@ class _MenuState extends State<MenuPage> {
                       }
                       final data = docSnapshot.data();
                       if (data != null) {
-                        print('La grille a été récupéré');
-                        Grille grille = Grille.fromJson(data);
-                        print(grille);
+                        print('La partie a été récupéré');
+                        Partie partie = Partie.fromJson(data);
+                        Navigator.pushNamed(context, '/game', arguments: {
+                          'type': 'fromSave',
+                          'size': partie.grille.getSize(),
+                          'partie': partie
+                        });
+                        print(partie);
                       }
                     },
                   ),

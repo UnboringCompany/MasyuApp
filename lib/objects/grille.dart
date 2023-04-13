@@ -9,7 +9,6 @@ class Grille {
   // Attributs
   int _size;
   List<Cell> _listeCells;
-  List<Cercle> _listeCercle;
   List<Trait> _listeTraits;
   List<Trait> _listeTraitsSolution;
   int _nbIndices = 0;
@@ -17,17 +16,44 @@ class Grille {
   // Constructeur
   Grille(this._size)
       : _listeCells = List<Cell>.empty(growable: true),
-        _listeCercle = List<Cercle>.empty(growable: true),
         _listeTraits = List<Trait>.empty(growable: true),
         _listeTraitsSolution = List<Trait>.empty(growable: true);
 
   // Constructeur à partir d'un json
   Grille.fromJson(Map<String, dynamic> json)
       : _size = json['size'],
-        _listeCells = json['listeCells'],
-        _listeCercle = json['listeCercle'],
-        _listeTraits = json['listeTraits'],
-        _listeTraitsSolution = json['listeTraitsSolution'];
+        _listeCells = List<Cell>.empty(growable: true),
+        _listeTraits = List<Trait>.empty(growable: true),
+        _listeTraitsSolution = List<Trait>.empty(growable: true) {
+    for (var cell in json['listeCells']) {
+      if (cell['color'] != null) {
+        _listeCells.add(
+            Cercle(cell['posX'], cell['posY'], cell['color'], cell['isValid']));
+      } else {
+        _listeCells.add(Cell(cell['posX'], cell['posY']));
+      }
+    }
+
+    for (var trait in json['listeTraits']) {
+      _listeTraits.add(Trait(
+          _listeCells.firstWhere((c) =>
+              c.getPosX() == trait['cellDep']['posX'] &&
+              c.getPosY() == trait['cellDep']['posY']),
+          _listeCells.firstWhere((c) =>
+              c.getPosX() == trait['cellArr']['posX'] &&
+              c.getPosY() == trait['cellArr']['posY'])));
+    }
+
+    for (var trait in json['listeTraitsSolution']) {
+      _listeTraitsSolution.add(Trait(
+          _listeCells.firstWhere((c) =>
+              c.getPosX() == trait['cellDep']['posX'] &&
+              c.getPosY() == trait['cellDep']['posY']),
+          _listeCells.firstWhere((c) =>
+              c.getPosX() == trait['cellArr']['posX'] &&
+              c.getPosY() == trait['cellArr']['posY'])));
+    }
+  }
 
   // Convertit la grille en json
   Map<String, dynamic> toJson() => {
@@ -45,14 +71,6 @@ class Grille {
     _listeCells.add(c);
   }
 
-  void addCercle(Cercle c) {
-    _listeCercle.add(c);
-  }
-
-  void removeCercle(Cercle c) {
-    _listeCercle.remove(c);
-  }
-
   /// Supprime une cellule de la grille
   /// @param c la cellule à supprimer
   void removeCell(Cell c) {
@@ -65,7 +83,6 @@ class Grille {
   void replaceCellbyCercle(Cell c, int couleur) {
     Cercle c2 = Cercle(c.getPosX(), c.getPosY(), couleur, false);
     _listeCells[_listeCells.indexOf(c)] = c2;
-    addCercle(c2);
   }
 
   /// Ajoute un trait à la grille
@@ -329,10 +346,6 @@ class Grille {
     return _listeCells;
   }
 
-  List<Cercle> getListeCercle() {
-    return _listeCercle;
-  }
-
   /// Fonction qui permet de récupérer la liste des traits de la grille
   /// @return la liste des traits de la grille
   List<Trait> getListeTraits() {
@@ -385,6 +398,6 @@ class Grille {
 
   @override
   String toString() {
-    return 'Grid{_size: $_size, _listeCells: $_listeCells, _listeTraits: $_listeTraits}';
+    return 'Grid{_size: $_size, _listeCells: $_listeCells, _listeTraits: $_listeTraits, _listeTraitsSolution : $_listeTraitsSolution}';
   }
 }

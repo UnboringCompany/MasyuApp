@@ -39,7 +39,7 @@ class _GamePageState extends State<GamePage> {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final type = args[
-        'type']; //new si nouvelle partie, resume si partie chargée depuis une sauvegarde, defi si defi contre la montre
+        'type']; //new si nouvelle partie, fromSave si partie chargée depuis une sauvegarde
     final size = args['size'];
 
     if (size == "10x10") {
@@ -50,8 +50,12 @@ class _GamePageState extends State<GamePage> {
       _gridSize = 6;
     }
 
-    partie = Partie(
-        _gridSize); //TODO : quand on ajoutera le joueur au constructeur, faudra le faire ici aussi
+    if (type == 'new') {
+      partie = Partie(
+          _gridSize); //TODO : quand on ajoutera le joueur au constructeur, faudra le faire ici aussi
+    } else {
+      partie = args['partie'];
+    }
 
     void winPopup(BuildContext context, int nbPoints, int chrono) {
       String points = nbPoints.toString();
@@ -64,7 +68,8 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono2}),
+            content: Text(
+                'bravo_text'.trParams({'points': points, 'time': chrono2}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -251,23 +256,24 @@ class _GamePageState extends State<GamePage> {
                                       .collection('grilles')
                                       .doc(id ?? 'loser')
                                       .set({
-                                    'size': partie.grille.getSize(),
-                                    'listeCells': partie.grille
-                                        .getListeCells()
-                                        .map((cell) => cell.toJson())
-                                        .toList(),
-                                    'listeCercle': partie.grille
-                                        .getListeCercle()
-                                        .map((cercle) => cercle.toJson())
-                                        .toList(),
-                                    'listeTraits': partie.grille
-                                        .getListeTraits()
-                                        .map((trait) => trait.toJson())
-                                        .toList(),
-                                    'listeTraitsSolution': partie.grille
-                                        .getListeTraitsSolution()
-                                        .map((trait) => trait.toJson())
-                                        .toList(),
+                                    'chrono': partie.getChrono(),
+                                    'scorePartie': partie.getScorePartie(),
+                                    'nbIndices': partie.getnbIndices(),
+                                    'grille': {
+                                      'size': partie.grille.getSize(),
+                                      'listeCells': partie.grille
+                                          .getListeCells()
+                                          .map((cell) => cell.toJson())
+                                          .toList(),
+                                      'listeTraits': partie.grille
+                                          .getListeTraits()
+                                          .map((trait) => trait.toJson())
+                                          .toList(),
+                                      'listeTraitsSolution': partie.grille
+                                          .getListeTraitsSolution()
+                                          .map((trait) => trait.toJson())
+                                          .toList(),
+                                    }
                                   });
                                   print('Grille ajoutée avec succès');
                                 } catch (error) {
