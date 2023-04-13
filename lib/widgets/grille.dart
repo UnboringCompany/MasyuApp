@@ -152,7 +152,7 @@ class _GrilleWidgetState extends State<GrilleWidget> {
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white)),
           backgroundColor: Colors.transparent,
-          content: Text('clue_text'.trParams({'points': '10'}),
+          content: Text('clue_text'.trParams({'points': '5'}),
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white)),
           actions: <Widget>[
