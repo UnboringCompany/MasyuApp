@@ -315,11 +315,16 @@ class Grille {
     // Cherche dans la liste des traits de la solution un trait qui n'est pas dans la liste des traits de la grille
     List<Trait> listeTraitNotPlaced = List<Trait>.empty(growable: true);
     for (Trait trait in _listeTraitsSolution) {
-      if (!_listeTraits.contains(trait)) {
+      Trait trait2 = Trait(trait.getCaseArr(), trait.getCaseDep());
+      if (!_listeTraits.contains(trait) && !_listeTraits.contains(trait2)) {
         listeTraitNotPlaced.add(trait);
       }
     }
     int size = listeTraitNotPlaced.length;
+    if (size == 0) {
+      // Si la liste est vide, la grille est complète
+      debugPrint("___________________________La grille est complète___________________________");
+    }
 
     return listeTraitNotPlaced[Random().nextInt(size)];
   }
