@@ -608,6 +608,8 @@ PODS:
     - firebase_core
     - FlutterMacOS
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
   - Firebase/CoreOnly (10.6.0):
     - FirebaseCore (= 10.6.0)
   - Firebase/Firestore (10.6.0):
@@ -710,6 +712,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - flutter_volume_controller (from `Flutter/ephemeral/.symlinks/plugins/flutter_volume_controller/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -733,6 +736,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   firebase_core:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   flutter_volume_controller:
@@ -744,6 +749,7 @@ SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: 7bbdda350c1321dcb0a61e51e459570a30fd2e9b
+  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
   Firebase: f13680471b021937f2230ea8503c7809d8c29806
   firebase_core: 7cad6afc6d420690c239021131b133b3920d092e
   FirebaseCore: fa80ad16a62d52f67274b5b88304c3a318bbf9a4
