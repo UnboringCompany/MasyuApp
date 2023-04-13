@@ -21,16 +21,16 @@ class _Rule extends State<Rule> {
 
   List<String> images = [
     "Jeu.png",
-    "Jeu (1).png",
-    "Jeu (2).png",
-    "Jeu (3).png",
-    "Jeu (4).png",
-    "Jeu (5).png",
-    "Jeu (6).png",
-    "Jeu (7).png",
-    "Jeu (8).png",
-    "Jeu (9).png",
-    "Jeu (10).png",
+    "Jeu1.png",
+    "Jeu2.png",
+    "Jeu3.png",
+    "Jeu4.png",
+    "Jeu5.png",
+    "Jeu6.png",
+    "Jeu7.png",
+    "Jeu8.png",
+    "Jeu9.png",
+    "Jeu10.png",
   ];
 
   void buildImageList(List<String> images) {
