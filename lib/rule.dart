@@ -20,40 +20,57 @@ class _Rule extends State<Rule> {
   }
 
   List<String> images = [
-    "Jeu.png",
-    "Jeu1.png",
-    "Jeu2.png",
-    "Jeu3.png",
-    "Jeu4.png",
-    "Jeu5.png",
-    "Jeu6.png",
-    "Jeu7.png",
-    "Jeu8.png",
-    "Jeu9.png",
-    "Jeu10.png",
+    "assets/Tuto/Jeu.png",
+    "assets/Tuto/Jeu1.png",
+    "assets/Tuto/Jeu2.png",
+    "assets/Tuto/Jeu3.png",
+    "assets/Tuto/Jeu4.png",
+    "assets/Tuto/Jeu5.png",
+    "assets/Tuto/Jeu6.png",
+    "assets/Tuto/Jeu7.png",
+    "assets/Tuto/Jeu8.png",
+    "assets/Tuto/Jeu9.png",
+    "assets/Tuto/Jeu10.png",
   ];
 
   void buildImageList(List<String> images) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: Text('Tutoriel')),
-          body: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: images.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                width: 200.0,
-                height: 200.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(images[index]),
+        builder: (context) => CoreWidget(
+          child: Container(
+            child: Stack(
+              children: [
+                ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: images.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(images[index]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context, "/game");
+                      });
+                    },
+                    backgroundColor: Color(0x7F373855),
+                    child: const Icon(BootstrapIcons.x),
                   ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       ),
