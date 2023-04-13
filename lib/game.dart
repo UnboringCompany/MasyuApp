@@ -31,8 +31,6 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     int _gridSize;
@@ -107,6 +105,10 @@ class _GamePageState extends State<GamePage> {
                 .toList(),
           }
         });
+        await FirebaseFirestore.instance
+            .collection('utilisateur')
+            .doc(id)
+            .set(partie.player.toJson());
         print('Grille ajoutée avec succès');
       } catch (error) {
         print('Erreur lors de l\'ajout des données à Firebase: $error');
@@ -124,7 +126,8 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono}),
+            content: Text(
+                'bravo_text'.trParams({'points': points, 'time': chrono}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -256,22 +259,22 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    String getTime(int chrono){
+    String getTime(int chrono) {
       debugPrint("chrono : $chrono");
-      int minutes = (chrono/60).floor();
-      int secondes = ((chrono)%60).floor();
+      int minutes = (chrono / 60).floor();
+      int secondes = ((chrono) % 60).floor();
       String minutes2 = minutes.toString();
       String secondes2 = secondes.toString();
-      if (minutes < 10){
+      if (minutes < 10) {
         minutes2 = '0$minutes2';
       }
-      if (secondes < 10){
+      if (secondes < 10) {
         secondes2 = '0$secondes2';
       }
       return '$minutes2:$secondes2';
     }
-    
-    valider(Stopwatch chrono){
+
+    valider(Stopwatch chrono) {
       chrono.stop();
       partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
@@ -285,8 +288,6 @@ class _GamePageState extends State<GamePage> {
         losePopup(context, partie.getScorePartie());
       }
     }
-
-    
 
     Stopwatch chrono = Stopwatch()..start();
 

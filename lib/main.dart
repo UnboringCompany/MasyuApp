@@ -228,8 +228,13 @@ class _MenuState extends State<MenuPage> {
     final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
     final docSnapshot = await docRef.get();
     final data = docSnapshot.data();
-    if (data != null) {
-      return Partie.fromJson(data);
+    final joueurData = await FirebaseFirestore.instance
+        .collection('utilisateur')
+        .doc(id)
+        .get();
+    final joueur = joueurData.data();
+    if (data != null && joueur != null) {
+      return Partie.fromJson(data, joueur);
     }
     return null;
   }
