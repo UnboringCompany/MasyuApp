@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -9,9 +8,6 @@ import 'package:masyu_app/LocalString.dart';
 import 'package:masyu_app/appstate.dart';
 import 'package:masyu_app/classement.dart';
 import 'package:masyu_app/gameagainstclock.dart';
-import 'package:masyu_app/objects/grille.dart';
-import 'package:masyu_app/objects/cell.dart';
-import 'package:masyu_app/objects/trait.dart';
 import 'package:flutter/services.dart';
 import 'package:masyu_app/rule.dart';
 import 'package:masyu_app/setings.dart' as setting;
@@ -26,6 +22,7 @@ import 'package:masyu_app/video.dart';
 import 'package:confetti/confetti.dart';
 import 'package:masyu_app/widgets/tripletap.dart';
 import 'package:provider/provider.dart';
+
 
 import 'game.dart';
 import 'objects/partie.dart';
@@ -267,6 +264,9 @@ class _MenuState extends State<MenuPage> {
     final size = MediaQuery.of(context).size;
     String _selectedOption = '6x6';
     List<String> _options = ['6x6', '8x8', '10x10'];
+    final appState = Provider.of<AppState>(context);
+
+    appState.loadSound(appState.pool, rootBundle);
 
     return CoreWidget(
         child: Stack(
