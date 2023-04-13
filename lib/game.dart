@@ -234,26 +234,6 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    Future<String?> _getId() async {
-      var deviceInfo = DeviceInfoPlugin();
-      if (Platform.isIOS) {
-        final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
-        var data = await deviceInfoPlugin.iosInfo;
-        var identifier = data.identifierForVendor;
-        return identifier;
-      } else if (Platform.isAndroid) {
-        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo;
-        try {
-          androidInfo = await deviceInfo.androidInfo;
-          return androidInfo.id;
-        } catch (e) {
-          print('Error: $e');
-        }
-      }
-      return null;
-    }
-
     String getTime(int chrono){
       debugPrint("chrono : $chrono");
       int minutes = (chrono/60).floor();
