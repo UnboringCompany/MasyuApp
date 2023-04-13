@@ -31,10 +31,13 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     int _gridSize;
     Partie partie;
+    final StopWatchWidget stopwtach = StopWatchWidget(key: UniqueKey());
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -110,9 +113,9 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
-    void winPopup(BuildContext context, int nbPoints, int chrono) {
+    void winPopup(BuildContext context, int nbPoints, String chrono) {
       String points = nbPoints.toString();
-      String chrono2 = chrono.toString();
+      // String chrono2 = chrono.toString();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -121,8 +124,7 @@ class _GamePageState extends State<GamePage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text(
-                'bravo_text'.trParams({'points': points, 'time': chrono2}),
+            content: Text('bravo_text'.trParams({'points': points, 'time' : chrono}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -254,17 +256,39 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    valider() {
+    String getTime(int chrono){
+      debugPrint("chrono : $chrono");
+      int minutes = (chrono/60).floor();
+      int secondes = ((chrono)%60).floor();
+      String minutes2 = minutes.toString();
+      String secondes2 = secondes.toString();
+      if (minutes < 10){
+        minutes2 = '0$minutes2';
+      }
+      if (secondes < 10){
+        secondes2 = '0$secondes2';
+      }
+      return '$minutes2:$secondes2';
+    }
+    
+    valider(Stopwatch chrono){
+      chrono.stop();
+      partie.chrono = chrono.elapsedMicroseconds;
       if (partie.valider()) {
         // debugPrint('Victoire');
-        // Navigator.pop(context);
-        winPopup(context, partie.getScorePartie(), partie.getChrono());
+        Navigator.pop(context);
+
+        winPopup(context, partie.getScorePartie(), getTime(partie.getChrono()));
       } else {
         //TOTEST
         Navigator.pop(context);
         losePopup(context, partie.getScorePartie());
       }
     }
+
+    
+
+    Stopwatch chrono = Stopwatch()..start();
 
     return (CoreWidget(
         child: Center(
@@ -340,7 +364,8 @@ class _GamePageState extends State<GamePage> {
                 fontWeight: FontWeight.w600))
       ]),
       const SizedBox(height: 30),
-      StopWatchWidget(),
+      stopwtach,
+      // StopWatchWidget(),
       const SizedBox(height: 30),
       GrilleWidget(
         gridSize: _gridSize,
@@ -374,7 +399,7 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {valider()},
+                onPressed: () => {valider(chrono)},
                 icon: const Icon(BootstrapIcons.check2),
                 color: Colors.white,
                 iconSize: 30,
