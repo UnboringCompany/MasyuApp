@@ -47,19 +47,22 @@ class _GamePageState extends State<GamePage> {
         'type']; //new si nouvelle partie, fromSave si partie chargée depuis une sauvegarde
     final size = args['size'];
 
-    if (size == "10x10") {
-      _gridSize = 10;
-    } else if (size == "8x8") {
-      _gridSize = 8;
-    } else {
-      _gridSize = 6;
-    }
 
     if (type == 'new') {
+      if (size == "10x10") {
+        _gridSize = 10;
+      } else if (size == "8x8") {
+        _gridSize = 8;
+      } else {
+        _gridSize = 6;
+      }
       partie = Partie(_gridSize);
     } else {
       partie = args['partie'];
+      _gridSize = partie.grille.getSize();
     }
+
+    
 
     final StopWatchWidget stopwtach =
         StopWatchWidget(key: UniqueKey(), time: partie.chrono);
