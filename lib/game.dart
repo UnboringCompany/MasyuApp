@@ -56,8 +56,7 @@ class _GamePageState extends State<GamePage> {
     }
 
     if (type == 'new') {
-      partie = Partie(
-          _gridSize);
+      partie = Partie(_gridSize);
     } else {
       partie = args['partie'];
     }
@@ -299,22 +298,22 @@ class _GamePageState extends State<GamePage> {
       return '$minutes2:$secondes2';
     }
 
-    valider(Stopwatch chrono) {
+    valider() {
       chrono.stop();
-      partie.chrono += chrono.elapsedMicroseconds;
+      partie.chrono = chrono.elapsedMilliseconds ~/ 1000 + partie.chrono;
       if (partie.valider()) {
         // debugPrint('Victoire');
         if (appState.isSoundEnabled) {
           appState.playSound(appState.victoireSound);
         }
-        Navigator.pop(context);
-        winPopup(context, partie.getScorePartie(), getTime(partie.getChrono()));
+        //Navigator.pop(context);
+        winPopup(context, partie.getScorePartie(), getTime(partie.chrono));
       } else {
         //TOTEST
         if (appState.isSoundEnabled) {
           appState.playSound(appState.defaiteSound);
         }
-        Navigator.pop(context);
+        //Navigator.pop(context);
         losePopup(context, partie.getScorePartie());
       }
     }
@@ -442,7 +441,7 @@ class _GamePageState extends State<GamePage> {
                 color: Color(0x7F373855),
               ),
               child: IconButton(
-                onPressed: () => {valider(chrono)},
+                onPressed: valider,
                 icon: const Icon(BootstrapIcons.check2),
                 color: Colors.white,
                 iconSize: 30,
