@@ -57,7 +57,7 @@ class _GamePageState extends State<GamePage> {
 
     if (type == 'new') {
       partie = Partie(
-          _gridSize); //TODO : quand on ajoutera le joueur au constructeur, faudra le faire ici aussi
+          _gridSize);
     } else {
       partie = args['partie'];
     }
@@ -301,7 +301,7 @@ class _GamePageState extends State<GamePage> {
 
     valider(Stopwatch chrono) {
       chrono.stop();
-      partie.chrono = chrono.elapsedMicroseconds;
+      partie.chrono += chrono.elapsedMicroseconds;
       if (partie.valider()) {
         // debugPrint('Victoire');
         if (appState.isSoundEnabled) {
