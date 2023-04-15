@@ -84,8 +84,8 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                     color: Color(0x7F373855),
                   ),
                   child: IconButton(
-                    icon: const Icon(BootstrapIcons.x),
-                    color: Colors.red,
+                    icon: const Icon(BootstrapIcons.check),
+                    color: Colors.green,
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/');
@@ -159,6 +159,9 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                       icon: const Icon(BootstrapIcons.check),
                       onPressed: () {
                         partie.player.score += -15;
+                        if (partie.player.score <= 0) {
+                          partie.player.score = 0;
+                        }
                         partie.player.partiePerdu += 1;
                         partie.updateJoueur();
                         Navigator.pop(context);

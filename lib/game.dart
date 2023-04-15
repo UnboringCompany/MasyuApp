@@ -151,8 +151,8 @@ class _GamePageState extends State<GamePage> {
                     color: Color(0x7F373855),
                   ),
                   child: IconButton(
-                    icon: const Icon(BootstrapIcons.x),
-                    color: Colors.red,
+                    icon: const Icon(BootstrapIcons.check),
+                    color: Colors.green,
                     onPressed: () async {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/solution',
