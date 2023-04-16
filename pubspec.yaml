@@ -1,5 +1,5 @@
 name: masyu_app
-description: A new Flutter project.
+description: La révolution que personne n'attendait mais dont tout le monde à besoin.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -35,6 +35,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  firebase_core: ^2.8.0
+  cloud_firestore: ^4.4.5
+  bootstrap_icons: ^1.10.2
+  flutter_volume_controller: ^1.2.5
+  vibration: ^1.7.6
+  get :
+  video_player: ^2.6.1
+  flutter_launcher_icons: ^0.13.0
+  confetti: ^0.7.0
+  provider: ^6.0.5
+  device_info_plus: ^8.2.0
+  soundpool: ^2.3.0
+
 
 dev_dependencies:
   flutter_test:
@@ -47,12 +60,27 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "assets/images/background.png"
+  adaptive_icon_foreground: "assets/images/foreground.png"
+  min_sdk_android: 21 
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/Citation.txt
+    - assets/images/
+    - assets/videos/
+    - assets/sons/
+    - assets/Tuto/
+    
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

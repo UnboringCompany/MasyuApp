@@ -1,7 +1,35 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:masyu_app/LocalString.dart';
+import 'package:masyu_app/appstate.dart';
+import 'package:masyu_app/classement.dart';
+import 'package:masyu_app/gameagainstclock.dart';
+import 'package:flutter/services.dart';
+import 'package:masyu_app/rule.dart';
+import 'package:masyu_app/setings.dart' as setting;
+import 'package:masyu_app/solution.dart';
+import 'package:masyu_app/widgets/citation.dart';
+import 'package:masyu_app/widgets/sizedropdown.dart';
+import 'package:masyu_app/widgets/tile.dart';
+import 'package:masyu_app/widgets/core.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:get/get.dart';
+import 'package:masyu_app/video.dart';
+import 'package:confetti/confetti.dart';
+import 'package:masyu_app/widgets/tripletap.dart';
+import 'package:provider/provider.dart';
+
+import 'game.dart';
+import 'objects/partie.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => AppState(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,116 +38,413 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+    return GetMaterialApp(
+      translations: LocalString(),
+      locale: Locale('fr', 'FR'),
+      debugShowCheckedModeBanner: false,
+      title: 'MASYU',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MenuPage(),
+        '/game': (context) => GamePage(),
+        '/solution': (context) => SolutionPage(),
+        '/video': (context) => Video(),
+        '/settings': (context) => setting.Settings(),
+        '/rules': (context) => Rule(),
+        '/classement': (context) => ClassementPage(),
+        '/challenge': (context) => GameAgainstClockPage(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MenuPage extends StatefulWidget {
+  const MenuPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => _MenuState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MenuState extends State<MenuPage> {
+  String _dropdownValue = '';
+  String _titleSave = 'resume'.tr + '\n' + 'no_save'.tr;
+  late ConfettiController _controller;
+  Partie? _save = null;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    _controller = ConfettiController(duration: const Duration(seconds: 2));
+    fetchSave();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+    _controller.play();
+  }
+
+  void seeSettings() {
+    Navigator.of(context).pushNamed('/settings');
+  }
+
+  void seeClassement() {
+    Navigator.of(context).pushNamed('/classement');
+  }
+
+  void seeRules() {
+    Navigator.of(context).pushNamed('/rules');
+  }
+
+  void losePopup(BuildContext context, int nbPoints) {
+    nbPoints = -nbPoints;
+    String points = nbPoints.toString();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('game_over'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          backgroundColor: Colors.transparent,
+          content: Text('game_over_text'.trParams({'points': points}),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            Container(
+                alignment: Alignment.bottomCenter,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x7F373855),
+                ),
+                child: IconButton(
+                  icon: const Icon(BootstrapIcons.x),
+                  color: Colors.red,
+                  onPressed: () {},
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  void abandon2Popup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'abandon'.tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.transparent,
+          content: Text(
+              'game_over_text'
+                  .trParams({'points': _save!.scorePartie.toString()}),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.check),
+                    onPressed: () async {
+                      String? id = await _getId();
+                      await Firebase.initializeApp();
+                      final docRef = FirebaseFirestore.instance
+                          .collection('grilles')
+                          .doc(id);
+                      final docSnapshot = await docRef.get();
+                      docRef
+                          .delete()
+                          // .then((value) => print('Document supprimé'))
+                          .catchError((error) => print(
+                              'Erreur lors de la suppression du document : $error'));
+                      setState(() {
+                        _titleSave = 'resume'.tr + '\n' + 'Aucune Sauvegarde';
+                      });
+                      Navigator.pop(context);
+                    },
+                    color: Colors.white,
+                  )),
+              const SizedBox(width: 50),
+              Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0x7F373855),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(BootstrapIcons.x),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.red,
+                  ))
+            ]),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+      var data = await deviceInfoPlugin.iosInfo;
+      var identifier = data.identifierForVendor;
+      return identifier;
+    } else if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo;
+      try {
+        androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.id;
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+    return null;
+  }
+
+  Future<Partie?> getSave() async {
+    String? id = await _getId();
+    await Firebase.initializeApp();
+    final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
+    final docSnapshot = await docRef.get();
+    final data = docSnapshot.data();
+    final joueurData = await FirebaseFirestore.instance
+        .collection('utilisateur')
+        .doc(id)
+        .get();
+    final joueur = joueurData.data();
+    if (data != null && joueur != null) {
+      return Partie.fromJson(data, joueur);
+    }
+    return null;
+  }
+
+  Future<void> fetchSave() async {
+    final result = await getSave();
+
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      if (result != null) {
+        _save = result;
+
+        int chrono = _save!.chrono;
+        int minutes = (chrono / 60).floor();
+        int secondes = chrono % 60;
+        String minutesString = minutes.toString();
+        String secondesString = secondes.toString();
+        if (minutes < 10) {
+          minutesString = '0' + minutesString;
+        }
+        if (secondes < 10) {
+          secondesString = '0' + secondesString;
+        }
+        _titleSave = 'resume'.tr +
+            '\n' +
+            _save!.grille.getSize().toString() +
+            'x' +
+            _save!.grille.getSize().toString() +
+            ' - ' +
+            minutesString +
+            ':' +
+            secondesString;
+      } else {
+        _save = null;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    final size = MediaQuery.of(context).size;
+    String _selectedOption = '6x6';
+    List<String> _options = ['6x6', '8x8', '10x10'];
+    final appState = Provider.of<AppState>(context);
+
+    appState.loadSound(appState.pool, rootBundle);
+
+    return CoreWidget(
+        child: Stack(
+      children: [
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              TripleTapButton(
+                onPressed: _startAnimation,
+                child: Text(
+                  'title'.tr,
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 10,
+                    fontSize: 0.10 * MediaQuery.of(context).size.width,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              CitationWidget(),
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Tile(
+                    icon: Icon(
+                      BootstrapIcons.play,
+                      color: Color(0xff3D4AEB),
+                      size: 0.20 * MediaQuery.of(context).size.width,
+                    ),
+                    title: _titleSave,
+                    onPressed: () async {
+                      Partie? partie = await getSave();
+                      Navigator.pushNamed(context, '/game', arguments: {
+                        'type': 'fromSave',
+                        'size': partie!.grille.getSize(),
+                        'partie': partie
+                      });
+                    },
+                  ),
+                  Tile(
+                    icon: Icon(
+                      BootstrapIcons.watch,
+                      color: Color(0xff3D4AEB),
+                      size: 0.16 * MediaQuery.of(context).size.width,
+                    ),
+                    title: 'challenge'.tr,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/challenge', arguments: {
+                        'type': 'new',
+                        'size': _dropdownValue,
+                      });
+                    },
+                  )
+                ],
+              ),
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Container(
+                width: 0.85 * MediaQuery.of(context).size.width,
+                height: 0.07 * MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  color: Color(0xff3D4AEB),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    String? id = await _getId();
+                    await Firebase.initializeApp();
+                    final docRef = FirebaseFirestore.instance
+                        .collection('grilles')
+                        .doc(id);
+                    final docSnapshot = await docRef.get();
+                    if (docSnapshot.exists) {
+                      // print('Le document existe');
+                      abandon2Popup(context);
+                    } else {
+                      Navigator.pushNamed(
+                        context,
+                        "/game",
+                        arguments: {'type': 'new', 'size': _dropdownValue},
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.transparent,
+                    elevation: 0,
+                  ),
+                  child: Text('new_game'.tr),
+                ),
+              ),
+              SizedBox(height: 0.015 * MediaQuery.of(context).size.height),
+              GridSizeMenu(
+                onChanged: (newValue) {
+                  setState(() {
+                    _dropdownValue = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 0.1 * MediaQuery.of(context).size.height),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: 0.3 * MediaQuery.of(context).size.width,
+                    height: 0.05 * MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: Color(0xffB15653),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: seeRules,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Text('rules'.tr),
+                    ),
+                  ),
+                  SizedBox(width: 0.001 * MediaQuery.of(context).size.width),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: seeClassement,
+                        icon: Icon(
+                          BootstrapIcons.trophy,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
+                      IconButton(
+                        onPressed: seeSettings,
+                        icon: Icon(
+                          BootstrapIcons.gear,
+                          color: Colors.white,
+                          size: 0.08 * MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfettiWidget(
+            confettiController: _controller,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 50,
+            shouldLoop: false,
+            colors: const [
+              Colors.blue,
+              Colors.purple,
+              Colors.pink,
+              Colors.green,
+              Colors.yellow,
+            ],
+          ),
+        )
+      ],
+    ));
   }
 }
