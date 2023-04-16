@@ -47,7 +47,7 @@ class _GamePageState extends State<GamePage> {
         'type']; //new si nouvelle partie, fromSave si partie chargée depuis une sauvegarde
     final size = args['size'];
 
-
+    //choix de la taille de la grille quand on lance une nouvelle partie
     if (type == 'new') {
       if (size == "10x10") {
         _gridSize = 10;
@@ -58,15 +58,15 @@ class _GamePageState extends State<GamePage> {
       }
       partie = Partie(_gridSize);
     } else {
+      //quand on lance une partie sauvegarder, on récupère la taille de celle ci
       partie = args['partie'];
       _gridSize = partie.grille.getSize();
     }
 
-    
-
     final StopWatchWidget stopwtach =
         StopWatchWidget(key: UniqueKey(), time: partie.chrono);
 
+    //fonction qui récupère l'id de l'appareil pour créer un profil différent pour chaque appareil
     Future<String?> _getId() async {
       var deviceInfo = DeviceInfoPlugin();
       if (Platform.isIOS) {
@@ -91,6 +91,7 @@ class _GamePageState extends State<GamePage> {
     // chrono.elapsed = Duration(seconds: partie.chrono);
     // chrono = Stopwatch()..start();
 
+    //fonction qui sauvegarde la partie en cours en base de donnée firebase
     void saveGame() async {
       try {
         String? id = await _getId();
@@ -128,6 +129,7 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
+    //fonction qui affiche une popup de victoire
     void winPopup(BuildContext context, int nbPoints, String chrono) {
       String points = nbPoints.toString();
       // String chrono2 = chrono.toString();
@@ -176,6 +178,7 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
+    //fonction qui affiche une popup de défaite
     void losePopup(BuildContext context, int nbPoints) {
       nbPoints = -nbPoints;
       String points = nbPoints.toString();
@@ -223,6 +226,7 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
+    //fonction qui affiche une popup d'abandon
     void abandonPopup(BuildContext context) {
       showDialog(
         context: context,
@@ -321,6 +325,7 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
+    //initialise le nombre de point que la partie peut faire perdre
     int nbpointToLose = 0;
     if (partie.grille.getSize() == 6) {
       nbpointToLose = 25;

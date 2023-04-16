@@ -22,6 +22,7 @@ class Partie {
     startPartie(tailleGrille);
   }
 
+  //fonction qui récupère l'id de l'appareil pour créer un profil différent pour chaque appareil
   Future<String?> _getId() async {
     if (Platform.isIOS) {
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -41,6 +42,7 @@ class Partie {
     return null;
   }
 
+  //fonction qui récupère le profil du joueur en base de donnée firebase
   Future<Joueur> _getPlayer() async {
     String? id = await _getId();
     await Firebase.initializeApp();
@@ -56,6 +58,7 @@ class Partie {
     }
   }
 
+  //fonction qui génére un joueur vià la fonction _getPlayer()
   void generatePlayer() async {
     player = await _getPlayer();
   }
@@ -68,8 +71,10 @@ class Partie {
         scorePartie = json['scorePartie'],
         nbIndices = json['nbIndices'];
 
+  //fonction qui retourne le nombre de point que la partie rapporte
   int getScorePartie() => scorePartie;
 
+  //fonction qui permet de débuter une partie
   void startPartie(int tailleGrille) {
     chrono = 0;
     nbIndices = 0;
@@ -96,6 +101,7 @@ class Partie {
     //TODO
   }
 
+  //fonction qui permet de valider une partie
   bool valider() {
     // debugPrint("Validation de la partie");
     // debugPrint("Liste trait : ${grille.getListeTraits()}");
@@ -115,6 +121,7 @@ class Partie {
     }
   }
 
+  //fonction qui permet de récupérer le score de la partie en cas de défaite
   int getScoreDefaite() {
     player.partiePerdu += 1;
     if (grille.getSize() == 6) {
@@ -140,14 +147,17 @@ class Partie {
     return 'Partie{grille: $grille, chrono: $chrono, player: $player, scorePartie: $scorePartie}';
   }
 
+  //fonction qui retourne la valeur du chrono
   int getChrono() {
     return chrono;
   }
 
+  //fonction qui retourne le nombre d'indices utilisés
   int getnbIndices() {
     return nbIndices;
   }
 
+  //fonction qui permet de mettre à jour le joueur en base de donnée firebase
   Future<void> updateJoueur() async {
     String? id = await _getId();
     await Firebase.initializeApp();

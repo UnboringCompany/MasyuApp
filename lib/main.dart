@@ -92,50 +92,22 @@ class _MenuState extends State<MenuPage> {
     _controller.play();
   }
 
+  //fonction qui permet d'aller aux paramètres
   void seeSettings() {
     Navigator.of(context).pushNamed('/settings');
   }
 
+  //fonction qui permet d'aller au classement
   void seeClassement() {
     Navigator.of(context).pushNamed('/classement');
   }
 
+  //fonction qui permet de d'aller aux règles
   void seeRules() {
     Navigator.of(context).pushNamed('/rules');
   }
 
-  void losePopup(BuildContext context, int nbPoints) {
-    nbPoints = -nbPoints;
-    String points = nbPoints.toString();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('game_over'.tr,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white)),
-          backgroundColor: Colors.transparent,
-          content: Text('game_over_text'.trParams({'points': points}),
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white)),
-          actions: <Widget>[
-            Container(
-                alignment: Alignment.bottomCenter,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x7F373855),
-                ),
-                child: IconButton(
-                  icon: const Icon(BootstrapIcons.x),
-                  color: Colors.red,
-                  onPressed: () {},
-                )),
-          ],
-        );
-      },
-    );
-  }
-
+  //pop up d'abandon quand on veut lancer une nouvelle partie alors qu'on a déjà une partie sauvagardée
   void abandon2Popup(BuildContext context) {
     showDialog(
       context: context,
@@ -201,6 +173,7 @@ class _MenuState extends State<MenuPage> {
     );
   }
 
+  //fonction qui récupère l'id de l'appareil pour créer un profil différent pour chaque appareil
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
@@ -221,6 +194,7 @@ class _MenuState extends State<MenuPage> {
     return null;
   }
 
+  //pour récupérer une sauvegarde en base de donnée firebase
   Future<Partie?> getSave() async {
     String? id = await _getId();
     await Firebase.initializeApp();
@@ -314,6 +288,7 @@ class _MenuState extends State<MenuPage> {
                     ),
                     title: _titleSave,
                     onPressed: () async {
+                      //bouton pour reprendre une partie
                       Partie? partie = await getSave();
                       Navigator.pushNamed(context, '/game', arguments: {
                         'type': 'fromSave',
@@ -330,6 +305,7 @@ class _MenuState extends State<MenuPage> {
                     ),
                     title: 'challenge'.tr,
                     onPressed: () {
+                      //bouton pour lancer un challenge contre la montre
                       Navigator.pushNamed(context, '/challenge', arguments: {
                         'type': 'new',
                         'size': _dropdownValue,
@@ -348,6 +324,7 @@ class _MenuState extends State<MenuPage> {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
+                    //bouton pour lancer une nouvelle partie
                     String? id = await _getId();
                     await Firebase.initializeApp();
                     final docRef = FirebaseFirestore.instance
@@ -375,6 +352,7 @@ class _MenuState extends State<MenuPage> {
               SizedBox(height: 0.015 * MediaQuery.of(context).size.height),
               GridSizeMenu(
                 onChanged: (newValue) {
+                  //pour séléctionner la taille de la grille
                   setState(() {
                     _dropdownValue = newValue;
                   });
@@ -392,6 +370,7 @@ class _MenuState extends State<MenuPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ElevatedButton(
+                      //bouton pour visionner les règles
                       onPressed: seeRules,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
@@ -404,6 +383,7 @@ class _MenuState extends State<MenuPage> {
                   Row(
                     children: [
                       IconButton(
+                        //bouton pour visionner le classement
                         onPressed: seeClassement,
                         icon: Icon(
                           BootstrapIcons.trophy,
@@ -413,6 +393,7 @@ class _MenuState extends State<MenuPage> {
                       ),
                       SizedBox(width: 0.02 * MediaQuery.of(context).size.width),
                       IconButton(
+                        //bouton pour visionner les paramètres
                         onPressed: seeSettings,
                         icon: Icon(
                           BootstrapIcons.gear,
