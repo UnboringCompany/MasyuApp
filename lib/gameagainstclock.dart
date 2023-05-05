@@ -36,7 +36,6 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
   Widget build(BuildContext context) {
     int _gridSize;
     Partie partie;
-    
 
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -59,12 +58,13 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
       partie = args['partie'];
     }
 
-    final TimerWatch timer = TimerWatch(key: UniqueKey(), time: 60, partie : partie);
+    final TimerWatch timer =
+        TimerWatch(key: UniqueKey(), time: 60, partie: partie);
 
-    void winPopup(BuildContext context, int nbPoints) {
+    Future<void> winPopup(BuildContext context, int nbPoints) async {
       String points = nbPoints.toString();
       // String chrono2 = chrono.toString();
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -72,8 +72,7 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
-            content: Text(
-                'timer_victory_content'.trParams({'points': points}),
+            content: Text('timer_victory_content'.trParams({'points': points}),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white)),
             actions: <Widget>[
@@ -95,12 +94,13 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
           );
         },
       );
+      Navigator.pushNamed(context, '/');
     }
 
-    void losePopup(BuildContext context, int nbPoints) {
+    Future<void> losePopup(BuildContext context, int nbPoints) async {
       nbPoints = -nbPoints;
       String points = nbPoints.toString();
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -131,6 +131,8 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
           );
         },
       );
+      Navigator.pushNamed(context, '/solution',
+          arguments: {'grille': partie.grille});
     }
 
     void abandonPopup(BuildContext context) {
@@ -243,8 +245,7 @@ class _GameAgainstClockPageState extends State<GameAgainstClockPage> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     content: Text(
-                        'game_back_text'
-                            .trParams({'points': 15.toString()}),
+                        'game_back_text'.trParams({'points': 15.toString()}),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white)),
                     actions: <Widget>[

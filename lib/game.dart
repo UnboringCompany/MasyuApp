@@ -130,10 +130,11 @@ class _GamePageState extends State<GamePage> {
     }
 
     //fonction qui affiche une popup de victoire
-    void winPopup(BuildContext context, int nbPoints, String chrono) {
+    Future<void> winPopup(
+        BuildContext context, int nbPoints, String chrono) async {
       String points = nbPoints.toString();
       // String chrono2 = chrono.toString();
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -176,13 +177,24 @@ class _GamePageState extends State<GamePage> {
           );
         },
       );
+      Navigator.pushNamed(context, '/solution',
+          arguments: {'grille': partie.grille});
+      String? id = await _getId();
+      await Firebase.initializeApp();
+      final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
+      final docSnapshot = await docRef.get();
+      docRef
+          .delete()
+          // .then((value) => print('Document supprimé'))
+          .catchError((error) =>
+              print('Erreur lors de la suppression du document : $error'));
     }
 
     //fonction qui affiche une popup de défaite
-    void losePopup(BuildContext context, int nbPoints) {
+    Future<void> losePopup(BuildContext context, int nbPoints) async {
       nbPoints = -nbPoints;
       String points = nbPoints.toString();
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -224,6 +236,17 @@ class _GamePageState extends State<GamePage> {
           );
         },
       );
+      Navigator.pushNamed(context, '/solution',
+          arguments: {'grille': partie.grille});
+      String? id = await _getId();
+      await Firebase.initializeApp();
+      final docRef = FirebaseFirestore.instance.collection('grilles').doc(id);
+      final docSnapshot = await docRef.get();
+      docRef
+          .delete()
+          // .then((value) => print('Document supprimé'))
+          .catchError((error) =>
+              print('Erreur lors de la suppression du document : $error'));
     }
 
     //fonction qui affiche une popup d'abandon
